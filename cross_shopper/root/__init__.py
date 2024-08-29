@@ -1,0 +1,1 @@
+"""Cross Shopper root configuration."""

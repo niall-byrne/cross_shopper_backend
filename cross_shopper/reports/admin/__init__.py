@@ -1,0 +1,34 @@
+"""Admin models for the reports app."""
+
+from django.contrib import admin
+from reports.models import Report, ReportStore
+
+
+class ReportStoreInline(admin.TabularInline[ReportStore, ReportStore]):
+  model = ReportStore
+  extra = 0
+
+
+class ReportAdmin(admin.ModelAdmin[Report]):
+  fieldsets = (
+      (
+          "IDENTIFICATION",
+          {
+              "fields": ('name', 'user')
+          },
+      ),
+      (
+          "ITEMS",
+          {
+              "fields": ('item',)
+          },
+      ),
+  )
+  filter_horizontal = [
+      'item',
+  ]
+  inlines = [ReportStoreInline]
+
+
+admin.site.register(Report, ReportAdmin)
+admin.site.register(ReportStore)

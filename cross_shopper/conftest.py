@@ -1,0 +1,13 @@
+"""Shared test fixtures for the cross_shopper project."""
+
+# pylint: disable=redefined-outer-name
+
+pytest_plugins = [
+    "items.models.fixtures.item",
+    "items.models.fixtures.packaging",
+    "reports.models.fixtures.report",
+    "stores.models.fixtures.franchise",
+    "stores.models.fixtures.store",
+    "scrapers.models.fixtures.scraper",
+    "scrapers.models.fixtures.scraper_config",
+]

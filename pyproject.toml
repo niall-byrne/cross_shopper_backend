@@ -1,0 +1,103 @@
+[build-system]
+build-backend = 'poetry.core.masonry.api'
+requires = ['poetry-core']
+
+[tool]
+[tool.commitizen]
+bump_message = 'bump(RELEASE): $current_version → $new_version'
+pre_bump_hooks = ['poetry run pre-commit run --hook-stage=manual commitizen-pre-bump --files pyproject.toml -c .cicd-tools/configuration/pre-commit-bootstrap.yaml || true']
+version = '0.1.0'
+version_files = ['pyproject.toml:version']
+version_provider = 'poetry'
+
+[tool.coverage]
+[tool.coverage.report]
+exclude_also = ['\.\.\.', 'if TYPE_CHECKING:']
+exclude_lines = ['no cover']
+fail_under = 100
+ignore_errors = true
+precision = 1
+
+[tool.coverage.run]
+branch = true
+omit = ['cross_shopper/manage.py', 'cross_shopper/root/*', '*/test*', '*/app.py', '*/migrations/*.py', '*/typing.py']
+source = ['./cross_shopper']
+
+[tool.django-stubs]
+django_settings_module = 'config'
+
+[tool.isort]
+default_section = 'FIRSTPARTY'
+include_trailing_comma = true
+indent = '    '
+length_sort = false
+line_length = 80
+multi_line_output = 3
+no_lines_before = 'LOCALFOLDER'
+sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
+
+[tool.mypy]
+disable_error_code = ['comparison-overlap']
+ignore_missing_imports = false
+mypy_path = '$MYPY_CONFIG_FILE_DIR/stubs'
+plugins = ['mypy_django_plugin.main', 'mypy_drf_plugin.main']
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = ['address.*']
+
+[tool.poetry]
+authors = ['Niall Byrne <9848926+niall-byrne@users.noreply.github.com>']
+description = ''
+name = 'cross-shopper'
+package-mode = false
+readme = 'README.md'
+version = '0.1.0'
+
+[tool.poetry.dependencies]
+django = '^4.2.16'
+django-address = '^0.2.8'
+django-bleach = '^3.1.0'
+django-stubs-ext = '^5.0.4'
+djangorestframework = '^3.15.2'
+python = '^3.9'
+python-dotenv = '^1.0.1'
+
+[tool.poetry.group]
+[tool.poetry.group.dev]
+[tool.poetry.group.dev.dependencies]
+commitizen = '^3.29.0'
+coverage = '^7.6.1'
+factory-boy = '^3.3.1'
+markdown = '^3.7'
+mypy = '^1.7.1'
+pre-commit = '^3.8.0'
+pytest = '^8.3.2'
+pytest-django = '^4.8.0'
+types-bleach = '^6.1.0.20240331'
+types-factory-boy = '^0.4.1'
+
+[tool.poetry.group.dev.dependencies.django-stubs]
+extras = ['compatible-mypy']
+version = '^4.0.0'
+
+[tool.poetry.group.dev.dependencies.djangorestframework-stubs]
+extras = ['compatible-mypy']
+version = '^3.0.0'
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = '^1.8'
+
+[tool.pytest]
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = 'config'
+filterwarnings = ['ignore:ItemFactory._after_postgeneration:DeprecationWarning', 'ignore:ReportFactory._after_postgeneration:DeprecationWarning']
+python_files = ['test_*.py']
+
+[tool.yapf]
+align_closing_bracket_with_visual_indent = false
+based_on_style = 'google'
+dedent_closing_brackets = true
+force_multiline_dict = false
+indent_width = 2
+split_before_logical_operator = true

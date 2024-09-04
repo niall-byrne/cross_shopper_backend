@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 import pytest
-from items.models.factories.item import ItemFactory
+from items.models.factories.item import ItemFactory, ScraperConfigFactory
 from reports.models.factories.report import ReportFactory, ReportStoreFactory
 from stores.models.factories.store import StoreFactory
 
@@ -14,9 +14,14 @@ if TYPE_CHECKING:  # no cover
 @pytest.fixture
 def report() -> "Report":
   return ReportFactory.create(
-      items=[ItemFactory.create(), ItemFactory.create()],
-      stores=[StoreFactory.create(),
-              StoreFactory.create()],
+      items=[
+          ItemFactory.create(scraper_configs=[ScraperConfigFactory.create()]),
+          ItemFactory.create(scraper_configs=[ScraperConfigFactory.create()]),
+      ],
+      stores=[
+          StoreFactory.create(),
+          StoreFactory.create(),
+      ],
   )
 
 

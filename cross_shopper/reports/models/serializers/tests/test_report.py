@@ -1,0 +1,36 @@
+"""Test the ReportSerializer class."""
+
+import pytest
+from items.models.serializers.item import ItemSerializer
+from reports.models import Report
+from stores.models.serializers.store import StoreSerializer
+from ..report import ReportSerializer
+
+
+@pytest.mark.django_db
+class TestReportSerializer:
+
+  def test_serialization__correct_representation(
+      self,
+      report: Report,
+  ) -> None:
+    serialized = ReportSerializer(report, context={})
+
+    assert serialized.data == {
+        "id":
+            report.id,
+        "name":
+            report.name,
+        "item":
+            ItemSerializer(
+                report.item.all().order_by(
+                    *ReportSerializer.ITEM_FIELD_ORDERING
+                ),
+                many=True,
+            ).data,
+        "store":
+            StoreSerializer(
+                report.store,
+                many=True,
+            ).data,
+    }

@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 import pytest
 from items.models.factories.item import ItemFactory
 from reports.models.factories.report import ReportFactory, ReportStoreFactory
+from scrapers.models.factories.scraper_config import ScraperConfigFactory
 from stores.models.factories.store import StoreFactory
 
 if TYPE_CHECKING:  # no cover
@@ -15,8 +16,8 @@ if TYPE_CHECKING:  # no cover
 def report() -> "Report":
   return ReportFactory.create(
       items=[
-          ItemFactory.create(),
-          ItemFactory.create(),
+          ItemFactory.create(scraper_configs=[ScraperConfigFactory.create()]),
+          ItemFactory.create(scraper_configs=[ScraperConfigFactory.create()]),
       ],
       stores=[
           StoreFactory.create(),

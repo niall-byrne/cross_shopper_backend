@@ -33,6 +33,12 @@ types: types-python
 backup:
 	@echo "Backing up database ..."
 	@cp -vp ./cross_shopper/db.sqlite3 ~/iCloud/Databases/cross_shopper/$$(date +%s).sqlite
+	@cp -vp ./cross_shopper/db.sqlite3 ~/iCloud/Databases/cross_shopper/"__latest__.sqlite"
+
+restore:
+	@echo "Restoring database ..."
+	@echo "Are you sure? [Y/n] " && read ANS && [ $${ANS:-N} = Y ]
+	@cp -vp ~/iCloud/Databases/cross_shopper/"__latest__.sqlite" ./cross_shopper/db.sqlite3
 
 clean-git:
 	@echo "Cleaning git content ..."

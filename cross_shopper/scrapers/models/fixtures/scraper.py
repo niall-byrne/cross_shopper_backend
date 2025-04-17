@@ -12,3 +12,8 @@ if TYPE_CHECKING:  # no cover
 @pytest.fixture
 def scraper() -> "Scraper":
   return ScraperFactory.create()
+
+
+@pytest.fixture
+def scraper_alternate() -> "Scraper":
+  return ScraperFactory.create()

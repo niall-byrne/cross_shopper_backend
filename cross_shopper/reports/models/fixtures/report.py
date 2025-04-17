@@ -1,7 +1,7 @@
 """Fixtures for building Report models."""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 import pytest
 from items.models.factories.item import ItemFactory
@@ -10,7 +10,12 @@ from scrapers.models.factories.scraper_config import ScraperConfigFactory
 from stores.models.factories.store import StoreFactory
 
 if TYPE_CHECKING:
+  from items.models import Item
   from reports.models import Report, ReportStore
+  from stores.models import Store
+
+AliasGetReportStores = Callable[["Report"], tuple["Store", "Store"]]
+AliasGetReportItem = Callable[["Report"], "Item"]
 
 
 @pytest.fixture

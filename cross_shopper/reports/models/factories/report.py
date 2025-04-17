@@ -3,6 +3,7 @@
 from typing import TYPE_CHECKING, Any, Dict, List
 
 import factory
+from api.models.factories.user import UserFactory
 from stores.models.factories.store import StoreFactory
 
 if TYPE_CHECKING:  # no cover
@@ -13,20 +14,9 @@ if TYPE_CHECKING:  # no cover
   from .typing import AliasFaker, AliasSubFactory
 
 
-class ReportUserFactory(factory.django.DjangoModelFactory["AbstractBaseUser"]):
-  first_name: "AliasFaker[str]" = factory.Faker("first_name")
-  last_name: "AliasFaker[str]" = factory.Faker("first_name")
-  email: "AliasFaker[str]" = factory.Faker("email")
-
-  class Meta:
-    model = "auth.User"
-
-
 class ReportFactory(factory.django.DjangoModelFactory["Report"]):
   name: "AliasFaker[str]" = factory.Faker("company")
-  user: "AliasSubFactory[AbstractBaseUser]" = factory.SubFactory(
-      ReportUserFactory
-  )
+  user: "AliasSubFactory[AbstractBaseUser]" = factory.SubFactory(UserFactory)
 
   class Meta:
     model = "reports.Report"

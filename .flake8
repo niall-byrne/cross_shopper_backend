@@ -14,6 +14,8 @@ ignore =
     E126
     E127
     E131
+    W503
+    W504
 per-file-ignores =
     cross_shopper/items/models/__init__.py: F401
     */fixtures/*.py: D103

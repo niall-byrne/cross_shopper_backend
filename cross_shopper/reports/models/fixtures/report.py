@@ -1,6 +1,6 @@
 """Fixtures for building Report models."""
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable, Tuple
 
 import pytest
 from items.models.factories.item import ItemFactory, ScraperConfigFactory
@@ -8,7 +8,12 @@ from reports.models.factories.report import ReportFactory, ReportStoreFactory
 from stores.models.factories.store import StoreFactory
 
 if TYPE_CHECKING:  # no cover
+  from items.models import Item
   from reports.models import Report, ReportStore
+  from stores.models import Store
+
+AliasGetReportStores = Callable[["Report"], Tuple["Store", "Store"]]
+AliasGetReportItem = Callable[["Report"], "Item"]
 
 
 @pytest.fixture

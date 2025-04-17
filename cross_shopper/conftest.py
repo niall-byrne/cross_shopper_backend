@@ -7,6 +7,7 @@ pytest_plugins = [
     "items.models.fixtures.item",
     "items.models.fixtures.item_scraper_config",
     "items.models.fixtures.packaging",
+    "pricing.models.fixtures.pricing",
     "reports.models.fixtures.report",
     "stores.models.fixtures.address",
     "stores.models.fixtures.franchise",

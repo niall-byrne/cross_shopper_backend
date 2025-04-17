@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'address',
     'django_bleach',
     'items',
+    'pricing',
     'reports',
     'scrapers',
     'stores',

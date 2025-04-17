@@ -6,14 +6,14 @@ import factory
 from stores.models.factories.store import StoreFactory
 
 if TYPE_CHECKING:  # no cover
-  from django.contrib.auth.models import AbstractUser
+  from django.contrib.auth.models import AbstractBaseUser
   from items.models import Item
   from reports.models import Report, ReportStore  # noqa: F401
   from stores.models import Store
   from .typing import AliasFaker, AliasSubFactory
 
 
-class ReportUserFactory(factory.django.DjangoModelFactory["AbstractUser"]):
+class ReportUserFactory(factory.django.DjangoModelFactory["AbstractBaseUser"]):
   first_name: "AliasFaker[str]" = factory.Faker("first_name")
   last_name: "AliasFaker[str]" = factory.Faker("first_name")
   email: "AliasFaker[str]" = factory.Faker("email")
@@ -24,7 +24,9 @@ class ReportUserFactory(factory.django.DjangoModelFactory["AbstractUser"]):
 
 class ReportFactory(factory.django.DjangoModelFactory["Report"]):
   name: "AliasFaker[str]" = factory.Faker('company')
-  user: "AliasSubFactory[AbstractUser]" = factory.SubFactory(ReportUserFactory)
+  user: "AliasSubFactory[AbstractBaseUser]" = factory.SubFactory(
+      ReportUserFactory
+  )
 
   class Meta:
     model = 'reports.Report'

@@ -3,6 +3,8 @@
 # pylint: disable=redefined-outer-name
 
 pytest_plugins = [
+    "api.models.fixtures.client",
+    "api.models.fixtures.user",
     "items.models.fixtures.brand",
     "items.models.fixtures.item",
     "items.models.fixtures.item_scraper_config",

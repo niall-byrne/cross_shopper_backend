@@ -3,7 +3,9 @@
 from typing import TYPE_CHECKING, Callable, Tuple
 
 import pytest
+from django.contrib.auth.base_user import AbstractBaseUser
 from items.models.factories.item import ItemFactory, ScraperConfigFactory
+from pricing.models.factories.pricing import TodayPriceFactory
 from reports.models.factories.report import ReportFactory, ReportStoreFactory
 from stores.models.factories.store import StoreFactory
 
@@ -16,8 +18,7 @@ AliasGetReportStores = Callable[["Report"], Tuple["Store", "Store"]]
 AliasGetReportItem = Callable[["Report"], "Item"]
 
 
-@pytest.fixture
-def report() -> "Report":
+def create_report(user: AbstractBaseUser) -> "Report":
   return ReportFactory.create(
       items=[
           ItemFactory.create(scraper_configs=[ScraperConfigFactory.create()]),
@@ -27,9 +28,41 @@ def report() -> "Report":
           StoreFactory.create(),
           StoreFactory.create(),
       ],
+      user=user,
   )
+
+
+@pytest.fixture
+def report(user: AbstractBaseUser) -> "Report":
+  return create_report(user)
+
+
+@pytest.fixture
+def report_alternate(user: AbstractBaseUser) -> "Report":
+  return create_report(user)
 
 
 @pytest.fixture
 def report_store() -> "ReportStore":
   return ReportStoreFactory.create()
+
+
+@pytest.fixture
+def report_with_pricing() -> "Report":
+  items_and_stores: Tuple[Tuple[Item, ...], Tuple[Store, ...]] = (
+      tuple(
+          ItemFactory.create(scraper_configs=[ScraperConfigFactory.create()])
+          for _ in range(0, 10)
+      ),
+      tuple(StoreFactory.create() for _ in range(0, 10)),
+  )
+
+  for item, store in zip(*items_and_stores):
+    TodayPriceFactory.create(item=item, store=store)
+
+  report = ReportFactory.create(
+      items=items_and_stores[0],
+      stores=items_and_stores[1],
+  )
+
+  return report

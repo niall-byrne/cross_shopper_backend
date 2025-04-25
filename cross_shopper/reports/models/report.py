@@ -24,5 +24,7 @@ class Report(
       on_delete=models.PROTECT,
   )
 
+  is_testing_only = models.BooleanField(default=False)
+
   def __str__(self) -> str:
     return self.name

@@ -1,8 +1,9 @@
 """Test for the ReportsPricingReadOnlyViewSet list view."""
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import pytest
+from django.conf import settings
 from reports.models.serializers.report import ReportSerializer
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -68,6 +69,40 @@ class TestReportsViewSetList:
   ) -> None:
     res = client.get(report_list_url({"name": report_alternate.name.upper()}))
     serializer = ReportSerializer(report_alternate)
+
+    assert res.status_code == status.HTTP_200_OK
+    assert res.data == [serializer.data]
+
+  def test_list__filter_by_testing__testing_only__returns_correct_response(
+      self,
+      client: APIClient,
+      report: "Report",
+      report_testing: "Report",
+      report_list_url: AliasReportListUrl,
+  ) -> None:
+    query_param = cast(
+        str,
+        getattr(
+            settings,
+            "QUERY_PARAMETER_REPORT_TESTING",
+            None,
+        ),
+    )
+    res = client.get(report_list_url({query_param: 1}))
+    serializer = ReportSerializer(report_testing)
+
+    assert res.status_code == status.HTTP_200_OK
+    assert res.data == [serializer.data]
+
+  def test_list__filter_by_testing__non_testing_only__returns_correct_response(
+      self,
+      client: APIClient,
+      report: "Report",
+      report_testing: "Report",
+      report_list_url: AliasReportListUrl,
+  ) -> None:
+    res = client.get(report_list_url())
+    serializer = ReportSerializer(report)
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == [serializer.data]

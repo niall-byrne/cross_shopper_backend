@@ -40,6 +40,12 @@ class TestItemAdmin:
   ) -> None:
     assert item_admin.inlines == [ItemScraperConfigInline]
 
+  def test_instantiate__has_correct_search_fields(
+      self,
+      item_admin: ItemAdmin,
+  ) -> None:
+    assert item_admin.search_fields == ("name", "brand__name")
+
   def test_get_ordering__returns_correct_field_order(
       self,
       item_admin: ItemAdmin,

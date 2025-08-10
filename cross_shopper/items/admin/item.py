@@ -37,6 +37,7 @@ class ItemAdmin(admin.ModelAdmin[Item]):
       )
   )
   inlines = [ItemScraperConfigInline]
+  search_fields = ('name', 'brand__name')
 
   def get_ordering(self, request: HttpRequest) -> Tuple[str, ...]:
     """Return the field ordering sequence for item model instances."""

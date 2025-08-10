@@ -41,6 +41,7 @@ class ItemAdmin(admin.ModelAdmin[Item]):
       )
   )
   inlines = [ItemScraperConfigInline]
+  search_fields = ('name', 'brand__name')
   ordering = (
       'name',
       'brand__name',

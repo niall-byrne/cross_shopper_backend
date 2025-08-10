@@ -30,5 +30,12 @@ class ReportAdmin(admin.ModelAdmin[Report]):
   inlines = [ReportStoreInline]
 
 
+class ReportStoreAdmin(admin.ModelAdmin[ReportStore]):
+  search_fields = (
+      "store__address__locality__name",
+      "store__franchise__name",
+  )
+
+
 admin.site.register(Report, ReportAdmin)
-admin.site.register(ReportStore)
+admin.site.register(ReportStore, ReportStoreAdmin)

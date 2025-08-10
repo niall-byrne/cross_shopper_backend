@@ -38,3 +38,9 @@ class TestPriceAdmin:
         'last_52_weeks_high',
         'last_52_weeks_low',
     )
+
+  def test_instantiate__has_correct_search_fields(
+      self,
+      price_admin: PriceAdmin,
+  ) -> None:
+    assert price_admin.search_fields == ("item__name", "store__franchise__name")

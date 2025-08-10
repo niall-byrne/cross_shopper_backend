@@ -44,6 +44,7 @@ class ItemAdmin(admin.ModelAdmin[Item]):
       "packaging__container",
       "packaging__quantity",
   )
+  search_fields = ("name", "brand__name")
 
   def formfield_for_foreignkey(
       self,

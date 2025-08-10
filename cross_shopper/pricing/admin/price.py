@@ -35,3 +35,4 @@ class PriceAdmin(admin.ModelAdmin[Price]):
       "last_52_weeks_high",
       "last_52_weeks_low",
   )
+  search_fields = ("item__name", "store__franchise__name")

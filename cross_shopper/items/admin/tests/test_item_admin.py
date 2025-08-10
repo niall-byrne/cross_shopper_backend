@@ -54,6 +54,12 @@ class TestItemAdmin:
         "packaging__quantity",
     )
 
+  def test_instantiate__has_correct_search_fields(
+      self,
+      item_admin: ItemAdmin,
+  ) -> None:
+    assert item_admin.search_fields == ("name", "brand__name")
+
   def test_formfield_for_foreignkey__default__correct_sort_order(
       self,
       item_admin: ItemAdmin,

@@ -1,12 +1,13 @@
 """Test the admin for the Item model."""
 
 from typing import TYPE_CHECKING
+from unittest import mock
 
+import pytest
+from django.test import override_settings
 from items.admin.inlines.item import item_inlines
 
 if TYPE_CHECKING:  # no cover
-  from unittest import mock
-
   from items.admin.item import ItemAdmin
 
 
@@ -65,9 +66,9 @@ class TestItemAdmin:
   def test_formfield_for_foreignkey__default__correct_sort_order(
       self,
       item_admin: "ItemAdmin",
-      mocked_db_field: "mock.Mock",
-      mocked_formfield_for_foreignkey: "mock.Mock",
-      mocked_request: "mock.Mock",
+      mocked_db_field: mock.Mock,
+      mocked_formfield_for_foreignkey: mock.Mock,
+      mocked_request: mock.Mock,
   ) -> None:
     mocked_db_field.name = "default"
 
@@ -81,10 +82,10 @@ class TestItemAdmin:
   def test_formfield_for_foreignkey__brand_model__correct_sort_order(
       self,
       item_admin: "ItemAdmin",
-      mocked_db_field: "mock.Mock",
-      mocked_formfield_for_foreignkey: "mock.Mock",
-      mocked_model_manager: "mock.Mock",
-      mocked_request: "mock.Mock",
+      mocked_db_field: mock.Mock,
+      mocked_formfield_for_foreignkey: mock.Mock,
+      mocked_model_manager: mock.Mock,
+      mocked_request: mock.Mock,
   ) -> None:
     mocked_db_field.name = "brand"
 
@@ -100,10 +101,10 @@ class TestItemAdmin:
   def test_formfield_for_foreignkey__packaging_model__correct_sort_order(
       self,
       item_admin: "ItemAdmin",
-      mocked_db_field: "mock.Mock",
-      mocked_formfield_for_foreignkey: "mock.Mock",
-      mocked_model_manager: "mock.Mock",
-      mocked_request: "mock.Mock",
+      mocked_db_field: mock.Mock,
+      mocked_formfield_for_foreignkey: mock.Mock,
+      mocked_model_manager: mock.Mock,
+      mocked_request: mock.Mock,
   ) -> None:
     mocked_db_field.name = "packaging"
 
@@ -118,3 +119,66 @@ class TestItemAdmin:
         "container__name",
         "quantity",
     )
+
+  @pytest.mark.parametrize(
+      "model_change", (True, False), ids=lambda b: f"change-{b}"
+  )
+  @override_settings(ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS=True)
+  def test_save_model__model_object__setting_on___item_attached_to_reports(
+      self,
+      item_admin: "ItemAdmin",
+      mocked_form: mock.Mock,
+      mocked_report_manger: mock.Mock,
+      mocked_request: mock.Mock,
+      model_change: bool,
+  ) -> None:
+    mocked_object = mock.Mock()
+
+    item_admin.save_model(
+        mocked_request, mocked_object, mocked_form, model_change
+    )
+
+    mocked_report_manger.filter.assert_called_once_with(is_testing_only=False)
+    for mocked_report in mocked_report_manger.filter.return_value:
+      mocked_report.item.add.assert_called_once_with(mocked_object)
+
+  @pytest.mark.parametrize(
+      "model_change", (True, False), ids=lambda b: f"change-{b}"
+  )
+  @override_settings(ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS=False)
+  def test_save_model__model_object__setting_off__item_not_attached_to_reports(
+      self,
+      item_admin: "ItemAdmin",
+      mocked_form: mock.Mock,
+      mocked_report_manger: mock.Mock,
+      mocked_request: mock.Mock,
+      model_change: bool,
+  ) -> None:
+    mocked_object = mock.Mock()
+
+    item_admin.save_model(
+        mocked_request, mocked_object, mocked_form, model_change
+    )
+
+    mocked_report_manger.filter.assert_not_called()
+    for mocked_report in mocked_report_manger.filter.return_value:
+      mocked_report.item.add.assert_not_called()
+
+  @pytest.mark.parametrize(
+      "model_change", (True, False), ids=lambda b: f"change-{b}"
+  )
+  @pytest.mark.usefixtures("mocked_request")
+  def test_save_model__model_object__saves_model_object(
+      self,
+      item_admin: "ItemAdmin",
+      mocked_form: mock.Mock,
+      mocked_request: mock.Mock,
+      model_change: bool,
+  ) -> None:
+    mocked_object = mock.Mock()
+
+    item_admin.save_model(
+        mocked_request, mocked_object, mocked_form, model_change
+    )
+
+    mocked_object.save.assert_called_once_with()

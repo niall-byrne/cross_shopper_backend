@@ -32,6 +32,7 @@ class ScraperConfig(
               ],
           }
       )
+    self.url = match.group(2)
 
   def __str__(self) -> str:
     return f'{self.scraper.name}: {self.url}'

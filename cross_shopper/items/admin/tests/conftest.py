@@ -4,7 +4,8 @@ from unittest import mock
 
 import pytest
 from django.contrib import admin
-from items.admin.item import Brand, ItemAdmin, Packaging
+from items.admin import item
+from items.admin.item import ItemAdmin
 
 
 @pytest.fixture
@@ -14,6 +15,11 @@ def mocked_admin_site() -> mock.Mock:
 
 @pytest.fixture
 def mocked_db_field() -> mock.Mock:
+  return mock.Mock()
+
+
+@pytest.fixture
+def mocked_form() -> mock.Mock:
   return mock.Mock()
 
 
@@ -33,6 +39,13 @@ def mocked_model_manager() -> mock.Mock:
 
 
 @pytest.fixture
+def mocked_report_manger() -> mock.Mock:
+  instance = mock.Mock()
+  instance.filter.return_value = [mock.Mock(), mock.Mock(), mock.Mock()]
+  return instance
+
+
+@pytest.fixture
 def mocked_request() -> mock.Mock:
   return mock.Mock()
 
@@ -43,6 +56,7 @@ def item_admin(
     mocked_formfield_for_foreignkey: mock.Mock,
     mocked_model: mock.Mock,
     mocked_model_manager: mock.Mock,
+    mocked_report_manger: mock.Mock,
     monkeypatch: pytest.MonkeyPatch,
 ) -> ItemAdmin:
   monkeypatch.setattr(
@@ -51,12 +65,17 @@ def item_admin(
       mocked_formfield_for_foreignkey,
   )
   monkeypatch.setattr(
-      Brand,
+      item.Report,
+      "objects",
+      mocked_report_manger,
+  )
+  monkeypatch.setattr(
+      item.Brand,
       "objects",
       mocked_model_manager,
   )
   monkeypatch.setattr(
-      Packaging,
+      item.Packaging,
       "objects",
       mocked_model_manager,
   )

@@ -2,6 +2,8 @@
 
 from unittest import mock
 
+import pytest
+from django.test import override_settings
 from items.admin.item import ItemAdmin, ItemScraperConfigInline
 
 
@@ -113,3 +115,66 @@ class TestItemAdmin:
         'container__name',
         'quantity',
     )
+
+  @pytest.mark.parametrize(
+      "model_change", (True, False), ids=lambda b: f"change-{b}"
+  )
+  @override_settings(ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS=True)
+  def test_save_model__model_object__setting_on___item_attached_to_reports(
+      self,
+      item_admin: ItemAdmin,
+      mocked_form: mock.Mock,
+      mocked_report_manger: mock.Mock,
+      mocked_request: mock.Mock,
+      model_change: bool,
+  ) -> None:
+    mocked_object = mock.Mock()
+
+    item_admin.save_model(
+        mocked_request, mocked_object, mocked_form, model_change
+    )
+
+    mocked_report_manger.filter.assert_called_once_with(is_testing_only=False)
+    for mocked_report in mocked_report_manger.filter.return_value:
+      mocked_report.item.add.assert_called_once_with(mocked_object)
+
+  @pytest.mark.parametrize(
+      "model_change", (True, False), ids=lambda b: f"change-{b}"
+  )
+  @override_settings(ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS=False)
+  def test_save_model__model_object__setting_off__item_not_attached_to_reports(
+      self,
+      item_admin: ItemAdmin,
+      mocked_form: mock.Mock,
+      mocked_report_manger: mock.Mock,
+      mocked_request: mock.Mock,
+      model_change: bool,
+  ) -> None:
+    mocked_object = mock.Mock()
+
+    item_admin.save_model(
+        mocked_request, mocked_object, mocked_form, model_change
+    )
+
+    mocked_report_manger.filter.assert_not_called()
+    for mocked_report in mocked_report_manger.filter.return_value:
+      mocked_report.item.add.assert_not_called()
+
+  @pytest.mark.parametrize(
+      "model_change", (True, False), ids=lambda b: f"change-{b}"
+  )
+  @pytest.mark.usefixtures('mocked_request')
+  def test_save_model__model_object__saves_model_object(
+      self,
+      item_admin: ItemAdmin,
+      mocked_form: mock.Mock,
+      mocked_request: mock.Mock,
+      model_change: bool,
+  ) -> None:
+    mocked_object = mock.Mock()
+
+    item_admin.save_model(
+        mocked_request, mocked_object, mocked_form, model_change
+    )
+
+    mocked_object.save.assert_called_once_with()

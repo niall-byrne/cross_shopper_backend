@@ -28,12 +28,18 @@ class TestScraperSerializer:
 
   def test_deserialization__valid_input__correct_model(self) -> None:
     scraper_data = {
-        "name": "mocked scraper.name",
-        "pricing_selector": "mocked scraper.pricing_selector",
-        "pricing_regex": "mocked scraper.pricing_regex",
-        "pricing_bulk_selector": "mocked scraper.pricing_bulk_selector",
-        "pricing_bulk_regex": "mocked scraper.pricing_bulk_rege",
-        "url_validation_regex": "mocked scraper.url_validation_regex",
+        "name":
+            "mocked scraper.name",
+        "pricing_selector":
+            "mocked scraper.pricing_selector",
+        "pricing_regex":
+            "mocked scraper.pricing_regex",
+        "pricing_bulk_selector":
+            "mocked scraper.pricing_bulk_selector",
+        "pricing_bulk_regex":
+            "mocked scraper.pricing_bulk_rege",
+        "url_validation_regex":
+            "mocked scraper.url_validation_regex_with_(two)(capture_groups)",
     }
 
     serialized = ScraperSerializer(data=scraper_data)

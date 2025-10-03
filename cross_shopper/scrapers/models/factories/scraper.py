@@ -15,7 +15,7 @@ class ScraperFactory(factory.django.DjangoModelFactory["Scraper"]):
   pricing_regex: "AliasFaker[str]" = factory.Faker("sentence")
   pricing_bulk_selector: "AliasFaker[str]" = factory.Faker("sentence")
   pricing_bulk_regex: "AliasFaker[str]" = factory.Faker("sentence")
-  url_validation_regex: "AliasFaker[str]" = factory.Faker("url")
+  url_validation_regex: str = "^(https?://)*(.*)"
 
   class Meta:
     model = "scrapers.Scraper"

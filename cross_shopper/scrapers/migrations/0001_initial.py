@@ -5,6 +5,9 @@ import django.db.models.functions.text
 import utilities.models.fields.title
 import utilities.models.validators.regex
 from django.db import migrations, models
+from utilities.models.validators.regex_with_n_capture_groups import (
+    create_validator_regex_with_n_capture_groups,
+)
 
 
 class Migration(migrations.Migration):
@@ -51,8 +54,8 @@ class Migration(migrations.Migration):
                   models.CharField(
                       max_length=250,
                       validators=[
-                          utilities.models.validators.regex.validator_regex
-                      ],
+                          create_validator_regex_with_n_capture_groups(2)
+                      ]
                   ),
               ),
           ],

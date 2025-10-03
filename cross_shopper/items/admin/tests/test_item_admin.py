@@ -3,10 +3,11 @@
 from unittest import mock
 
 import pytest
-from django.test import override_settings
+from constance.test import override_config
 from items.admin.item import ItemAdmin, ItemScraperConfigInline
 
 
+@pytest.mark.django_db
 class TestItemAdmin:
 
   def test_instantiate__has_correct_fieldsets(
@@ -119,7 +120,7 @@ class TestItemAdmin:
   @pytest.mark.parametrize(
       "model_change", (True, False), ids=lambda b: f"change-{b}"
   )
-  @override_settings(ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS=True)
+  @override_config(ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS=True)
   def test_save_model__model_object__setting_on___item_attached_to_reports(
       self,
       item_admin: ItemAdmin,
@@ -141,7 +142,7 @@ class TestItemAdmin:
   @pytest.mark.parametrize(
       "model_change", (True, False), ids=lambda b: f"change-{b}"
   )
-  @override_settings(ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS=False)
+  @override_config(ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS=False)
   def test_save_model__model_object__setting_off__item_not_attached_to_reports(
       self,
       item_admin: ItemAdmin,

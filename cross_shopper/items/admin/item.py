@@ -2,7 +2,7 @@
 
 from typing import TYPE_CHECKING
 
-from django.conf import settings
+from constance import config
 from django.contrib import admin
 from items.admin.inlines.item import item_inlines
 from items.models import Brand, Item, Packaging
@@ -76,6 +76,6 @@ class ItemAdmin(admin.ModelAdmin[Item]):
     """Given a model instance save it to the database."""
     super().save_model(request, obj, form, change)
 
-    if settings.ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS:
+    if config.ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS:
       for report in Report.objects.filter(is_testing_only=False):
         report.item.add(obj)

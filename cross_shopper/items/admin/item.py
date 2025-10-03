@@ -3,13 +3,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from django.conf import settings
 from django.contrib import admin
 from items.admin.inlines.item import item_inlines
 from items.models import Brand, Item, Packaging
+from reports.models import Report
 
 if TYPE_CHECKING:
   from django.db.models import ForeignKey
-  from django.forms import ModelChoiceField
+  from django.forms import ModelChoiceField, ModelForm
   from django.http import HttpRequest
 
 
@@ -60,3 +62,17 @@ class ItemAdmin(admin.ModelAdmin[Item]):
           "quantity",
       )
     return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+  def save_model(
+      self,
+      request: HttpRequest,
+      obj: Item,
+      form: ModelForm[Item],
+      change: bool,
+  ) -> None:
+    """Given a model instance save it to the database."""
+    super().save_model(request, obj, form, change)
+
+    if settings.ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS:
+      for report in Report.objects.filter(is_testing_only=False):
+        report.item.add(obj)

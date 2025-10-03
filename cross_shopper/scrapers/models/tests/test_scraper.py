@@ -10,12 +10,18 @@ class TestScraper:
 
   def test_name__is_unique(self) -> None:
     scraper_data = {
-        "name": "mocked name",
-        "pricing_selector": "mocked_pricing_selector",
-        "pricing_regex": "mocked_pricing_regex",
-        "pricing_bulk_selector": "mocked_pricing_bulk_selector",
-        "pricing_bulk_regex": "mocked_pricing_bulk_regex",
-        "url_validation_regex": "mocked_url_validation_regex",
+        "name":
+            "mocked name",
+        "pricing_selector":
+            "mocked_pricing_selector",
+        "pricing_regex":
+            "mocked_pricing_regex",
+        "pricing_bulk_selector":
+            "mocked_pricing_bulk_selector",
+        "pricing_bulk_regex":
+            "mocked_pricing_bulk_regex",
+        "url_validation_regex":
+            "mocked_url_validation_regex_with_(two)(capture_groups)",
     }
 
     scraper1 = Scraper(**scraper_data)
@@ -33,6 +39,33 @@ class TestScraper:
                     f'“{CONSTRAINT_NAMES["name"]}” '
                     'is violated.',
                 ]
+        }
+    )
+
+  def test_url_validation_regex__must_contain_2_capture_groups(self) -> None:
+    scraper_data = {
+        "name":
+            "mocked name",
+        "pricing_selector":
+            "mocked_pricing_selector",
+        "pricing_regex":
+            "mocked_pricing_regex",
+        "pricing_bulk_selector":
+            "mocked_pricing_bulk_selector",
+        "pricing_bulk_regex":
+            "mocked_pricing_bulk_regex",
+        "url_validation_regex":
+            "mocked_url_validation_regex_with_no_capture_groups",
+    }
+
+    with pytest.raises(ValidationError) as exc:
+      scraper1 = Scraper(**scraper_data)
+      scraper1.save()
+
+    assert str(exc.value) == str(
+        {
+            "url_validation_regex":
+                ["Regex: must contain exactly 2 capture group(s)."]
         }
     )
 

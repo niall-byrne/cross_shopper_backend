@@ -1,6 +1,7 @@
 """Test the ItemSerializer class."""
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING, Any
 
 import pytest
@@ -18,6 +19,37 @@ AliasNestedItemData = dict[str, Any]
 
 @pytest.mark.django_db
 class TestItemSerializer:
+
+  def compare_instance_to_data(
+      self,
+      item_instance: Item,
+      item_data: dict[str, Any],
+      scraper_instance: Scraper,
+  ) -> None:
+    assert item_instance.name == item_data["name"]
+    assert item_instance.brand.name == item_data["brand"]
+    assert item_instance.packaging.quantity == item_data["packaging"]["quantity"
+                                                                     ]
+    assert item_instance.packaging.unit.name == item_data["packaging"]["unit"]
+    assert item_instance.packaging.container is not None
+    assert item_instance.packaging.container.name == \
+           item_data["packaging"]["container"]
+    assert item_instance.is_non_gmo == item_data["is_non_gmo"]
+    assert item_instance.is_organic == item_data["is_organic"]
+    assert item_instance.scraper_config.all()[0].scraper == scraper_instance
+    validation_regex = re.compile(
+        item_instance.scraper_config.all()[0].scraper.url_validation_regex
+    )
+    match = validation_regex.match(item_data["scraper_config"][0]["url"])
+    assert match
+    assert item_instance.scraper_config.all()[0].url == match.group(2)
+    assert item_instance.scraper_config.all()[1].scraper == scraper_instance
+    validation_regex = re.compile(
+        item_instance.scraper_config.all()[0].scraper.url_validation_regex
+    )
+    match = validation_regex.match(item_data["scraper_config"][1]["url"])
+    assert match
+    assert item_instance.scraper_config.all()[1].url == match.group(2)
 
   def test_serialization__correct_representation(
       self,
@@ -68,10 +100,10 @@ class TestItemSerializer:
             [
                 {
                     "scraper": scraper.name,
-                    "url": scraper.url_validation_regex + "/1",
+                    "url": "https://site.com/1",
                 }, {
                     "scraper": scraper.name,
-                    "url": scraper.url_validation_regex + "/2",
+                    "url": "https://site.com/2",
                 }
             ]
     }
@@ -80,21 +112,7 @@ class TestItemSerializer:
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
-    assert instance.name == item_data["name"]
-    assert instance.brand.name == item_data["brand"]
-    assert instance.packaging.quantity == item_data["packaging"]["quantity"]
-    assert instance.packaging.unit.name == item_data["packaging"]["unit"]
-    assert instance.packaging.container is not None
-    assert instance.packaging.container.name == \
-        item_data["packaging"]["container"]
-    assert instance.is_non_gmo == item_data["is_non_gmo"]
-    assert instance.is_organic == item_data["is_organic"]
-    assert instance.scraper_config.all()[0].scraper == scraper
-    assert instance.scraper_config.all()[0].url == \
-        item_data["scraper_config"][0]["url"]
-    assert instance.scraper_config.all()[1].scraper == scraper
-    assert instance.scraper_config.all()[1].url == \
-        item_data["scraper_config"][1]["url"]
+    self.compare_instance_to_data(instance, item_data, scraper)
 
   def test_deserialization__valid_input__existing_all__correct_model(
       self,
@@ -123,10 +141,10 @@ class TestItemSerializer:
             [
                 {
                     "scraper": scraper.name,
-                    "url": scraper.url_validation_regex + "/1",
+                    "url": "https://site.com/1",
                 }, {
                     "scraper": scraper.name,
-                    "url": scraper.url_validation_regex + "/2",
+                    "url": "https://site.com/2",
                 }
             ]
     }
@@ -135,21 +153,7 @@ class TestItemSerializer:
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
-    assert instance.name == item_data["name"]
-    assert instance.brand.name == item_data["brand"]
-    assert instance.packaging.quantity == item_data["packaging"]["quantity"]
-    assert instance.packaging.unit.name == item_data["packaging"]["unit"]
-    assert instance.packaging.container is not None
-    assert instance.packaging.container.name == \
-        item_data["packaging"]["container"]
-    assert instance.is_non_gmo == item_data["is_non_gmo"]
-    assert instance.is_organic == item_data["is_organic"]
-    assert instance.scraper_config.all()[0].scraper == scraper
-    assert instance.scraper_config.all()[0].url == \
-        item_data["scraper_config"][0]["url"]
-    assert instance.scraper_config.all()[1].scraper == scraper
-    assert instance.scraper_config.all()[1].url == \
-        item_data["scraper_config"][1]["url"]
+    self.compare_instance_to_data(instance, item_data, scraper)
 
   def test_deserialization__invalid_input__existing_scraper__exception(
       self,

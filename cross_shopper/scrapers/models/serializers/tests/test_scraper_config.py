@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
+from rest_framework.exceptions import ErrorDetail, ValidationError
 from scrapers.models.serializers.scraper_config import ScraperConfigSerializer
 
 if TYPE_CHECKING:
@@ -29,7 +30,7 @@ class TestScraperConfigSerializer:
       scraper: Scraper,
   ) -> None:
     scraper_config_data = {
-        "url": scraper.url_validation_regex + "/additional/path",
+        "url": "https://somehost.com/additional/path1",
         "scraper": scraper.name,
     }
 
@@ -37,21 +38,29 @@ class TestScraperConfigSerializer:
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
-    assert instance.url == scraper_config_data["url"]
+    assert instance.url == "somehost.com/additional/path1"
     assert instance.scraper == scraper
 
   def test_deserialization__invalid_input__non_existing_scraper__exception(
       self,
-      scraper: Scraper,
   ) -> None:
     scraper_config_data = {
-        "url": scraper.url_validation_regex + "/additional/path",
-        "scraper": scraper.name,
+        "url": "https://somehost.com/additional/path2",
+        "scraper": "non-existent",
     }
 
-    serialized = ScraperConfigSerializer(data=scraper_config_data)
-    serialized.is_valid(raise_exception=True)
-    instance = serialized.save()
+    with pytest.raises(ValidationError) as exc:
+      serialized = ScraperConfigSerializer(data=scraper_config_data)
+      serialized.is_valid(raise_exception=True)
 
-    assert instance.url == scraper_config_data["url"]
-    assert instance.scraper == scraper
+    assert str(exc.value) == str(
+        {
+            "scraper":
+                [
+                    ErrorDetail(
+                        string="Object with name=non-existent does not exist.",
+                        code="does_not_exist"
+                    ),
+                ],
+        }
+    )

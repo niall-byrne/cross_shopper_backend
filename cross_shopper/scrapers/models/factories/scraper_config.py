@@ -12,13 +12,8 @@ if TYPE_CHECKING:
 
 
 class ScraperConfigFactory(factory.django.DjangoModelFactory["ScraperConfig"]):
-  scraper: AliasSubFactory[Scraper] = factory.SubFactory(
-      ScraperFactory,
-      url_validation_regex=factory.SelfAttribute("..url"),
-  )
-  url: factory.Sequence[str] = factory.Sequence(
-      lambda n: "https://url/path/%03d" % n
-  )
+  scraper: AliasSubFactory[Scraper] = factory.SubFactory(ScraperFactory)
+  url: factory.Sequence[str] = factory.Sequence(lambda n: "/url/path/%03d" % n)
 
   class Meta:
     model = "scrapers.ScraperConfig"

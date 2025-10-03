@@ -18,7 +18,7 @@ class TestScraperConfig:
       self,
       scraper: Scraper,
   ) -> None:
-    scraper.url_validation_regex = "http://.*"
+    scraper.url_validation_regex = "^(http://)*(.*)"
     scraper.save()
 
     scraper_config = ScraperConfig(
@@ -27,11 +27,24 @@ class TestScraperConfig:
     )
     scraper_config.save()
 
-  def test_clean__non_matching_scraper_regex__no_exception(
+  def test_clean__matching_scraper_regex__saves_url_as_regex_capture_group(
       self,
       scraper: Scraper,
   ) -> None:
-    scraper.url_validation_regex = "https://.*\\.ca"
+    scraper.url_validation_regex = "^(http://)*(.*)"
+    scraper.save()
+
+    scraper_config = ScraperConfig(
+        scraper=scraper,
+        url="http://yahoo.com",
+    )
+    scraper_config.save()
+
+  def test_clean__non_matching_scraper_regex__raises_exception(
+      self,
+      scraper: Scraper,
+  ) -> None:
+    scraper.url_validation_regex = "^(https://)(.*\\.ca)"
     scraper.save()
 
     with pytest.raises(ValidationError) as exc:

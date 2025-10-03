@@ -11,12 +11,9 @@ if TYPE_CHECKING:  # no cover
 
 
 class ScraperConfigFactory(factory.django.DjangoModelFactory["ScraperConfig"]):
-  scraper: "AliasSubFactory[Scraper]" = factory.SubFactory(
-      ScraperFactory,
-      url_validation_regex=factory.SelfAttribute("..url"),
-  )
+  scraper: "AliasSubFactory[Scraper]" = factory.SubFactory(ScraperFactory)
   url: "factory.Sequence[str]" = factory.Sequence(
-      lambda n: "https://url/path/%03d" % n
+      lambda n: "/url/path/%03d" % n
   )
 
   class Meta:

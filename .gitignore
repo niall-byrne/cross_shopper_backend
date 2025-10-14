@@ -180,5 +180,4 @@ pyrightconfig.json
 .vale/*
 !.vale/Vocab
 db.sqlite3
-poetry.lock
 

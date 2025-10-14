@@ -191,5 +191,4 @@ pyrightconfig.json
 .cicd-tools/manifest.json
 .vale/*
 !.vale/Vocab
-poetry.lock
 staticfiles

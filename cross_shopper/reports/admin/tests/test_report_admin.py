@@ -1,10 +1,17 @@
 """Test the admin for the Report model."""
 
-from reports.admin import ReportAdmin, ReportStoreInline
+from django.contrib import admin
+from reports.admin.report import ReportAdmin, ReportStoreInline
 
 
 class TestReportAdmin:
   """Test the ReportAdmin class."""
+
+  def test_instantiate__inheritance(
+      self,
+      report_admin: ReportAdmin,
+  ) -> None:
+    assert isinstance(report_admin, admin.ModelAdmin)
 
   def test_instantiate__has_correct_fieldsets(
       self,
@@ -38,3 +45,6 @@ class TestReportAdmin:
       report_admin: ReportAdmin,
   ) -> None:
     assert report_admin.inlines == [ReportStoreInline]
+
+  def test_instantiate__ordering(self, report_admin: ReportAdmin) -> None:
+    assert report_admin.ordering == ('name',)

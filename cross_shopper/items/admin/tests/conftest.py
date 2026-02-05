@@ -4,7 +4,7 @@ from unittest import mock
 
 import pytest
 from django.contrib import admin
-from items.admin import item, packaging_container, packaging_unit
+from items.admin import item, packaging, packaging_container, packaging_unit
 
 
 @pytest.fixture
@@ -80,6 +80,18 @@ def item_admin(
   )
 
   return item.ItemAdmin(
+      model=mocked_model,
+      admin_site=mocked_admin_site,
+  )
+
+
+@pytest.fixture
+def packaging_admin(
+    mocked_admin_site: mock.Mock,
+    mocked_model: mock.Mock,
+) -> packaging.PackagingAdmin:
+
+  return packaging.PackagingAdmin(
       model=mocked_model,
       admin_site=mocked_admin_site,
   )

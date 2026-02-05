@@ -4,12 +4,19 @@ from unittest import mock
 
 import pytest
 from constance.test import override_config
+from django.contrib import admin
 from items.admin.item import ItemAdmin, ItemScraperConfigInline
 
 
 @pytest.mark.django_db
 class TestItemAdmin:
   """Test the ItemAdmin class."""
+
+  def test_instantiate__inheritance(
+      self,
+      item_admin: ItemAdmin,
+  ) -> None:
+    assert isinstance(item_admin, admin.ModelAdmin)
 
   def test_instantiate__has_correct_fieldsets(
       self,
@@ -49,14 +56,8 @@ class TestItemAdmin:
   ) -> None:
     assert item_admin.search_fields == ("name", "brand__name")
 
-  def test_get_ordering__returns_correct_field_order(
-      self,
-      item_admin: ItemAdmin,
-      mocked_request: mock.Mock,
-  ) -> None:
-    field_order = item_admin.get_ordering(mocked_request)
-
-    assert field_order == (
+  def test_instantiate__ordering(self, item_admin: ItemAdmin) -> None:
+    assert item_admin.ordering == (
         'name',
         'brand__name',
         'is_organic',

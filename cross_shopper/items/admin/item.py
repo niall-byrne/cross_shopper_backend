@@ -1,6 +1,6 @@
 """Admin for the item model."""
 
-from typing import Any, Tuple
+from typing import Any
 
 from constance import config
 from django.contrib import admin
@@ -41,16 +41,13 @@ class ItemAdmin(admin.ModelAdmin[Item]):
   )
   inlines = [ItemScraperConfigInline]
   search_fields = ('name', 'brand__name')
-
-  def get_ordering(self, request: HttpRequest) -> Tuple[str, ...]:
-    """Return the field ordering sequence for item model instances."""
-    return (
-        'name',
-        'brand__name',
-        'is_organic',
-        'packaging__container',
-        'packaging__quantity',
-    )
+  ordering = (
+      'name',
+      'brand__name',
+      'is_organic',
+      'packaging__container',
+      'packaging__quantity',
+  )
 
   def formfield_for_foreignkey(
       self,

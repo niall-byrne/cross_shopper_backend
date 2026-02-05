@@ -1,10 +1,18 @@
 """Test the admin for the Report model."""
 
+from django.contrib import admin
 from reports.admin.inlines.report import report_inlines
+from reports.admin.list_filters.report import report_list_filter
 from reports.admin.report import ReportAdmin
 
 
 class TestReportAdmin:
+
+  def test_instantiate__inheritance(
+      self,
+      report_admin: ReportAdmin,
+  ) -> None:
+    assert isinstance(report_admin, admin.ModelAdmin)
 
   def test_instantiate__has_correct_fieldsets(
       self,
@@ -38,3 +46,12 @@ class TestReportAdmin:
       report_admin: ReportAdmin,
   ) -> None:
     assert report_admin.inlines == report_inlines
+
+  def test_instantiate__has_list_filter(
+      self,
+      report_admin: ReportAdmin,
+  ) -> None:
+    assert report_admin.list_filter == report_list_filter
+
+  def test_instantiate__ordering(self, report_admin: ReportAdmin) -> None:
+    assert report_admin.ordering == ("name",)

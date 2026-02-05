@@ -7,8 +7,9 @@ import pytest
 from django.core.exceptions import ValidationError
 from pricing.models import Price
 from pricing.models.defaults import default_pricing_week, default_pricing_year
-from rest_framework.exceptions import \
-    ValidationError as SerializerValidationError
+from rest_framework.exceptions import (
+    ValidationError as SerializerValidationError,
+)
 from ..pricing import PricingSerializer
 
 if TYPE_CHECKING:  # no cover

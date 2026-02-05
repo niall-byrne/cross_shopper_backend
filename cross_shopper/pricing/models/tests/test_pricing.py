@@ -67,7 +67,7 @@ class TestPrice:
   ) -> None:
     last_52_price_batch = create_last_52_price_batch()
     avg_price = (
-        sum([price.amount for price in last_52_price_batch]) /  # noqa: W504
+        sum([price.amount for price in last_52_price_batch]) /
         decimal.Decimal(len(last_52_price_batch))
     ).quantize(
         decimal.Decimal('.01'),

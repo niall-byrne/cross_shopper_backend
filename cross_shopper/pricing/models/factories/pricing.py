@@ -10,9 +10,9 @@ from stores.models.factories.store import StoreFactory
 if TYPE_CHECKING:  # no cover
   from decimal import Decimal
 
-  from items.models import Item  # noqa: F401
+  from items.models import Item
   from pricing.models import Price  # noqa: F401
-  from stores.models import Store  # noqa: F401
+  from stores.models import Store
   from .typing import AliasFaker, AliasFuzzyChoice, AliasSubFactory
 
 

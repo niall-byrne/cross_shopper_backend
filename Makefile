@@ -68,8 +68,8 @@ format-toml:
 format-python:
 	@echo "Formatting all Python files ..."
 	@poetry run bash -c "pre-commit run fmt-type-checking-coverage --verbose --all-files"
+	@poetry run bash -c "pre-commit run ruff-fix --hook-stage manual --verbose --all-files"
 	@poetry run bash -c "pre-commit run yapf --verbose --all-files"
-	@poetry run bash -c "pre-commit run isort --verbose --all-files"
 	@echo "Done."
 
 lint-markdown:
@@ -84,8 +84,7 @@ lint-shell:
 
 lint-python:
 	@echo "Checking Python files ..."
-	@poetry run bash -c "pre-commit run isort --verbose --all-files"
-	@poetry run bash -c "pre-commit run flake8 --verbose --all-files"
+	@poetry run bash -c "pre-commit run ruff-lint --verbose --all-files"
 	@echo "Done."
 
 lint-workflows:

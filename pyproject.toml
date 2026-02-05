@@ -26,16 +26,6 @@ source = ['./cross_shopper']
 [tool.django-stubs]
 django_settings_module = 'config'
 
-[tool.isort]
-default_section = 'FIRSTPARTY'
-include_trailing_comma = true
-indent = '    '
-length_sort = false
-line_length = 80
-multi_line_output = 3
-no_lines_before = 'LOCALFOLDER'
-sections = 'FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER'
-
 [tool.mypy]
 ignore_missing_imports = false
 mypy_path = '$MYPY_CONFIG_FILE_DIR/stubs'
@@ -94,6 +84,38 @@ version = '^3.0.0'
 DJANGO_SETTINGS_MODULE = 'config'
 filterwarnings = ['ignore:ItemFactory._after_postgeneration:DeprecationWarning', 'ignore:ReportFactory._after_postgeneration:DeprecationWarning']
 python_files = ['test_*.py']
+
+[tool.ruff]
+exclude = ['.git', '__pycache__', '.mypy_cache', '*/migrations/*.py', 'cross_shopper/manage.py', 'cross_shopper/root/asgi.py', 'cross_shopper/root/wsgi.py', 'cross_shopper/root/urls.py']
+indent-width = 2
+line-length = 80
+
+[tool.ruff.format]
+quote-style = 'preserve'
+
+[tool.ruff.lint]
+extend-select = ['I']
+fixable = ['ALL']
+ignore = ['ANN001', 'ANN201', 'ANN401', 'ARG002', 'B904', 'B905', 'COM812', 'COM819', 'D101', 'D105', 'D106', 'D107', 'DTZ001', 'EM101', 'FBT001', 'FBT002', 'FBT003', 'FLY002', 'I001', 'N815', 'PERF401', 'PIE808', 'PYI021', 'Q000', 'RET504', 'RET505', 'RUF010', 'RUF012', 'RUF032', 'RUF100', 'S101', 'SIM102', 'S311', 'SIM300', 'TC006', 'TID252', 'UP006', 'UP007', 'UP031', 'UP033', 'UP035', 'UP037', 'UP045']
+select = ['ALL']
+unfixable = []
+
+[tool.ruff.lint.isort]
+default-section = 'first-party'
+length-sort = false
+no-lines-before = ['local-folder']
+section-order = ['future', 'standard-library', 'third-party', 'first-party', 'local-folder']
+
+[tool.ruff.lint.per-file-ignores]
+'*/conftest.py' = ['D103']
+'*/fixtures/*.py' = ['D103']
+'*/tests/*.py' = ['D102', 'D104', 'INP001', 'PLR2004', 'PT006', 'PT007', 'PT012', 'S105']
+'cross_shopper/config/__init__.py' = ['D212']
+'cross_shopper/conftest.py' = ['INP001']
+'cross_shopper/utilities/models/generators/superuser.py' = ['N806', 'S107']
+
+[tool.ruff.lint.pylint]
+max-args = 6
 
 [tool.yapf]
 align_closing_bracket_with_visual_indent = false

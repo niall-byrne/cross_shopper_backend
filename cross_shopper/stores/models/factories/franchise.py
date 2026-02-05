@@ -7,7 +7,7 @@ from scrapers.models.factories.scraper import ScraperFactory
 
 if TYPE_CHECKING:  # no cover
   from scrapers.models import Scraper
-  from stores.models import Franchise  # noqa: 401
+  from stores.models import Franchise  # noqa: F401
   from .typing import AliasSubFactory
 
 

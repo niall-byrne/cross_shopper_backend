@@ -14,7 +14,7 @@ AliasPricingDetailUrl = Callable[[int], str]
 
 class AliasPricingListUrl(Protocol):
 
-  def __call__(  # noqa: D102
+  def __call__(
       self,
       query: dict[str, int] | None = None,
   ) -> str:

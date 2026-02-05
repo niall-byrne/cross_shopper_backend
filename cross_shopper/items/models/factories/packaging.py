@@ -11,9 +11,9 @@ if TYPE_CHECKING:
   from decimal import Decimal
 
   from items.models import (  # noqa: F401
-      Packaging,
-      PackagingContainer,
-      PackagingUnit,
+    Packaging,
+    PackagingContainer,
+    PackagingUnit,
   )
   from .typing import AliasFaker, AliasSubFactory
 

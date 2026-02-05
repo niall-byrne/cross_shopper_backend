@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 import factory
 
 if TYPE_CHECKING:  # no cover
-  from address.models import Address, Country, Locality, State  # noqa: 401
+  from address.models import Address, Country, Locality, State  # noqa: F401
   from .typing import AliasFaker, AliasSubFactory
 
 

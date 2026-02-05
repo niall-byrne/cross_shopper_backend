@@ -1,4 +1,4 @@
 """Models for the stores app."""
 
-from .franchise import Franchise  # noqa: 401
-from .store import Store  # noqa: 401
+from .franchise import Franchise  # noqa: F401
+from .store import Store  # noqa: F401

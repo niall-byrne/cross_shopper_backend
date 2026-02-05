@@ -1,11 +1,14 @@
 """Reports API endpoints."""
 
+from typing import TYPE_CHECKING
 from django.conf import settings
-from django.db import models
 from reports.models import Report
 from reports.models.serializers.report import ReportSerializer
 from rest_framework import viewsets
 from .filters import ReportFilter
+
+if TYPE_CHECKING:
+  from django.db import models
 
 
 class ReportsReadOnlyViewSet(

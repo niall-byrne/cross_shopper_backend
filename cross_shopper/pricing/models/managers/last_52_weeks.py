@@ -10,7 +10,7 @@ from pricing.models.pricing import default_pricing_week, default_pricing_year
 
 if TYPE_CHECKING:  # no cover
   from items.models import Item
-  from pricing.models import Price  # noqa: F401
+  from pricing.models import Price
   from stores.models import Store
 
 

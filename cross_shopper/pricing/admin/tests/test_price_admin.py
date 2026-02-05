@@ -1,10 +1,17 @@
 """Test the admin for the Price model."""
 
+from django.contrib import admin
 from pricing.admin import PriceAdmin
 
 
 class TestPriceAdmin:
   """Test the PriceAdmin class."""
+
+  def test_instantiate__inheritance(
+      self,
+      price_admin: PriceAdmin,
+  ) -> None:
+    assert isinstance(price_admin, admin.ModelAdmin)
 
   def test_instantiate__has_correct_fieldsets(
       self,
@@ -44,3 +51,6 @@ class TestPriceAdmin:
       price_admin: PriceAdmin,
   ) -> None:
     assert price_admin.search_fields == ("item__name", "store__franchise__name")
+
+  def test_instantiate__ordering(self, price_admin: PriceAdmin) -> None:
+    assert price_admin.ordering == ('-year', '-week')

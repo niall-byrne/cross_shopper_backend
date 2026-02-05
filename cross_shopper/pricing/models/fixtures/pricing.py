@@ -43,8 +43,8 @@ def filter_to_last_52_weeks(price_batch: List["Price"]) -> List["Price"]:
 
   for price in price_batch:
     if (
-        price.year == current_year - 1 and  # noqa: W504
-        price.week >= last_year_total_weeks - last_year_remainder_weeks
+        price.year == current_year - 1
+        and price.week >= last_year_total_weeks - last_year_remainder_weeks
     ):
       filtered_prices.append(price)
 

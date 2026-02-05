@@ -1,6 +1,7 @@
 """Admin for the Price model."""
 
 from django.contrib import admin
+from pricing.admin.list_filters.price import price_list_filter
 from pricing.models.pricing import Price
 
 
@@ -28,6 +29,13 @@ class PriceAdmin(admin.ModelAdmin[Price]):
                   ),
           }
       ),
+  )
+  list_filter = price_list_filter
+  ordering = (
+      "-year",
+      "-week",
+      "item__name",
+      "store__franchise__name",
   )
   readonly_fields = (
       "last_52_weeks_average",

@@ -1,0 +1,39 @@
+"""Test the admin for the ItemScraperConfig model."""
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from django.contrib import admin
+from items.admin.list_filters.item_scraper_config import (
+    item_scraper_config_list_filter,
+)
+
+if TYPE_CHECKING:
+  from items.admin.item_scraper_config import ItemScraperConfigAdmin
+
+
+class TestItemScraperConfigAdmin:
+
+  def test_instantiate__inheritance(
+      self,
+      item_scraper_config_admin: ItemScraperConfigAdmin,
+  ) -> None:
+    assert isinstance(item_scraper_config_admin, admin.ModelAdmin)
+
+  def test_instantiate__has_list_filter(
+      self,
+      item_scraper_config_admin: ItemScraperConfigAdmin,
+  ) -> None:
+    assert item_scraper_config_admin.list_filter == (
+        item_scraper_config_list_filter
+    )
+
+  def test_instantiate__has_correct_ordering(
+      self,
+      item_scraper_config_admin: ItemScraperConfigAdmin,
+  ) -> None:
+    assert item_scraper_config_admin.ordering == (
+        "item__name",
+        "scraper_config__scraper__name",
+        "scraper_config__url",
+    )

@@ -2,6 +2,7 @@
 
 from django.contrib import admin
 from reports.admin.inlines.report import report_inlines
+from reports.admin.list_filters.report import report_list_filter
 from reports.models import Report
 
 
@@ -24,3 +25,5 @@ class ReportAdmin(admin.ModelAdmin[Report]):
       'item',
   ]
   inlines = report_inlines
+  list_filter = report_list_filter
+  ordering = ('name',)

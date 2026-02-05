@@ -4,12 +4,20 @@ from unittest import mock
 
 import pytest
 from constance.test import override_config
+from django.contrib import admin
 from items.admin.item import ItemAdmin, ItemScraperConfigInline
+from items.admin.list_filters.item import item_list_filter
 
 
 @pytest.mark.django_db
 class TestItemAdmin:
   """Test the ItemAdmin class."""
+
+  def test_instantiate__inheritance(
+      self,
+      item_admin: ItemAdmin,
+  ) -> None:
+    assert isinstance(item_admin, admin.ModelAdmin)
 
   def test_instantiate__has_correct_fieldsets(
       self,
@@ -42,6 +50,12 @@ class TestItemAdmin:
       item_admin: ItemAdmin,
   ) -> None:
     assert item_admin.inlines == [ItemScraperConfigInline]
+
+  def test_instantiate__has_correct_list_filter(
+      self,
+      item_admin: ItemAdmin,
+  ) -> None:
+    assert item_admin.list_filter == item_list_filter
 
   def test_instantiate__has_correct_ordering(
       self,

@@ -4,7 +4,14 @@ from unittest import mock
 
 import pytest
 from django.contrib import admin
-from items.admin import item, packaging_container, packaging_unit
+from items.admin import (
+    brand,
+    item,
+    item_scraper_config,
+    packaging,
+    packaging_container,
+    packaging_unit,
+)
 
 
 @pytest.fixture
@@ -50,6 +57,17 @@ def mocked_request() -> mock.Mock:
 
 
 @pytest.fixture
+def brand_admin(
+    mocked_admin_site: mock.Mock,
+    mocked_model: mock.Mock,
+) -> brand.BrandAdmin:
+  return brand.BrandAdmin(
+      model=mocked_model,
+      admin_site=mocked_admin_site,
+  )
+
+
+@pytest.fixture
 def item_admin(
     mocked_admin_site: mock.Mock,
     mocked_formfield_for_foreignkey: mock.Mock,
@@ -86,11 +104,32 @@ def item_admin(
 
 
 @pytest.fixture
+def item_scraper_config_admin(
+    mocked_admin_site: mock.Mock,
+    mocked_model: mock.Mock,
+) -> item_scraper_config.ItemScraperConfigAdmin:
+  return item_scraper_config.ItemScraperConfigAdmin(
+      model=mocked_model,
+      admin_site=mocked_admin_site,
+  )
+
+
+@pytest.fixture
+def packaging_admin(
+    mocked_admin_site: mock.Mock,
+    mocked_model: mock.Mock,
+) -> packaging.PackagingAdmin:
+  return packaging.PackagingAdmin(
+      model=mocked_model,
+      admin_site=mocked_admin_site,
+  )
+
+
+@pytest.fixture
 def packaging_container_admin(
     mocked_admin_site: mock.Mock,
     mocked_model: mock.Mock,
 ) -> packaging_container.PackagingContainerAdmin:
-
   return packaging_container.PackagingContainerAdmin(
       model=mocked_model,
       admin_site=mocked_admin_site,
@@ -102,7 +141,6 @@ def packaging_unit_admin(
     mocked_admin_site: mock.Mock,
     mocked_model: mock.Mock,
 ) -> packaging_unit.PackagingUnitAdmin:
-
   return packaging_unit.PackagingUnitAdmin(
       model=mocked_model,
       admin_site=mocked_admin_site,

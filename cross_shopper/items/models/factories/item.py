@@ -9,10 +9,10 @@ from scrapers.models.factories.scraper_config import ScraperConfigFactory
 
 if TYPE_CHECKING:  # no cover
   from items.models import (  # noqa: F401
-      Brand,
-      Item,
-      ItemScraperConfig,
-      Packaging,
+    Brand,
+    Item,
+    ItemScraperConfig,
+    Packaging,
   )
   from scrapers.models import ScraperConfig
   from .typing import AliasFaker, AliasSubFactory

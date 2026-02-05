@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 from constance import config
 from django.contrib import admin
 from items.admin.inlines.item import item_inlines
+from items.admin.list_filters.item import item_list_filter
 from items.models import Brand, Item, Packaging
 from reports.models import Report
 
@@ -39,6 +40,7 @@ class ItemAdmin(admin.ModelAdmin[Item]):
       )
   )
   inlines = item_inlines
+  list_filter = item_list_filter
   ordering = (
       'name',
       'brand__name',

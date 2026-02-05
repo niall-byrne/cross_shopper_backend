@@ -8,8 +8,9 @@ from django.core.exceptions import ValidationError
 from pricing.models import Price
 from pricing.models.defaults import default_pricing_week, default_pricing_year
 from pricing.models.serializers.pricing import PricingSerializer
-from rest_framework.exceptions import \
-    ValidationError as SerializerValidationError
+from rest_framework.exceptions import (
+    ValidationError as SerializerValidationError,
+)
 
 if TYPE_CHECKING:  # no cover
   from items.models import Item

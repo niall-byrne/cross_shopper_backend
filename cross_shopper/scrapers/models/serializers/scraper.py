@@ -12,4 +12,8 @@ class ScraperSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Scraper
-    fields = '__all__'
+    fields = (
+        'id',
+        'name',
+        'url_validation_regex',
+    )

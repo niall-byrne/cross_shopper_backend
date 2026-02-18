@@ -24,10 +24,6 @@ class TestScraperSerializer:
     assert serialized.data == {
         "id": scraper.pk,
         "name": scraper.name,
-        "pricing_selector": scraper.pricing_selector,
-        "pricing_regex": scraper.pricing_regex,
-        "pricing_bulk_selector": scraper.pricing_bulk_selector,
-        "pricing_bulk_regex": scraper.pricing_bulk_regex,
         "url_validation_regex": scraper.url_validation_regex,
     }
 
@@ -35,14 +31,6 @@ class TestScraperSerializer:
     scraper_data = {
         "name":
             "mocked scraper.name",
-        "pricing_selector":
-            "mocked scraper.pricing_selector",
-        "pricing_regex":
-            "mocked scraper.pricing_regex",
-        "pricing_bulk_selector":
-            "mocked scraper.pricing_bulk_selector",
-        "pricing_bulk_regex":
-            "mocked scraper.pricing_bulk_rege",
         "url_validation_regex":
             "mocked scraper.url_validation_regex_with_(two)(capture_groups)",
     }
@@ -54,10 +42,6 @@ class TestScraperSerializer:
   def test_deserialization__invalid_input__exception(self) -> None:
     scraper_data = {
         "name": "mocked scraper.name",
-        "pricing_selector": "mocked scraper.pricing_selector",
-        "pricing_regex": "mocked scraper.pricing_regex",
-        "pricing_bulk_selector": "mocked scraper.pricing_bulk_selector",
-        "pricing_bulk_regex": "mocked scraper.pricing_bulk_rege",
     }
 
     with pytest.raises(ValidationError) as exc:

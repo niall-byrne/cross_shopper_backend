@@ -12,14 +12,6 @@ class TestScraper:
     scraper_data = {
         "name":
             "mocked name",
-        "pricing_selector":
-            "mocked_pricing_selector",
-        "pricing_regex":
-            "mocked_pricing_regex",
-        "pricing_bulk_selector":
-            "mocked_pricing_bulk_selector",
-        "pricing_bulk_regex":
-            "mocked_pricing_bulk_regex",
         "url_validation_regex":
             "mocked_url_validation_regex_with_(two)(capture_groups)",
     }
@@ -46,14 +38,6 @@ class TestScraper:
     scraper_data = {
         "name":
             "mocked name",
-        "pricing_selector":
-            "mocked_pricing_selector",
-        "pricing_regex":
-            "mocked_pricing_regex",
-        "pricing_bulk_selector":
-            "mocked_pricing_bulk_selector",
-        "pricing_bulk_regex":
-            "mocked_pricing_bulk_regex",
         "url_validation_regex":
             "mocked_url_validation_regex_with_no_capture_groups",
     }

@@ -12,7 +12,11 @@ class ScraperSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Scraper
-    fields = '__all__'
+    fields = (
+        'id',
+        'name',
+        'url_validation_regex',
+    )
 
   def validate_name(self, value: str):
     """Ensure that the name is unique, ignoring case."""

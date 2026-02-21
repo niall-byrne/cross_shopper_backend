@@ -15,4 +15,4 @@ class ScraperConfigSerializer(serializers.ModelSerializer[ScraperConfig]):
 
   class Meta:
     model = ScraperConfig
-    fields = ('id', 'scraper', 'url')
+    fields = ('id', 'scraper', 'url', 'is_active')

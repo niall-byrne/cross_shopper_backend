@@ -4,7 +4,9 @@ from typing import TYPE_CHECKING
 
 from django.contrib import admin
 from errors.admin.list_filters.error import error_list_filter
-from scrapers.models import ScraperConfig
+from scrapers.admin.mixins.scraper_config_actions import (
+    ScraperConfigActionsAdminMixin,
+)
 
 if TYPE_CHECKING:  # no cover
   from django.db.models import QuerySet
@@ -12,7 +14,12 @@ if TYPE_CHECKING:  # no cover
   from errors.models import Error
 
 
-class ErrorAdmin(admin.ModelAdmin["Error"]):
+class ErrorAdmin(
+    ScraperConfigActionsAdminMixin["Error"],
+    admin.ModelAdmin["Error"],
+):
+  scraper_config_is_related_model = True
+
   actions = (
       "mark_as_reoccurring",
       "mark_as_non_reoccurring",
@@ -22,6 +29,11 @@ class ErrorAdmin(admin.ModelAdmin["Error"]):
   list_filter = error_list_filter
   ordering = (
       "type__name",
+      "store__franchise__name",
+      "item__name",
+      "scraper_config__url",
+  )
+  search_fields = (
       "store__franchise__name",
       "item__name",
       "scraper_config__url",
@@ -51,40 +63,4 @@ class ErrorAdmin(admin.ModelAdmin["Error"]):
     self.message_user(
         request,
         f"{updated_count} errors were successfully marked as non-reoccurring."
-    )
-
-  @admin.action(description="Activate related scraper configs")
-  def activate_scraper_configs(
-      self,
-      request: "HttpRequest",
-      queryset: "QuerySet[Error]",
-  ) -> None:
-    """Activate the selected scraper configs."""
-    scraper_config_ids = queryset.values_list('scraper_config__id', flat=True)
-    scraper_config_queryset = ScraperConfig.objects.filter(
-        id__in=scraper_config_ids
-    )
-    updated_count = scraper_config_queryset.update(is_active=True)
-
-    self.message_user(
-        request, f"{updated_count} related scraper configs were successfully "
-        "activated."
-    )
-
-  @admin.action(description="Deactivate related scraper configs")
-  def deactivate_scraper_configs(
-      self,
-      request: "HttpRequest",
-      queryset: "QuerySet[Error]",
-  ) -> None:
-    """Disable the selected scraper configs."""
-    scraper_config_ids = queryset.values_list('scraper_config__id', flat=True)
-    scraper_config_queryset = ScraperConfig.objects.filter(
-        id__in=scraper_config_ids
-    )
-    updated_count = scraper_config_queryset.update(is_active=False)
-
-    self.message_user(
-        request, f"{updated_count} related scraper configs were successfully "
-        "deactivated."
     )

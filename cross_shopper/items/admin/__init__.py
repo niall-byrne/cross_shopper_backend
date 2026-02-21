@@ -18,7 +18,13 @@ from items.models import (
 
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Item, ItemAdmin)
-admin.site.register(ItemScraperConfig, ItemScraperConfigAdmin)
-admin.site.register(Packaging, PackagingAdmin)
+admin.site.register(
+    ItemScraperConfig,
+    ItemScraperConfigAdmin,
+)
+admin.site.register(
+    Packaging,
+    PackagingAdmin,
+)
 admin.site.register(PackagingContainer, PackagingContainerAdmin)
 admin.site.register(PackagingUnit, PackagingUnitAdmin)

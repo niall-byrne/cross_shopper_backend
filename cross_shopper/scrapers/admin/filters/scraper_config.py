@@ -6,8 +6,8 @@ from utilities.admin.list_filter.bases.admin_list_filter_base import (
 
 
 class ScraperFilter(AdminListFilterBase):
-  title = 'scraper'
+  title = 'scraper name'
   parameter_name = 'scraper__name'
 
 
-scraper_config_filter = (ScraperFilter,)
+scraper_config_filter = ("is_active", ScraperFilter)

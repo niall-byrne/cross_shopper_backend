@@ -20,6 +20,8 @@ class TestErrorAdmin:
       error_admin: ErrorAdmin,
   ) -> None:
     assert error_admin.actions == (
+        "action_activate_scraper_configs",
+        "action_deactivate_scraper_configs",
         "action_mark_as_reoccurring",
         "action_mark_as_non_reoccurring",
         "action_reset_error_count",
@@ -40,6 +42,64 @@ class TestErrorAdmin:
         "store__franchise__name",
         "item__name",
         "scraper_config__url",
+    )
+
+  def test_action_activate_scraper_configs__updates_selected(
+      self,
+      error_admin: ErrorAdmin,
+      mocked_model: mock.Mock,
+      mocked_request: mock.Mock,
+      mocked_scraper_config: mock.Mock,
+  ) -> None:
+    error_admin.action_activate_scraper_configs(mocked_request, mocked_model)
+
+    mocked_scraper_config.objects.filter.return_value.update.assert_called_once_with(
+        is_active=True
+    )
+
+  def test_action_activate_scraper_configs__notifies_user(
+      self,
+      error_admin: ErrorAdmin,
+      mocked_model: mock.Mock,
+      mocked_request: mock.Mock,
+      mocked_scraper_config: mock.Mock,
+  ) -> None:
+    error_admin.action_activate_scraper_configs(mocked_request, mocked_model)
+
+    mocked_request._messages.add.assert_called_once_with(  # noqa: SLF001
+      20,
+      str(mocked_scraper_config.objects.filter.return_value.update.return_value)
+      + " related scraper configs were successfully activated.",
+      "",
+    )
+
+  def test_action_deactivate_scraper_configs__updates_selected(
+      self,
+      error_admin: ErrorAdmin,
+      mocked_model: mock.Mock,
+      mocked_request: mock.Mock,
+      mocked_scraper_config: mock.Mock,
+  ) -> None:
+    error_admin.action_deactivate_scraper_configs(mocked_request, mocked_model)
+
+    mocked_scraper_config.objects.filter.return_value.update.assert_called_once_with(
+        is_active=False
+    )
+
+  def test_action_deactivate_scraper_configs__notifies_user(
+      self,
+      error_admin: ErrorAdmin,
+      mocked_model: mock.Mock,
+      mocked_request: mock.Mock,
+      mocked_scraper_config: mock.Mock,
+  ) -> None:
+    error_admin.action_deactivate_scraper_configs(mocked_request, mocked_model)
+
+    mocked_request._messages.add.assert_called_once_with(  # noqa: SLF001
+      20,
+      str(mocked_scraper_config.objects.filter.return_value.update.return_value)
+      + " related scraper configs were successfully deactivated.",
+      "",
     )
 
   def test_action_mark_as_reoccurring__updates_selected(

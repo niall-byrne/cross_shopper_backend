@@ -17,6 +17,13 @@ def mocked_model() -> mock.Mock:
 
 
 @pytest.fixture
+def mocked_scraper_config(monkeypatch: pytest.MonkeyPatch) -> mock.Mock:
+  instance = mock.Mock(return_value=[mock.Mock(), mock.Mock()])
+  monkeypatch.setattr(error, "ScraperConfig", instance)
+  return instance
+
+
+@pytest.fixture
 def mocked_request() -> mock.Mock:
   return mock.Mock()
 

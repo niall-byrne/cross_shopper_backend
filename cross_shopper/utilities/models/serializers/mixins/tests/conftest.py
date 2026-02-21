@@ -1,14 +1,18 @@
-"""Test fixtures for the report models serializers."""
+"""Test fixtures for the utilities app serializer mixins."""
 
 from typing import Callable, Dict
 from unittest import mock
 
 import pytest
 from django.http import HttpRequest
-from pricing.models import Price
 from rest_framework import request
 
 AliasCreateMockedRequest = Callable[[Dict[str, str]], request.Request]
+
+
+@pytest.fixture
+def mocked_model() -> mock.Mock:
+  return mock.Mock()
 
 
 @pytest.fixture
@@ -20,13 +24,3 @@ def create_mocked_request() -> AliasCreateMockedRequest:
     return request.Request(http_request)
 
   return create
-
-
-@pytest.fixture
-def mocked_aggregate_last_52_weeks_manager(
-    monkeypatch: pytest.MonkeyPatch
-) -> mock.Mock:
-  manager_mock = mock.Mock()
-  monkeypatch.setattr(Price, "aggregate_last_52_weeks", manager_mock)
-
-  return manager_mock

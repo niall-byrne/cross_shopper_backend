@@ -14,6 +14,15 @@ class TestItemScraperConfigAdminListFilter:
         DynamicSubClass(
             base=GenericListFilter,
             attributes={
+                "title": "is active",
+                "parameter_name": "scraper_config__is_active",
+                "is_boolean": True,
+                "is_reversed": False,
+            }
+        ),
+        DynamicSubClass(
+            base=GenericListFilter,
+            attributes={
                 "title": "scraper",
                 "parameter_name": "scraper_config__scraper__name",
                 "is_boolean": False,

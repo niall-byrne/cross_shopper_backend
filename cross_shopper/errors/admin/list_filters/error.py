@@ -9,6 +9,7 @@ error_list_filter = (
         title="type",
         parameter_name="type__name",
     ),
+    "is_reoccurring",
     GenericListFilter.create(
         title="franchise",
         parameter_name="store__franchise__name",
@@ -20,5 +21,10 @@ error_list_filter = (
     GenericListFilter.create(
         title="scraper",
         parameter_name="scraper_config__scraper__name",
+    ),
+    GenericListFilter.create(
+        title="scraper config active",
+        parameter_name="scraper_config__is_active",
+        is_boolean=True
     ),
 )

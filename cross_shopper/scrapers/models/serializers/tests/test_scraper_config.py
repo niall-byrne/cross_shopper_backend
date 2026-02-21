@@ -24,6 +24,7 @@ class TestScraperConfigSerializer:
         "id": scraper_config.pk,
         "url": scraper_config.url,
         "scraper": scraper_config.scraper.name,
+        "is_active": scraper_config.is_active,
     }
 
   def test_deserialization__valid_input__existing_scraper__correct_model(

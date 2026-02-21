@@ -20,6 +20,7 @@ class ScraperConfig(
       max_length=250,
       blank=False,
   )
+  is_active = models.BooleanField(default=True)
 
   def clean(self) -> None:
     """Pre-save verification."""

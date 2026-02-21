@@ -5,6 +5,8 @@
 pytest_plugins = [
     "api.views.fixtures.client",
     "api.views.fixtures.user",
+    "errors.models.fixtures.error",
+    "errors.models.fixtures.error_type",
     "items.models.fixtures.brand",
     "items.models.fixtures.item",
     "items.models.fixtures.packaging",

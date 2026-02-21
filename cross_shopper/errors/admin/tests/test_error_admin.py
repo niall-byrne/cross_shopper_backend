@@ -5,6 +5,9 @@ from unittest import mock
 from django.contrib import admin
 from errors.admin.error import ErrorAdmin
 from errors.admin.list_filters.error import error_list_filter
+from scrapers.admin.mixins.scraper_config_actions import (
+    ScraperConfigActionsAdminMixin,
+)
 
 
 class TestErrorAdmin:
@@ -14,6 +17,7 @@ class TestErrorAdmin:
       error_admin: ErrorAdmin,
   ) -> None:
     assert isinstance(error_admin, admin.ModelAdmin)
+    assert isinstance(error_admin, ScraperConfigActionsAdminMixin)
 
   def test_instantiate__has_correct_actions(
       self,
@@ -38,6 +42,16 @@ class TestErrorAdmin:
   ) -> None:
     assert error_admin.ordering == (
         "type__name",
+        "store__franchise__name",
+        "item__name",
+        "scraper_config__url",
+    )
+
+  def test_instantiate__has_correct_search_fields(
+      self,
+      error_admin: ErrorAdmin,
+  ) -> None:
+    assert error_admin.search_fields == (
         "store__franchise__name",
         "item__name",
         "scraper_config__url",
@@ -90,65 +104,5 @@ class TestErrorAdmin:
       20,
       f"{mocked_model.update.return_value} errors were successfully "
       f"marked as non-reoccurring.",
-      "",
-    )
-
-  def test_activate_scraper_configs__updates_selected(
-      self,
-      error_admin: ErrorAdmin,
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
-      mocked_scraper_config: mock.Mock,
-  ) -> None:
-    error_admin.activate_scraper_configs(mocked_request, mocked_model)
-
-    mocked_scraper_config.objects.filter. \
-      return_value.update.assert_called_once_with(is_active=True)
-
-  def test_activate_scraper_configs__notifies_user(
-      self,
-      error_admin: ErrorAdmin,
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
-      mocked_scraper_config: mock.Mock,
-  ) -> None:
-    error_admin.activate_scraper_configs(mocked_request, mocked_model)
-
-    mocked_request._messages.add.assert_called_once_with(  # noqa: SLF001
-      20,
-      str(
-        mocked_scraper_config.objects.filter.
-        return_value.update.return_value
-      ) + " related scraper configs were successfully activated.",
-      "",
-    )
-
-  def test_deactivate_scraper_configs__updates_selected(
-      self,
-      error_admin: ErrorAdmin,
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
-      mocked_scraper_config: mock.Mock,
-  ) -> None:
-    error_admin.deactivate_scraper_configs(mocked_request, mocked_model)
-
-    mocked_scraper_config.objects.filter. \
-      return_value.update.assert_called_once_with(is_active=False)
-
-  def test_deactivate_scraper_configs__notifies_user(
-      self,
-      error_admin: ErrorAdmin,
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
-      mocked_scraper_config: mock.Mock,
-  ) -> None:
-    error_admin.deactivate_scraper_configs(mocked_request, mocked_model)
-
-    mocked_request._messages.add.assert_called_once_with(  # noqa: SLF001
-      20,
-      str(
-        mocked_scraper_config.objects.filter.
-        return_value.update.return_value
-      ) + " related scraper configs were successfully deactivated.",
       "",
     )

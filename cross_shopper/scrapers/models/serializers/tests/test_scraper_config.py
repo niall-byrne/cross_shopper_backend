@@ -20,6 +20,7 @@ class TestScraperConfigSerializer:
     serialized = ScraperConfigSerializer(scraper_config)
 
     assert serialized.data == {
+        "id": scraper_config.pk,
         "url": scraper_config.url,
         "scraper": scraper_config.scraper.name,
     }

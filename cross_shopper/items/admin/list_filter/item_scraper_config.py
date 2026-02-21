@@ -4,6 +4,11 @@ from utilities.admin.list_filter import GenericListFilter
 
 item_scraper_config_list_filter = (
     GenericListFilter.create(
+        title='is active',
+        parameter_name='scraper_config__is_active',
+        is_boolean=True,
+    ),
+    GenericListFilter.create(
         title='scraper',
         parameter_name='scraper_config__scraper__name',
     ),

@@ -9,6 +9,7 @@ class TestScraperConfigListFilter:
 
   def test_list_filter(self) -> None:
     assert scraper_config_list_filter == (
+        "is_active",
         DynamicSubClass(
             base=GenericListFilter,
             attributes={

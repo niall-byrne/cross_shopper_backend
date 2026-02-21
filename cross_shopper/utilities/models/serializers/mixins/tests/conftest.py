@@ -1,14 +1,21 @@
-"""Test fixtures for the report models serializers."""
+"""Test fixtures for the utilities app serializer mixins."""
 
 from typing import Callable, Dict
 from unittest import mock
 
 import pytest
 from django.http import HttpRequest
-from pricing.models import Price
-from rest_framework import request
+from rest_framework import request, serializers
+from utilities.models.serializers.mixins.boolean_query_string_mixin import (
+    BooleanQueryParamMixin,
+)
 
 AliasCreateMockedRequest = Callable[[Dict[str, str]], request.Request]
+
+
+@pytest.fixture
+def mocked_model() -> mock.Mock:
+  return mock.Mock()
 
 
 @pytest.fixture
@@ -23,10 +30,5 @@ def create_mocked_request() -> AliasCreateMockedRequest:
 
 
 @pytest.fixture
-def mocked_aggregate_last_52_weeks_manager(
-    monkeypatch: pytest.MonkeyPatch
-) -> mock.Mock:
-  manager_mock = mock.Mock()
-  monkeypatch.setattr(Price, "aggregate_last_52_weeks", manager_mock)
-
-  return manager_mock
+def serializer_with_boolean_query_string() -> serializers.Serializer:
+  return BooleanQueryParamMixin()

@@ -25,6 +25,11 @@ class ItemNameFilter(AdminListFilterBase):
   parameter_name = "item__name"
 
 
+class ScraperConfigIsActiveFilter(AdminListFilterBase):
+  title = "scraper_config active"
+  parameter_name = "scraper_config__is_active"
+
+
 class ScraperNameFilter(AdminListFilterBase):
   title = "scraper"
   parameter_name = "scraper_config__scraper__name"
@@ -35,5 +40,6 @@ error_filter = (
     ItemNameFilter,
     IsReoccurringFilter,
     FranchiseNameFilter,
+    ScraperConfigIsActiveFilter,
     ScraperNameFilter,
 )

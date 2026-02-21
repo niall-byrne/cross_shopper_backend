@@ -7,12 +7,13 @@ from scrapers.models.factories.scraper import ScraperFactory
 
 if TYPE_CHECKING:  # no cover
   from scrapers.models import Scraper, ScraperConfig  # noqa: F401
-  from .typing import AliasSubFactory
+  from .typing import AliasFaker, AliasSubFactory
 
 
 class ScraperConfigFactory(factory.django.DjangoModelFactory["ScraperConfig"]):
   scraper: "AliasSubFactory[Scraper]" = factory.SubFactory(ScraperFactory)
   url: "factory.Faker[str, str]" = factory.Faker("url")
+  is_active: "AliasFaker[bool]" = factory.Faker("pybool")
 
   class Meta:
     model = 'scrapers.ScraperConfig'

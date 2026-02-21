@@ -5,7 +5,9 @@ from typing import TYPE_CHECKING
 
 from django.contrib import admin
 from errors.admin.list_filters.error import error_list_filter
-from scrapers.models import ScraperConfig
+from scrapers.admin.mixins.scraper_config_actions import (
+    ScraperConfigActionsAdminMixin,
+)
 
 if TYPE_CHECKING:
   from django.db.models import QuerySet
@@ -13,7 +15,12 @@ if TYPE_CHECKING:
   from errors.models import Error
 
 
-class ErrorAdmin(admin.ModelAdmin["Error"]):
+class ErrorAdmin(
+    ScraperConfigActionsAdminMixin["Error"],
+    admin.ModelAdmin["Error"],
+):
+  scraper_config_is_related_model = True
+
   actions = (
       "action_activate_scraper_configs",
       "action_deactivate_scraper_configs",
@@ -28,42 +35,11 @@ class ErrorAdmin(admin.ModelAdmin["Error"]):
       "item__name",
       "scraper_config__url",
   )
-
-  @admin.action(description="Activate related scraper configs")
-  def action_activate_scraper_configs(
-      self,
-      request: HttpRequest,
-      queryset: QuerySet[Error],
-  ) -> None:
-    """Activate the selected scraper configs."""
-    scraper_config_ids = queryset.values_list("scraper_config__id", flat=True)
-    scraper_config_queryset = ScraperConfig.objects.filter(
-        id__in=scraper_config_ids
-    )
-    updated_count = scraper_config_queryset.update(is_active=True)
-
-    self.message_user(
-        request, f"{updated_count} related scraper configs were successfully "
-        "activated."
-    )
-
-  @admin.action(description="Deactivate related scraper configs")
-  def action_deactivate_scraper_configs(
-      self,
-      request: HttpRequest,
-      queryset: QuerySet[Error],
-  ) -> None:
-    """Disable the selected scraper configs."""
-    scraper_config_ids = queryset.values_list("scraper_config__id", flat=True)
-    scraper_config_queryset = ScraperConfig.objects.filter(
-        id__in=scraper_config_ids
-    )
-    updated_count = scraper_config_queryset.update(is_active=False)
-
-    self.message_user(
-        request, f"{updated_count} related scraper configs were successfully "
-        "deactivated."
-    )
+  search_fields = (
+      "store__franchise__name",
+      "item__name",
+      "scraper_config__url",
+  )
 
   @admin.action(description="Mark selected errors as reoccurring")
   def action_mark_as_reoccurring(

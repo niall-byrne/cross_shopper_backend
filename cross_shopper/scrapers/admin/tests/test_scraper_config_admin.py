@@ -7,6 +7,9 @@ from django.contrib import admin
 from scrapers.admin.list_filters.scraper_config import (
     scraper_config_list_filter,
 )
+from scrapers.admin.mixins.scraper_config_actions import (
+    ScraperConfigActionsAdminMixin,
+)
 
 if TYPE_CHECKING:
   from scrapers.admin.scraper_config import ScraperConfigAdmin
@@ -19,6 +22,16 @@ class TestScraperConfigAdmin:
       scraper_config_admin: ScraperConfigAdmin,
   ) -> None:
     assert isinstance(scraper_config_admin, admin.ModelAdmin)
+    assert isinstance(scraper_config_admin, ScraperConfigActionsAdminMixin)
+
+  def test_instantiate__has_correct_actions(
+      self,
+      scraper_config_admin: ScraperConfigAdmin,
+  ) -> None:
+    assert scraper_config_admin.actions == (
+        "action_activate_scraper_configs",
+        "action_deactivate_scraper_configs",
+    )
 
   def test_instantiate__has_correct_list_filter(
       self,
@@ -31,3 +44,8 @@ class TestScraperConfigAdmin:
       scraper_config_admin: ScraperConfigAdmin,
   ) -> None:
     assert scraper_config_admin.ordering == ("scraper__name", "url")
+
+  def test_instantiate__has_correct_search_fields(
+      self, scraper_config_admin: ScraperConfigAdmin
+  ) -> None:
+    assert scraper_config_admin.search_fields == ("scraper__name", "url")

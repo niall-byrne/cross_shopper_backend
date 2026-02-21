@@ -7,6 +7,7 @@ from django.contrib import admin
 from items.admin import (
     brand,
     item,
+    item_scraper_config,
     packaging,
     packaging_container,
     packaging_unit,
@@ -97,6 +98,17 @@ def item_admin(
   )
 
   return item.ItemAdmin(
+      model=mocked_model,
+      admin_site=mocked_admin_site,
+  )
+
+
+@pytest.fixture
+def item_scraper_config_admin(
+    mocked_admin_site: mock.Mock,
+    mocked_model: mock.Mock,
+) -> item_scraper_config.ItemScraperConfigAdmin:
+  return item_scraper_config.ItemScraperConfigAdmin(
       model=mocked_model,
       admin_site=mocked_admin_site,
   )

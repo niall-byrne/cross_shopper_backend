@@ -4,6 +4,7 @@ from unittest import mock
 
 from django.contrib import admin
 from errors.admin.error import ErrorAdmin
+from errors.admin.list_display.error import error_list_display
 from errors.admin.list_filter.error import error_list_filter
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
@@ -30,6 +31,12 @@ class TestErrorAdmin:
         "activate_scraper_configs",
         "deactivate_scraper_configs",
     )
+
+  def test_instantiate__has_correct_list_display(
+      self,
+      error_admin: ErrorAdmin,
+  ) -> None:
+    assert error_admin.list_display == tuple(map(str, error_list_display))
 
   def test_instantiate__has_correct_list_filter(
       self,

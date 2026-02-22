@@ -31,6 +31,20 @@ class TestErrorAdmin:
         "deactivate_scraper_configs",
     )
 
+  def test_instantiate__has_correct_list_display(
+      self,
+      error_admin: ErrorAdmin,
+  ) -> None:
+    assert error_admin.list_display == (
+        "error",
+        "count",
+        "is_reoccurring",
+        "error_franchise",
+        "error_item",
+        "error_url",
+        "error_store",
+    )
+
   def test_instantiate__has_correct_list_filter(
       self,
       error_admin: ErrorAdmin,
@@ -42,11 +56,10 @@ class TestErrorAdmin:
       error_admin: ErrorAdmin,
   ) -> None:
     assert error_admin.ordering == (
-        "-count",
-        "type",
+        "type__name",
         "store__franchise__name",
         "item__name",
-        "scraper_config",
+        "scraper_config__url",
     )
 
   def test_instantiate__has_correct_search_fields(

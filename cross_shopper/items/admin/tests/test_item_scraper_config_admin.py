@@ -2,6 +2,9 @@
 
 from django.contrib import admin
 from items.admin.item_scraper_config import ItemScraperConfigAdmin
+from items.admin.list_displays.item_scraper_config import (
+    item_scraper_config_list_display,
+)
 from items.admin.list_filters.item_scraper_config import (
     item_scraper_config_list_filter,
 )
@@ -26,6 +29,14 @@ class TestItemScraperConfigAdmin:
     assert item_scraper_config_admin.actions == (
         "activate_scraper_configs",
         "deactivate_scraper_configs",
+    )
+
+  def test_instantiate__has_correct_list_display(
+      self,
+      item_scraper_config_admin: ItemScraperConfigAdmin,
+  ) -> None:
+    assert item_scraper_config_admin.list_display == tuple(
+        map(str, item_scraper_config_list_display)
     )
 
   def test_instantiate__has_correct_list_filter(

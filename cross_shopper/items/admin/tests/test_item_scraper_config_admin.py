@@ -45,3 +45,13 @@ class TestItemScraperConfigAdmin:
         "activate_scraper_configs",
         "deactivate_scraper_configs",
     )
+
+  def test_instantiate__list_display(
+      self,
+      item_scraper_config_admin: ItemScraperConfigAdmin,
+  ) -> None:
+    assert item_scraper_config_admin.list_display == (
+        "item_scraper_config",
+        "item_scraper_config__scraper_config__is_active",
+        "item_scraper_config__scraper_config",
+    )

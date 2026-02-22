@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from django.contrib import admin
+from errors.admin.list_displays.error import error_list_display
 from errors.admin.list_filters.error import error_list_filter
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
@@ -35,6 +36,12 @@ class TestErrorAdmin:
         "action_mark_as_non_reoccurring",
         "action_reset_error_count",
     )
+
+  def test_instantiate__has_correct_list_display(
+      self,
+      error_admin: ErrorAdmin,
+  ) -> None:
+    assert error_admin.list_display == tuple(map(str, error_list_display))
 
   def test_instantiate__has_correct_list_filter(
       self,

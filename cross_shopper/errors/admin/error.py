@@ -4,10 +4,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from django.contrib import admin
+from errors.admin.list_displays.error import error_list_display
 from errors.admin.list_filters.error import error_list_filter
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )
+from utilities.admin.list_displays import generate_list_display
 
 if TYPE_CHECKING:
   from django.db.models import QuerySet
@@ -15,6 +17,7 @@ if TYPE_CHECKING:
   from errors.models import Error
 
 
+@generate_list_display(error_list_display)
 class ErrorAdmin(
     ScraperConfigActionsAdminMixin["Error"],
     admin.ModelAdmin["Error"],

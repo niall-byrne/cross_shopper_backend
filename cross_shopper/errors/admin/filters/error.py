@@ -18,6 +18,7 @@ class FranchiseNameFilter(AdminListFilterBase):
 class IsReoccurringFilter(AdminListFilterBase):
   title = "is_reoccurring"
   parameter_name = "is_reoccurring"
+  is_boolean = True
 
 
 class ItemNameFilter(AdminListFilterBase):
@@ -28,6 +29,7 @@ class ItemNameFilter(AdminListFilterBase):
 class ScraperConfigIsActiveFilter(AdminListFilterBase):
   title = "scraper_config active"
   parameter_name = "scraper_config__is_active"
+  is_boolean = True
 
 
 class ScraperNameFilter(AdminListFilterBase):

@@ -18,11 +18,10 @@ class TestErrorAdmin:
 
   def test_instantiate__ordering(self, error_admin: ErrorAdmin) -> None:
     assert error_admin.ordering == (
-        "-count",
-        "type",
+        "type__name",
         "store__franchise__name",
         "item__name",
-        "scraper_config",
+        "scraper_config__url",
     )
 
   def test_instantiate__search_fields(self, error_admin: ErrorAdmin) -> None:
@@ -38,6 +37,17 @@ class TestErrorAdmin:
         "mark_as_non_reoccurring",
         "activate_scraper_configs",
         "deactivate_scraper_configs",
+    )
+
+  def test_instantiate__list_display(self, error_admin: ErrorAdmin) -> None:
+    assert error_admin.list_display == (
+        "error",
+        "count",
+        "is_reoccurring",
+        "error_franchise",
+        "error_item",
+        "error_url",
+        "error_store",
     )
 
   def test_mark_as_reoccurring__updates_selected(

@@ -1,6 +1,11 @@
 """Test the ScraperConfig admin model list filter."""
 
-from scrapers.admin.list_filter.scraper_config import scraper_config_list_filter
+from scrapers.admin.list_filter.filters.scraper_config.has_items import (
+    HasItemsFilter,
+)
+from scrapers.admin.list_filter.scraper_config import (
+    scraper_config_list_filter,
+)
 from utilities.admin.list_filter import GenericListFilter
 from utilities.testing.comparisons.is_subclass import DynamicSubClass
 
@@ -19,4 +24,5 @@ class TestScraperConfigListFilter:
                 "is_reversed": False,
             }
         ),
+        HasItemsFilter,
     )

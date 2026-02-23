@@ -1,6 +1,7 @@
 """ItemScraperConfig model."""
 
 from django.db import models
+from items.models.managers.item_scraper_configs.associations import Associations
 from utilities.models.bases.model_base import ModelBase
 
 
@@ -15,6 +16,9 @@ class ItemScraperConfig(
       'scrapers.ScraperConfig',
       on_delete=models.PROTECT,
   )
+
+  associations = Associations()
+  objects = models.Manager()
 
   class Meta:
     unique_together = ('item', 'scraper_config')

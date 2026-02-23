@@ -18,6 +18,7 @@ class ScraperFilter(AdminListFilterBase):
 class ScraperIsActiveFilter(AdminListFilterBase):
   title = 'is active'
   parameter_name = 'scraper_config__is_active'
+  is_boolean = True
 
 
 item_scraper_config_filter = (ScraperIsActiveFilter, ScraperFilter, ItemFilter)

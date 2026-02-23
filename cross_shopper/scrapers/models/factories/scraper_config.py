@@ -12,7 +12,9 @@ if TYPE_CHECKING:  # no cover
 
 class ScraperConfigFactory(factory.django.DjangoModelFactory["ScraperConfig"]):
   scraper: "AliasSubFactory[Scraper]" = factory.SubFactory(ScraperFactory)
-  url: "factory.Faker[str, str]" = factory.Faker("url")
+  url: "factory.Sequence[str]" = factory.Sequence(
+      lambda n: "/url/path/%03d" % n
+  )
   is_active: "AliasFaker[bool]" = factory.Faker("pybool")
 
   class Meta:

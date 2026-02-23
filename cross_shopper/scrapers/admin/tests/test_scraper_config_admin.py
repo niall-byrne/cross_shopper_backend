@@ -11,25 +11,41 @@ class TestScraperConfigAdmin:
   """Test the ScraperConfigAdmin class."""
 
   def test_instantiate__inheritance(
-      self, scraper_config_admin: ScraperConfigAdmin
+      self,
+      scraper_config_admin: ScraperConfigAdmin,
   ) -> None:
     assert isinstance(scraper_config_admin, admin.ModelAdmin)
     assert isinstance(scraper_config_admin, ScraperConfigActionsAdminMixin)
 
   def test_instantiate__ordering(
-      self, scraper_config_admin: ScraperConfigAdmin
+      self,
+      scraper_config_admin: ScraperConfigAdmin,
   ) -> None:
     assert scraper_config_admin.ordering == ('scraper__name', 'url')
 
   def test_instantiate__search_fields(
-      self, scraper_config_admin: ScraperConfigAdmin
+      self,
+      scraper_config_admin: ScraperConfigAdmin,
   ) -> None:
     assert scraper_config_admin.search_fields == ('scraper__name', 'url')
 
   def test_instantiate__actions(
-      self, scraper_config_admin: ScraperConfigAdmin
+      self,
+      scraper_config_admin: ScraperConfigAdmin,
   ) -> None:
     assert scraper_config_admin.actions == (
         "activate_scraper_configs",
         "deactivate_scraper_configs",
+    )
+
+  def test_instantiate__list_display(
+      self,
+      scraper_config_admin: ScraperConfigAdmin,
+  ) -> None:
+    assert scraper_config_admin.list_display == (
+        'scraper_config__url',
+        'is_active',
+        'scraper_config__scraper__name',
+        'scraper_config__has_item',
+        'scraper_config__associated_item',
     )

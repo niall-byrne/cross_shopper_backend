@@ -12,8 +12,11 @@ AliasGenericClassFactory = Callable[[AliasAttributes], AliasGenericClass]
 @pytest.fixture
 def generic_class() -> AliasGenericClass:
 
-  class GenericClass:
-    pass
+  class GenericClass():
+
+    def __init__(self, attr: Dict[str, Any]) -> None:
+      for attribute, value in attr.items():
+        setattr(self, attribute, value)
 
   return GenericClass
 

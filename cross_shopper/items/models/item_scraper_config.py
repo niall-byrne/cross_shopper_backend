@@ -1,7 +1,7 @@
 """ItemScraperConfig model."""
 
 from django.db import models
-from django.db.models import UniqueConstraint
+from items.models.managers.item_scraper_configs.associations import Associations
 from utilities.models.bases.base_model import BaseModel
 
 
@@ -17,10 +17,13 @@ class ItemScraperConfig(
       on_delete=models.PROTECT,
   )
 
+  associations = Associations()
+  objects = models.Manager()
+
   class Meta:
     unique_together = ('item', 'scraper_config')
     constraints = [
-        UniqueConstraint(
+        models.UniqueConstraint(
             fields=['scraper_config'],
             name='unique_scraper_config',
         )

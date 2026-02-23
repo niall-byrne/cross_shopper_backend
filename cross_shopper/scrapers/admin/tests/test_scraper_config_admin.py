@@ -27,6 +27,18 @@ class TestScraperConfigAdmin:
         "deactivate_scraper_configs",
     )
 
+  def test_instantiate__has_correct_list_display(
+      self,
+      scraper_config_admin: ScraperConfigAdmin,
+  ) -> None:
+    assert scraper_config_admin.list_display == (
+        'scraper_config__url',
+        'is_active',
+        'scraper_config__scraper__name',
+        'scraper_config__has_item',
+        'scraper_config__associated_item',
+    )
+
   def test_instantiate__has_correct_list_filter(
       self,
       scraper_config_admin: ScraperConfigAdmin,

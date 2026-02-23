@@ -34,6 +34,7 @@ class TestItemScraperConfigAdmin:
     assert item_scraper_config_admin.list_display == (
         "item_scraper_config",
         "item_scraper_config__scraper_config__is_active",
+        'item_scraper_config__item',
         "item_scraper_config__scraper_config",
     )
 

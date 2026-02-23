@@ -13,7 +13,10 @@ AliasGenericClassFactory = Callable[[AliasAttributes], AliasGenericClass]
 def generic_class() -> AliasGenericClass:
 
   class GenericClass:
-    pass
+
+    def __init__(self, attr: Dict[str, Any]) -> None:
+      for attribute, value in attr.items():
+        setattr(self, attribute, value)
 
   return GenericClass
 

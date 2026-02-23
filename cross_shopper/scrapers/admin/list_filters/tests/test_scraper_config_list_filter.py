@@ -1,5 +1,8 @@
 """Test the ScraperConfig admin model list filter."""
 
+from scrapers.admin.list_filters.filters.scraper_config.has_items import (
+    HasItemsFilter,
+)
 from scrapers.admin.list_filters.scraper_config import (
     scraper_config_list_filter,
 )
@@ -21,4 +24,5 @@ class TestScraperConfigListFilter:
                 "is_reversed": False,
             }
         ),
+        HasItemsFilter,
     )

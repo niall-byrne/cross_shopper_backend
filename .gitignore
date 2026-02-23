@@ -179,5 +179,5 @@ pyrightconfig.json
 .cicd-tools/manifest.json
 .vale/*
 !.vale/Vocab
+.vscode
 db.sqlite3
-

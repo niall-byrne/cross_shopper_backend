@@ -143,7 +143,7 @@ class TestDynamicSubClass:
     )
 
   @scenarios
-  def test_repr__returns_expected_string(
+  def test_instantiate__repr__returns_expected_string(
       self,
       attributes: AliasAttributes,
       generic_class: AliasGenericClass,

@@ -26,7 +26,7 @@ class TestPackaging:
             "__all__":
                 [
                     "Packaging with this Quantity, Container and Unit already exists.",
-                ]
+                ],
         }
     )
 
@@ -88,7 +88,6 @@ class TestPackaging:
     assert packaging.unit is not None
 
   def test_clean__no_container__no_quantity__no_unit__exception(self,) -> None:
-
     with pytest.raises(ValidationError) as exc:
       packaging = Packaging(
           container=None,

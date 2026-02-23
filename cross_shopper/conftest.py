@@ -9,6 +9,7 @@ pytest_plugins = [
     "errors.models.fixtures.error_type",
     "items.models.fixtures.brand",
     "items.models.fixtures.item",
+    "items.models.fixtures.item_scraper_config",
     "items.models.fixtures.packaging",
     "pricing.models.fixtures.pricing",
     "reports.models.fixtures.report",

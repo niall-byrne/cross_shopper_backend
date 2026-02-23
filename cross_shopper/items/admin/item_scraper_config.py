@@ -38,6 +38,7 @@ class ItemScraperConfigAdmin(
   list_display = (
       "item_scraper_config",
       "item_scraper_config__scraper_config__is_active",
+      "item_scraper_config__item",
       "item_scraper_config__scraper_config",
   )
 
@@ -47,7 +48,14 @@ column_generator(ItemScraperConfigAdmin)(
         ColumnObjectConfig(
             method_name="item_scraper_config",
             description="Item Scraper Config",
-            obj_lookup="item.name",
+            obj_lookup="",
+        ),
+        ColumnLinkConfig(
+            method_name="item_scraper_config__item",
+            description="Item",
+            reverse_url_name="admin:items_item_change",
+            obj_id_lookup="item.id",
+            obj_name_lookup="item",
         ),
         ColumnLinkConfig(
             method_name="item_scraper_config__scraper_config",
@@ -56,7 +64,7 @@ column_generator(ItemScraperConfigAdmin)(
             obj_id_lookup="scraper_config.id",
             obj_name_lookup="scraper_config",
         ),
-        ColumnObjectConfig(            
+        ColumnObjectConfig(
             method_name="item_scraper_config__scraper_config__is_active",
             description="Is Active",
             obj_lookup="scraper_config.is_active",

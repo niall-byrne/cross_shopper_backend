@@ -2,7 +2,9 @@
 
 from typing import Any, Dict
 
+from django.db.models import Prefetch
 from django.utils import timezone
+from pricing.models import Price
 from reports.models import Report
 from rest_framework import serializers
 from .item import ItemJsonSerializer
@@ -34,9 +36,30 @@ class ReportJsonSerializer(serializers.ModelSerializer):
 
   def get_items(self, instance: Report) -> list[Dict[str, Any]]:
     """Get the serialized item model representation."""
+    week = self.context.get('week')
+    year = self.context.get('year')
+
     items = instance.item.all().order_by(*self.ITEM_FIELD_ORDERING)
+
+    if week is not None and year is not None:
+      items = items.prefetch_related(
+          Prefetch(
+              'price_set',
+              queryset=Price.objects.filter(
+                  week=week,
+                  year=year,
+                  store__in=instance.store.all(),
+              ),
+              to_attr='current_prices',
+          )
+      )
+
     return ItemJsonSerializer(
         items,
         many=True,
-        context={'report': instance},
+        context={
+            'report': instance,
+            'week': week,
+            'year': year,
+        },
     ).data

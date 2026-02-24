@@ -10,6 +10,8 @@ from django.http import HttpRequest
 from items.models import Brand, Item, ItemScraperConfig, Packaging
 from reports.models import Report
 
+from . import filters
+
 
 class ItemScraperConfigInline(
     admin.StackedInline[ItemScraperConfig, ItemScraperConfig],
@@ -41,6 +43,7 @@ class ItemAdmin(admin.ModelAdmin[Item]):
   )
   inlines = [ItemScraperConfigInline]
   search_fields = ('name', 'brand__name')
+  list_filter = filters.item_filter
   ordering = (
       'name',
       'brand__name',

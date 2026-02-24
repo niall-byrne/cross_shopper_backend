@@ -5,6 +5,7 @@ from unittest import mock
 import pytest
 from constance.test import override_config
 from django.contrib import admin
+from items.admin import filters
 from items.admin.item import ItemAdmin, ItemScraperConfigInline
 
 
@@ -55,6 +56,12 @@ class TestItemAdmin:
       item_admin: ItemAdmin,
   ) -> None:
     assert item_admin.search_fields == ("name", "brand__name")
+
+  def test_instantiate__has_correct_list_filter(
+      self,
+      item_admin: ItemAdmin,
+  ) -> None:
+    assert item_admin.list_filter == filters.item_filter
 
   def test_instantiate__ordering(self, item_admin: ItemAdmin) -> None:
     assert item_admin.ordering == (

@@ -4,6 +4,8 @@ from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from errors.models import Error
+
+from . import filters
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )
@@ -31,6 +33,7 @@ class ErrorAdmin(ScraperConfigAdminActions, admin.ModelAdmin[Error]):
       "item__name",
       "scraper_config__url",
   )
+  list_filter = filters.error_filter
   actions = (
       "mark_as_reoccurring",
       "mark_as_non_reoccurring",

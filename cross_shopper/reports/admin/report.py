@@ -3,6 +3,8 @@
 from django.contrib import admin
 from reports.models import Report, ReportStore
 
+from . import filters
+
 
 class ReportStoreInline(admin.TabularInline[ReportStore, ReportStore]):
   model = ReportStore
@@ -28,4 +30,5 @@ class ReportAdmin(admin.ModelAdmin[Report]):
       'item',
   ]
   inlines = [ReportStoreInline]
+  list_filter = filters.report_filter
   ordering = ('name',)

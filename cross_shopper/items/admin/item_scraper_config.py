@@ -2,6 +2,8 @@
 
 from django.contrib import admin
 from items.models import ItemScraperConfig
+
+from . import filters
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )
@@ -35,6 +37,7 @@ class ItemScraperConfigAdmin(
       "activate_scraper_configs",
       "deactivate_scraper_configs",
   )
+  list_filter = filters.item_scraper_config_filter
   list_display = (
       "item_scraper_config",
       "item_scraper_config__scraper_config__is_active",

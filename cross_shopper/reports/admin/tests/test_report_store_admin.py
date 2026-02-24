@@ -1,6 +1,7 @@
 """Test the admin for the ReportStore model."""
 
 from django.contrib import admin
+from reports.admin import filters
 from reports.admin.report_store import ReportStoreAdmin
 
 
@@ -21,6 +22,12 @@ class TestReportStoreAdmin:
         "store__address__locality__name",
         "store__franchise__name",
     )
+
+  def test_instantiate__has_correct_list_filter(
+      self,
+      report_store_admin: ReportStoreAdmin,
+  ) -> None:
+    assert report_store_admin.list_filter == filters.report_store_filter
 
   def test_instantiate__ordering(
       self, report_store_admin: ReportStoreAdmin

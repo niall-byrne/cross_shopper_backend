@@ -5,6 +5,8 @@ from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )
 from scrapers.models import ScraperConfig
+
+from . import filters
 from utilities.admin.list_display_column import (
     ColumnLinkConfig,
     ColumnObjectConfig,
@@ -23,6 +25,7 @@ class ScraperConfigAdmin(
   ordering = ('scraper__name', 'url')
   search_fields = ('scraper__name', 'url')
   actions = ("activate_scraper_configs", "deactivate_scraper_configs")
+  list_filter = filters.scraper_config_filter
   list_display = (
       'scraper_config__url', 
       'is_active', 

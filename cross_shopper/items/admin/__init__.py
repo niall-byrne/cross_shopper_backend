@@ -9,7 +9,6 @@ from items.models import (
     PackagingContainer,
     PackagingUnit,
 )
-from . import filters
 from .brand import BrandAdmin
 from .item import ItemAdmin
 from .item_scraper_config import ItemScraperConfigAdmin
@@ -18,16 +17,8 @@ from .packaging_container import PackagingContainerAdmin
 from .packaging_unit import PackagingUnitAdmin
 
 admin.site.register(Brand, BrandAdmin)
-admin.site.register(Item, ItemAdmin, list_filter=filters.item_filter)
-admin.site.register(
-    ItemScraperConfig,
-    ItemScraperConfigAdmin,
-    list_filter=filters.item_scraper_config_filter,
-)
-admin.site.register(
-    Packaging,
-    PackagingAdmin,
-    list_filter=filters.packaging_filter,
-)
+admin.site.register(Item, ItemAdmin)
+admin.site.register(ItemScraperConfig, ItemScraperConfigAdmin)
+admin.site.register(Packaging, PackagingAdmin)
 admin.site.register(PackagingContainer, PackagingContainerAdmin)
 admin.site.register(PackagingUnit, PackagingUnitAdmin)

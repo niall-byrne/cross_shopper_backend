@@ -2,6 +2,8 @@
 
 from django.contrib import admin
 
+from .filters import price_filter
+
 
 class PriceAdmin(admin.ModelAdmin):
   fieldsets = (
@@ -28,4 +30,5 @@ class PriceAdmin(admin.ModelAdmin):
       'last_52_weeks_low',
   )
   search_fields = ("item__name", "store__franchise__name")
+  list_filter = price_filter
   ordering = ('-year', '-week')

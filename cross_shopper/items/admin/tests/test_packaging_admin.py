@@ -1,6 +1,7 @@
 """Test the admin for the Packaging model."""
 
 from django.contrib import admin
+from items.admin import filters
 from items.admin.packaging import PackagingAdmin
 
 
@@ -11,6 +12,12 @@ class TestPackagingAdmin:
       self, packaging_admin: PackagingAdmin
   ) -> None:
     assert isinstance(packaging_admin, admin.ModelAdmin)
+
+  def test_instantiate__list_filter(
+      self,
+      packaging_admin: PackagingAdmin,
+  ) -> None:
+    assert packaging_admin.list_filter == filters.packaging_filter
 
   def test_instantiate__ordering(self, packaging_admin: PackagingAdmin) -> None:
     assert packaging_admin.ordering == ('container__name', 'unit__name')

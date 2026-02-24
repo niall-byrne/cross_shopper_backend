@@ -1,6 +1,7 @@
 """Test the admin for the ItemScraperConfig model."""
 
 from django.contrib import admin
+from items.admin import filters
 from items.admin.item_scraper_config import ItemScraperConfigAdmin
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
@@ -44,6 +45,14 @@ class TestItemScraperConfigAdmin:
     assert item_scraper_config_admin.actions == (
         "activate_scraper_configs",
         "deactivate_scraper_configs",
+    )
+
+  def test_instantiate__list_filter(
+      self,
+      item_scraper_config_admin: ItemScraperConfigAdmin,
+  ) -> None:
+    assert item_scraper_config_admin.list_filter == (
+        filters.item_scraper_config_filter
     )
 
   def test_instantiate__list_display(

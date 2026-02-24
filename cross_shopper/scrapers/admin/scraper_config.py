@@ -1,12 +1,11 @@
 """Admin for the scraper config model."""
 
 from django.contrib import admin
+from scrapers.admin import filters
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )
 from scrapers.models import ScraperConfig
-
-from . import filters
 from utilities.admin.list_display_column import (
     ColumnLinkConfig,
     ColumnObjectConfig,
@@ -27,8 +26,8 @@ class ScraperConfigAdmin(
   actions = ("activate_scraper_configs", "deactivate_scraper_configs")
   list_filter = filters.scraper_config_filter
   list_display = (
-      'scraper_config__url', 
-      'is_active', 
+      'scraper_config__url',
+      'is_active',
       'scraper_config__scraper__name',
       'scraper_config__has_item',
       'scraper_config__associated_item',

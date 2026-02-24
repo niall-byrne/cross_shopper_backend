@@ -7,10 +7,9 @@ from django.contrib import admin
 from django.db.models import ForeignKey
 from django.forms import Form
 from django.http import HttpRequest
+from items.admin import filters
 from items.models import Brand, Item, ItemScraperConfig, Packaging
 from reports.models import Report
-
-from . import filters
 
 
 class ItemScraperConfigInline(

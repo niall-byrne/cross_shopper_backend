@@ -1,14 +1,14 @@
 """Test the price model list filters."""
 
-from utilities.admin.filters.bases.base_admin_list_filter import (
-    AdminListFilterBase,
-)
 from pricing.admin.filters.price import (
-    ItemFilter,
     BrandFilter,
     FranchiseFilter,
+    ItemFilter,
     LocationFilter,
     YearFilter,
+)
+from utilities.admin.filters.bases.base_admin_list_filter import (
+    AdminListFilterBase,
 )
 
 

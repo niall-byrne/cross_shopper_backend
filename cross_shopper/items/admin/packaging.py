@@ -1,9 +1,8 @@
 """Admin for the packaging container model."""
 
 from django.contrib import admin
+from items.admin import filters
 from items.models import Packaging
-
-from . import filters
 
 
 class PackagingAdmin(admin.ModelAdmin[Packaging]):

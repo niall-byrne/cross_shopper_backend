@@ -3,8 +3,8 @@
 from typing import TYPE_CHECKING, Generic, cast
 
 from django.contrib import admin
+from scrapers.admin.mixins.types import AdminMixinType, ModelType
 from scrapers.models import ScraperConfig
-from .types import AdminMixinType, ModelType
 
 if TYPE_CHECKING:  # no cover
   from django.db.models import QuerySet

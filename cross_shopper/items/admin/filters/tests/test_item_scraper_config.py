@@ -1,12 +1,12 @@
 """Test the item scraper config model list filters."""
 
-from utilities.admin.filters.bases.base_admin_list_filter import (
-    AdminListFilterBase,
-)
 from items.admin.filters.item_scraper_config import (
     ItemFilter,
     ScraperFilter,
     ScraperIsActiveFilter,
+)
+from utilities.admin.filters.bases.base_admin_list_filter import (
+    AdminListFilterBase,
 )
 
 

@@ -1,9 +1,8 @@
 """Admin for the item scraper config model."""
 
 from django.contrib import admin
+from items.admin import filters
 from items.models import ItemScraperConfig
-
-from . import filters
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )

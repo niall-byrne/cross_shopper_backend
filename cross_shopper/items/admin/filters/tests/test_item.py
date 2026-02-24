@@ -1,12 +1,12 @@
 """Test the item model list filters."""
 
-from utilities.admin.filters.bases.base_admin_list_filter import (
-    AdminListFilterBase,
-)
 from items.admin.filters.item import (
     BrandFilter,
     ContainerFilter,
     NameFilter,
+)
+from utilities.admin.filters.bases.base_admin_list_filter import (
+    AdminListFilterBase,
 )
 
 

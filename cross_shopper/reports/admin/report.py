@@ -1,9 +1,8 @@
 """Admin for the report model."""
 
 from django.contrib import admin
+from reports.admin import filters
 from reports.models import Report, ReportStore
-
-from . import filters
 
 
 class ReportStoreInline(admin.TabularInline[ReportStore, ReportStore]):

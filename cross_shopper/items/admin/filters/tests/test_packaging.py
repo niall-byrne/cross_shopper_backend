@@ -1,11 +1,11 @@
 """Test the packaging model list filters."""
 
-from utilities.admin.filters.bases.base_admin_list_filter import (
-    AdminListFilterBase,
-)
 from items.admin.filters.packaging import (
     ContainerFilter,
     UnitFilter,
+)
+from utilities.admin.filters.bases.base_admin_list_filter import (
+    AdminListFilterBase,
 )
 
 

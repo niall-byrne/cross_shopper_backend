@@ -3,7 +3,7 @@
 from unittest import mock
 
 from django.contrib import admin
-from errors.admin import filters, ErrorAdmin
+from errors.admin import ErrorAdmin, filters
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )

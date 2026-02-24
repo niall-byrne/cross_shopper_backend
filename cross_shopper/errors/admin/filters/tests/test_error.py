@@ -1,8 +1,5 @@
 """Test the error model list filters."""
 
-from utilities.admin.filters.bases.base_admin_list_filter import (
-    AdminListFilterBase,
-)
 from errors.admin.filters.error import (
     ErrorTypeFilter,
     FranchiseNameFilter,
@@ -10,6 +7,9 @@ from errors.admin.filters.error import (
     ItemNameFilter,
     ScraperConfigIsActiveFilter,
     ScraperNameFilter,
+)
+from utilities.admin.filters.bases.base_admin_list_filter import (
+    AdminListFilterBase,
 )
 
 

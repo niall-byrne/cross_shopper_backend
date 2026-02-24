@@ -3,12 +3,12 @@
 from unittest import mock
 
 import pytest
+from scrapers.admin.filters.scraper_config import (
+    HasItemsFilter,
+    ScraperFilter,
+)
 from utilities.admin.filters.bases.base_admin_list_filter import (
     AdminListFilterBase,
-)
-from scrapers.admin.filters.scraper_config import (
-    ScraperFilter,
-    HasItemsFilter,
 )
 
 
@@ -63,7 +63,9 @@ class TestHasItemsFilter:
 
     result = instance.queryset(mocked_request, mocked_queryset)
 
-    mocked_model.associations.with_items.assert_called_once_with(mocked_queryset)
+    mocked_model.associations.with_items.assert_called_once_with(
+        mocked_queryset
+    )
     assert result == mocked_model.associations.with_items.return_value
 
   @mock.patch("scrapers.admin.filters.scraper_config.ItemScraperConfig")

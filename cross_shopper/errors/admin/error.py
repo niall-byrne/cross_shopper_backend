@@ -3,9 +3,8 @@
 from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpRequest
+from errors.admin import filters
 from errors.models import Error
-
-from . import filters
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )

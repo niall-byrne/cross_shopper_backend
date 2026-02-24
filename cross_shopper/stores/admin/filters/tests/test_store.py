@@ -1,11 +1,11 @@
 """Test the store model list filters."""
 
-from utilities.admin.filters.bases.base_admin_list_filter import (
-    AdminListFilterBase,
-)
 from stores.admin.filters.store import (
     FranchiseFilter,
     LocationFilter,
+)
+from utilities.admin.filters.bases.base_admin_list_filter import (
+    AdminListFilterBase,
 )
 
 

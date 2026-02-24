@@ -1,9 +1,8 @@
 """Admin for the franchise model."""
 
 from django.contrib import admin
+from stores.admin import filters
 from stores.models import Franchise
-
-from . import filters
 
 
 class FranchiseAdmin(admin.ModelAdmin[Franchise]):

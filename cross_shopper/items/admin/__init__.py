@@ -1,6 +1,12 @@
 """Admin models for the items app."""
 
 from django.contrib import admin
+from items.admin.brand import BrandAdmin
+from items.admin.item import ItemAdmin
+from items.admin.item_scraper_config import ItemScraperConfigAdmin
+from items.admin.packaging import PackagingAdmin
+from items.admin.packaging_container import PackagingContainerAdmin
+from items.admin.packaging_unit import PackagingUnitAdmin
 from items.models import (
     Brand,
     Item,
@@ -9,12 +15,6 @@ from items.models import (
     PackagingContainer,
     PackagingUnit,
 )
-from .brand import BrandAdmin
-from .item import ItemAdmin
-from .item_scraper_config import ItemScraperConfigAdmin
-from .packaging import PackagingAdmin
-from .packaging_container import PackagingContainerAdmin
-from .packaging_unit import PackagingUnitAdmin
 
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Item, ItemAdmin)

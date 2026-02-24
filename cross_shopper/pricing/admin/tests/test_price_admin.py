@@ -1,7 +1,7 @@
 """Test the admin for the Price model."""
 
 from django.contrib import admin
-from pricing.admin import filters, PriceAdmin
+from pricing.admin import PriceAdmin, filters
 
 
 class TestPriceAdmin:

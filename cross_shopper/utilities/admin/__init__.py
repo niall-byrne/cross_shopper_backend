@@ -1,3 +1,3 @@
 """Admin models for the utilities app."""
 
-from . import address  # noqa: F401
+from utilities.admin import address  # noqa: F401

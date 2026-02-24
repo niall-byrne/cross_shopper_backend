@@ -1,8 +1,7 @@
 """Admin for the price model."""
 
 from django.contrib import admin
-
-from .filters import price_filter
+from pricing.admin.filters import price_filter
 
 
 class PriceAdmin(admin.ModelAdmin):

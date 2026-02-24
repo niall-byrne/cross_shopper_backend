@@ -1,12 +1,12 @@
 """Test the report model list filters."""
 
+from reports.admin.filters.report import (
+    FranchiseFilter,
+    ItemFilter,
+    LocationFilter,
+)
 from utilities.admin.filters.bases.base_admin_list_filter import (
     AdminListFilterBase,
-)
-from reports.admin.filters.report import (
-    ItemFilter,
-    FranchiseFilter,
-    LocationFilter,
 )
 
 

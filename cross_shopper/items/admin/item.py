@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from constance import config
 from django.contrib import admin
-from items.admin.filters.item import item_filter
+from items.admin.list_filter.item import item_filter
 from items.models import Brand, Item, ItemScraperConfig, Packaging
 from reports.models import Report
 

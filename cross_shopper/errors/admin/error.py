@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 from django.contrib import admin
-from errors.admin.filters.error import error_filter
+from errors.admin.list_filter.error import error_filter
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )

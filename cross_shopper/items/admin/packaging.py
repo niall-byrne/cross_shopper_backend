@@ -1,7 +1,7 @@
 """Admin for the packaging container model."""
 
 from django.contrib import admin
-from items.admin.filters.packaging import packaging_filter
+from items.admin.list_filter.packaging import packaging_filter
 from items.models import Packaging
 
 

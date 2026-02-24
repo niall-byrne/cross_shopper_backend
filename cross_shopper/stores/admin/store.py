@@ -1,7 +1,7 @@
 """Admin for the store model."""
 
 from django.contrib import admin
-from stores.admin.filters.store import store_filter
+from stores.admin.list_filter.store import store_filter
 from stores.models import Store
 
 

@@ -7,6 +7,11 @@ from pricing.admin import PriceAdmin
 
 
 @pytest.fixture
+def mocked_request() -> mock.Mock:
+  return mock.Mock()
+
+
+@pytest.fixture
 def mocked_admin_site() -> mock.Mock:
   return mock.Mock()
 

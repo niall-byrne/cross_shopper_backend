@@ -1,7 +1,7 @@
 """Test the admin for the ReportStore model."""
 
 from django.contrib import admin
-from reports.admin.filters.report_store import report_store_filter
+from reports.admin.list_filter.report_store import report_store_filter
 from reports.admin.report_store import ReportStoreAdmin
 
 

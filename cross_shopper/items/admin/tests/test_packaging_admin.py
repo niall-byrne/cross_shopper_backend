@@ -1,7 +1,7 @@
 """Test the admin for the Packaging model."""
 
 from django.contrib import admin
-from items.admin.filters.packaging import packaging_filter
+from items.admin.list_filter.packaging import packaging_filter
 from items.admin.packaging import PackagingAdmin
 
 

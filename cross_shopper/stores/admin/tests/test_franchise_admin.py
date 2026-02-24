@@ -1,7 +1,7 @@
 """Test the admin for the Franchise model."""
 
 from django.contrib import admin
-from stores.admin.filters.franchise import franchise_filter
+from stores.admin.list_filter.franchise import franchise_filter
 from stores.admin.franchise import FranchiseAdmin
 
 

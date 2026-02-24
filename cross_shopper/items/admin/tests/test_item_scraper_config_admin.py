@@ -1,7 +1,7 @@
 """Test the admin for the ItemScraperConfig model."""
 
 from django.contrib import admin
-from items.admin.filters.item_scraper_config import item_scraper_config_filter
+from items.admin.list_filter.item_scraper_config import item_scraper_config_filter
 from items.admin.item_scraper_config import ItemScraperConfigAdmin
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,

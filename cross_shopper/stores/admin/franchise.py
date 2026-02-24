@@ -1,7 +1,7 @@
 """Admin for the franchise model."""
 
 from django.contrib import admin
-from stores.admin.filters.franchise import franchise_filter
+from stores.admin.list_filter.franchise import franchise_filter
 from stores.models import Franchise
 
 

@@ -7,15 +7,12 @@ from utilities.admin.list_filter.bases.admin_list_filter_base import (
 from pricing.admin.list_filter.price.franchise_filter import FranchiseFilter
 
 
-@pytest.mark.django_db
 class TestFranchiseFilter:
   """Test the FranchiseFilter class."""
 
   def test_inheritance(self) -> None:
-    """Test that FranchiseFilter inherits from AdminListFilterBase."""
     assert issubclass(FranchiseFilter, AdminListFilterBase)
 
   def test_attributes(self) -> None:
-    """Test the FranchiseFilter attributes."""
     assert FranchiseFilter.title == 'franchise'
     assert FranchiseFilter.parameter_name == 'store__franchise__name'

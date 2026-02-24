@@ -11,16 +11,13 @@ from scrapers.admin.list_filter.scraper_config.has_items_filter import (
 )
 
 
-@pytest.mark.django_db
 class TestHasItemsFilter:
   """Test the HasItemsFilter class."""
 
   def test_inheritance(self) -> None:
-    """Test that HasItemsFilter inherits from AdminListFilterBase."""
     assert issubclass(HasItemsFilter, AdminListFilterBase)
 
   def test_attributes(self) -> None:
-    """Test the HasItemsFilter attributes."""
     assert HasItemsFilter.title == 'has items'
     assert HasItemsFilter.parameter_name == 'has_item'
     assert HasItemsFilter.is_boolean is True
@@ -29,7 +26,6 @@ class TestHasItemsFilter:
       self,
       mocked_request: mock.Mock,
   ) -> None:
-    """Test the queryset method with 'True' value."""
     filter_instance = HasItemsFilter(
         mocked_request, {HasItemsFilter.parameter_name: 'True'}, HasItemsFilter,
         mock.Mock()
@@ -49,7 +45,6 @@ class TestHasItemsFilter:
       self,
       mocked_request: mock.Mock,
   ) -> None:
-    """Test the queryset method with 'False' value."""
     filter_instance = HasItemsFilter(
         mocked_request, {HasItemsFilter.parameter_name: 'False'},
         HasItemsFilter, mock.Mock()
@@ -69,7 +64,6 @@ class TestHasItemsFilter:
       self,
       mocked_request: mock.Mock,
   ) -> None:
-    """Test the queryset method without a value."""
     filter_instance = HasItemsFilter(
         mocked_request, {}, HasItemsFilter, mock.Mock()
     )

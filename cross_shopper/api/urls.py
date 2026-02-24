@@ -4,6 +4,7 @@ from django.urls import include, path
 from rest_framework_nested import routers
 from .views.errors import ErrorViewSet
 from .views.pricing import PricingViewSet
+from .views.report_json import ReportJsonViewSet
 from .views.report_pricing import ReportPricingReadOnlyViewSet
 from .views.reports import ReportsReadOnlyViewSet
 from .views.scrapers import ScrapersReadOnlyViewSet
@@ -11,6 +12,7 @@ from .views.scrapers import ScrapersReadOnlyViewSet
 router = routers.SimpleRouter()
 router.register(r'errors', ErrorViewSet)
 router.register(r'pricing', PricingViewSet)
+router.register(r'reports/json', ReportJsonViewSet, basename='report_json')
 router.register(r'reports', ReportsReadOnlyViewSet)
 router.register(r'scrapers', ScrapersReadOnlyViewSet)
 

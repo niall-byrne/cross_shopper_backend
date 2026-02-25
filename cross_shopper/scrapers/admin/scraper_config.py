@@ -3,15 +3,20 @@
 from typing import TYPE_CHECKING
 
 from django.contrib import admin
+from scrapers.admin.list_display.scraper_config import (
+    scraper_config_list_display,
+)
 from scrapers.admin.list_filter.scraper_config import scraper_config_list_filter
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )
+from utilities.admin.list_display import generate_list_display
 
 if TYPE_CHECKING:  # no cover
   from scrapers.models import ScraperConfig  # noqa: F401
 
 
+@generate_list_display(scraper_config_list_display)
 class ScraperConfigAdmin(
     ScraperConfigActionsAdminMixin["ScraperConfig"],
     admin.ModelAdmin["ScraperConfig"]

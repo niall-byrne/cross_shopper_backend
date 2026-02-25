@@ -3,6 +3,9 @@
 from typing import TYPE_CHECKING
 
 from django.contrib import admin
+from scrapers.admin.list_displays.scraper_config import (
+    scraper_config_list_display,
+)
 from scrapers.admin.list_filters.scraper_config import (
     scraper_config_list_filter,
 )
@@ -30,6 +33,14 @@ class TestScraperConfigAdmin:
     assert scraper_config_admin.actions == (
         "action_activate_scraper_configs",
         "action_deactivate_scraper_configs",
+    )
+
+  def test_instantiate__has_correct_list_display(
+      self,
+      scraper_config_admin: "ScraperConfigAdmin",
+  ) -> None:
+    assert scraper_config_admin.list_display == tuple(
+        map(str, scraper_config_list_display)
     )
 
   def test_instantiate__has_correct_list_filter(

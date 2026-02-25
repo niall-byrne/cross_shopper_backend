@@ -1,6 +1,9 @@
 """Test the admin for the ScraperConfig model."""
 
 from django.contrib import admin
+from scrapers.admin.list_displays.scraper_config import (
+    scraper_config_list_display,
+)
 from scrapers.admin.list_filters.scraper_config import (
     scraper_config_list_filter,
 )
@@ -27,6 +30,14 @@ class TestScraperConfigAdmin:
     assert scraper_config_admin.actions == (
         "activate_scraper_configs",
         "deactivate_scraper_configs",
+    )
+
+  def test_instantiate__has_correct_list_display(
+      self,
+      scraper_config_admin: ScraperConfigAdmin,
+  ) -> None:
+    assert scraper_config_admin.list_display == tuple(
+        map(str, scraper_config_list_display)
     )
 
   def test_instantiate__has_correct_list_filter(

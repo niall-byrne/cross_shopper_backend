@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 
 import pytest
 from rest_framework.exceptions import ErrorDetail, ValidationError
-from scrapers.models import ScraperConfig
-from ..scraper_config import ScraperConfigSerializer
+from scrapers.models.scraper_config import CONSTRAINT_NAMES, ScraperConfig
+from scrapers.models.serializers.scraper_config import ScraperConfigSerializer
 
 if TYPE_CHECKING:  # no cover
   from scrapers.models import Scraper
@@ -64,5 +64,28 @@ class TestScraperConfigSerializer:
                         code='does_not_exist'
                     ),
                 ],
+        }
+    )
+
+  def test_deserialization__enforces_unique_url_constraint(
+      self,
+      scraper_config: ScraperConfig,
+  ) -> None:
+    serialized = ScraperConfigSerializer(scraper_config)
+    data = dict(serialized.data)
+    data.pop('id')
+
+    serializer = ScraperConfigSerializer(data=data)
+
+    with pytest.raises(ValidationError) as exc:
+      serializer.is_valid(raise_exception=True)
+
+    assert str(exc.value) == str(
+        {
+            'url':
+                [ErrorDetail(
+                    string=CONSTRAINT_NAMES['url'],
+                    code='invalid',
+                ),]
         }
     )

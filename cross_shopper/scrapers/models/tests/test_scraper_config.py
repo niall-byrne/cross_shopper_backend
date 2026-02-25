@@ -8,6 +8,24 @@ from scrapers.models import Scraper, ScraperConfig
 @pytest.mark.django_db
 class TestScraperConfig:
 
+  def test_constraint__unique_url(
+      self,
+      scraper_config: ScraperConfig,
+  ) -> None:
+    scraper_config2 = ScraperConfig(
+        scraper=scraper_config.scraper,
+        url=scraper_config.url,
+    )
+
+    with pytest.raises(ValidationError) as exc:
+      scraper_config2.save()
+
+    assert str(exc.value) == str(
+        {
+            '__all__': ['Constraint “URL name must be unique” is violated.'],
+        }
+    )
+
   def test_clean__matching_scraper_regex__no_exception(
       self,
       scraper: Scraper,

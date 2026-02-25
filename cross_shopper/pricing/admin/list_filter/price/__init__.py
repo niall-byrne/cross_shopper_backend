@@ -6,7 +6,7 @@ from .item_filter import ItemFilter
 from .location_filter import LocationFilter
 from .year_filter import YearFilter
 
-price_filter = (
+price_list_filter = (
     ItemFilter,
     BrandFilter,
     FranchiseFilter,

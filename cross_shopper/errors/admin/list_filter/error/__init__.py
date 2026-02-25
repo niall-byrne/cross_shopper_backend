@@ -7,7 +7,7 @@ from .item_name_filter import ItemNameFilter
 from .scraper_config_is_active_filter import ScraperConfigIsActiveFilter
 from .scraper_name_filter import ScraperNameFilter
 
-error_filter = (
+error_list_filter = (
     ErrorTypeFilter,
     ItemNameFilter,
     IsReoccurringFilter,

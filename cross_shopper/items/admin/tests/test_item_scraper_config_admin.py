@@ -1,7 +1,7 @@
 """Test the admin for the ItemScraperConfig model."""
 
 from django.contrib import admin
-from items.admin.list_filter.item_scraper_config import item_scraper_config_filter
+from items.admin.list_filter.item_scraper_config import item_scraper_config_list_filter
 from items.admin.item_scraper_config import ItemScraperConfigAdmin
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
@@ -42,7 +42,7 @@ class TestItemScraperConfigAdmin:
       self,
       item_scraper_config_admin: ItemScraperConfigAdmin,
   ) -> None:
-    assert item_scraper_config_admin.list_filter == item_scraper_config_filter
+    assert item_scraper_config_admin.list_filter == item_scraper_config_list_filter
 
   def test_instantiate__has_correct_ordering(
       self,

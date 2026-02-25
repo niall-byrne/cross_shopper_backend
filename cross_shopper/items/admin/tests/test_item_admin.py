@@ -5,7 +5,7 @@ from unittest import mock
 import pytest
 from constance.test import override_config
 from django.contrib import admin
-from items.admin.list_filter.item import item_filter
+from items.admin.list_filter.item import item_list_filter
 from items.admin.item import ItemAdmin, ItemScraperConfigInline
 
 
@@ -55,7 +55,7 @@ class TestItemAdmin:
       self,
       item_admin: ItemAdmin,
   ) -> None:
-    assert item_admin.list_filter == item_filter
+    assert item_admin.list_filter == item_list_filter
 
   def test_instantiate__has_correct_ordering(
       self,

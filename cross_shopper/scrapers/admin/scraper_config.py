@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 from django.contrib import admin
-from scrapers.admin.list_filter.scraper_config import scraper_config_filter
+from scrapers.admin.list_filter.scraper_config import scraper_config_list_filter
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )
@@ -31,7 +31,7 @@ class ScraperConfigAdmin(
       'scraper_config__has_item',
       'scraper_config__associated_item',
   )
-  list_filter = scraper_config_filter
+  list_filter = scraper_config_list_filter
   ordering = ('scraper__name', 'url')
   search_fields = ('scraper__name', 'url')
 

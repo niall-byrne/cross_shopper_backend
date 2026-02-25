@@ -1,7 +1,7 @@
 """Test the admin for the Price model."""
 
 from django.contrib import admin
-from pricing.admin.list_filter.price import price_filter
+from pricing.admin.list_filter.price import price_list_filter
 from pricing.admin.price import PriceAdmin
 
 
@@ -47,7 +47,7 @@ class TestPriceAdmin:
       self,
       price_admin: PriceAdmin,
   ) -> None:
-    assert price_admin.list_filter == price_filter
+    assert price_admin.list_filter == price_list_filter
 
   def test_instantiate__has_correct_ordering(
       self,

@@ -4,7 +4,7 @@ from .franchise_filter import FranchiseFilter
 from .item_filter import ItemFilter
 from .location_filter import LocationFilter
 
-report_filter = (
+report_list_filter = (
     ItemFilter,
     FranchiseFilter,
     LocationFilter,

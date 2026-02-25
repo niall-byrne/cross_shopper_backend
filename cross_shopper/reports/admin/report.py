@@ -1,7 +1,7 @@
 """Admin models for the Report model."""
 
 from django.contrib import admin
-from reports.admin.list_filter.report import report_filter
+from reports.admin.list_filter.report import report_list_filter
 from reports.models import Report, ReportStore
 
 
@@ -29,5 +29,5 @@ class ReportAdmin(admin.ModelAdmin[Report]):
       'item',
   ]
   inlines = [ReportStoreInline]
-  list_filter = report_filter
+  list_filter = report_list_filter
   ordering = ('name',)

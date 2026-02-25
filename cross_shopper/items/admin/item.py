@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from constance import config
 from django.contrib import admin
-from items.admin.list_filter.item import item_filter
+from items.admin.list_filter.item import item_list_filter
 from items.models import Brand, Item, ItemScraperConfig, Packaging
 from reports.models import Report
 
@@ -45,7 +45,7 @@ class ItemAdmin(admin.ModelAdmin[Item]):
       )
   )
   inlines = [ItemScraperConfigInline]
-  list_filter = item_filter
+  list_filter = item_list_filter
   ordering = (
       'name',
       'brand__name',

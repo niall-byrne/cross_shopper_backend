@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 from django.contrib import admin
-from errors.admin.list_filter.error import error_filter
+from errors.admin.list_filter.error import error_list_filter
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )
@@ -40,7 +40,7 @@ class ErrorAdmin(
       "error_url",
       "error_store",
   )
-  list_filter = error_filter
+  list_filter = error_list_filter
   ordering = (
       "type__name",
       "store__franchise__name",

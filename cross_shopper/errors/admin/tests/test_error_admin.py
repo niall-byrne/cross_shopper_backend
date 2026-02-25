@@ -4,7 +4,7 @@ from unittest import mock
 
 from django.contrib import admin
 from errors.admin.error import ErrorAdmin
-from errors.admin.list_filter.error import error_filter
+from errors.admin.list_filter.error import error_list_filter
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )
@@ -49,7 +49,7 @@ class TestErrorAdmin:
       self,
       error_admin: ErrorAdmin,
   ) -> None:
-    assert error_admin.list_filter == error_filter
+    assert error_admin.list_filter == error_list_filter
 
   def test_instantiate__has_correct_ordering(
       self,

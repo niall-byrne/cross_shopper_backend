@@ -1,7 +1,7 @@
 """Test the admin for the Packaging model."""
 
 from django.contrib import admin
-from items.admin.list_filter.packaging import packaging_filter
+from items.admin.list_filter.packaging import packaging_list_filter
 from items.admin.packaging import PackagingAdmin
 
 
@@ -18,7 +18,7 @@ class TestPackagingAdmin:
       self,
       packaging_admin: PackagingAdmin,
   ) -> None:
-    assert packaging_admin.list_filter == packaging_filter
+    assert packaging_admin.list_filter == packaging_list_filter
 
   def test_instantiate__has_correct_ordering(
       self,

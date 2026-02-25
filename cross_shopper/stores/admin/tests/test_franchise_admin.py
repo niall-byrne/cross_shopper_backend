@@ -1,7 +1,7 @@
 """Test the admin for the Franchise model."""
 
 from django.contrib import admin
-from stores.admin.list_filter.franchise import franchise_filter
+from stores.admin.list_filter.franchise import franchise_list_filter
 from stores.admin.franchise import FranchiseAdmin
 
 
@@ -18,7 +18,7 @@ class TestFranchiseAdmin:
       self,
       franchise_admin: FranchiseAdmin,
   ) -> None:
-    assert franchise_admin.list_filter == franchise_filter
+    assert franchise_admin.list_filter == franchise_list_filter
 
   def test_instantiate__has_correct_ordering(
       self,

@@ -3,4 +3,4 @@
 from .has_items_filter import HasItemsFilter
 from .scraper_filter import ScraperFilter
 
-scraper_config_filter = ("is_active", ScraperFilter, HasItemsFilter)
+scraper_config_list_filter = ("is_active", ScraperFilter, HasItemsFilter)

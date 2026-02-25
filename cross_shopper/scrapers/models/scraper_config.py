@@ -1,11 +1,18 @@
 """ScraperConfig model."""
+from __future__ import annotations
 
 import re
+from typing import TYPE_CHECKING, cast
 
+from django.apps import apps
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.functions import Lower
+from django.utils.functional import cached_property
 from utilities.models.bases.model_base import ModelBase
+
+if TYPE_CHECKING:
+  from items.models import Item, ItemScraperConfig
 
 CONSTRAINT_NAMES = {"url": "URL name must be unique"}
 
@@ -32,6 +39,20 @@ class ScraperConfig(
       blank=False,
   )
   is_active = models.BooleanField(default=True)
+
+  @property
+  def has_item(self) -> bool:
+    """Return a boolean if an item is associated with this instance."""
+    return self.associated_item is not None
+
+  @cached_property
+  def associated_item(self) -> Item | None:
+    """Return the item associated with this instance, if one exists."""
+    ItemScraperConfigModel = cast(
+        "ItemScraperConfig",
+        apps.get_model("items", "ItemScraperConfig"),
+    )
+    return ItemScraperConfigModel.associations.get_item(self)
 
   def clean(self) -> None:
     """Pre-save verification."""

@@ -4,13 +4,24 @@ import re
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.functions import Lower
 from utilities.models.bases.model_base import ModelBase
+
+CONSTRAINT_NAMES = {"url": "URL name must be unique"}
 
 
 class ScraperConfig(
     ModelBase,
 ):
   """ScraperConfig model."""
+
+  class Meta:
+    constraints = [
+        models.UniqueConstraint(
+            Lower("url"),
+            name=CONSTRAINT_NAMES["url"],
+        ),
+    ]
 
   scraper = models.ForeignKey(
       "scrapers.Scraper",

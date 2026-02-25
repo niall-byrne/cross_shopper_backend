@@ -2,6 +2,7 @@
 
 import pytest
 from django.core.exceptions import ValidationError
+from items.models import ItemScraperConfig
 from scrapers.models import Scraper, ScraperConfig
 
 
@@ -24,6 +25,32 @@ class TestScraperConfig:
         {
             '__all__': ['Constraint “URL name must be unique” is violated.'],
         }
+    )
+
+  def test_has_item__no_related_item__returns_false(
+      self,
+      scraper_config: ScraperConfig,
+  ) -> None:
+    assert scraper_config.has_item is False
+
+  def test_has_item__with_related_item__returns_true(
+      self,
+      item_scraper_config: ItemScraperConfig,
+  ) -> None:
+    assert item_scraper_config.scraper_config.has_item is True
+
+  def test_associated_item__no_related_item__returns_none(
+      self,
+      scraper_config: ScraperConfig,
+  ) -> None:
+    assert scraper_config.associated_item is None
+
+  def test_associated_item__with_related_item__returns_item(
+      self,
+      item_scraper_config: ItemScraperConfig,
+  ) -> None:
+    assert item_scraper_config.scraper_config.associated_item == (
+        item_scraper_config.item
     )
 
   def test_clean__matching_scraper_regex__no_exception(

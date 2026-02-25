@@ -3,17 +3,22 @@
 from typing import TYPE_CHECKING
 
 from django.contrib import admin
+from scrapers.admin.list_displays.scraper_config import (
+    scraper_config_list_display,
+)
 from scrapers.admin.list_filters.scraper_config import (
     scraper_config_list_filter,
 )
 from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
 )
+from utilities.admin.list_displays import generate_list_display
 
 if TYPE_CHECKING:
   from scrapers.models import ScraperConfig  # noqa: F401
 
 
+@generate_list_display(scraper_config_list_display)
 class ScraperConfigAdmin(
     ScraperConfigActionsAdminMixin["ScraperConfig"],
     admin.ModelAdmin["ScraperConfig"]

@@ -1,9 +1,12 @@
 """Admin for the Price model."""
 
 from django.contrib import admin
+from pricing.admin.list_display.price import price_list_display
 from pricing.admin.list_filter.price import price_list_filter
+from utilities.admin.list_display import generate_list_display
 
 
+@generate_list_display(price_list_display)
 class PriceAdmin(admin.ModelAdmin):
   fieldsets = (
       (

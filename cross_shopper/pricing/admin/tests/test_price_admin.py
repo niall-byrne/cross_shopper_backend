@@ -1,6 +1,7 @@
 """Test the admin for the Price model."""
 
 from django.contrib import admin
+from pricing.admin.list_display.price import price_list_display
 from pricing.admin.list_filter.price import price_list_filter
 from pricing.admin.price import PriceAdmin
 
@@ -42,6 +43,12 @@ class TestPriceAdmin:
             }
         ),
     )
+
+  def test_instantiate__has_correct_list_display(
+      self,
+      price_admin: PriceAdmin,
+  ) -> None:
+    assert price_admin.list_display == tuple(map(str, price_list_display))
 
   def test_instantiate__has_correct_list_filter(
       self,

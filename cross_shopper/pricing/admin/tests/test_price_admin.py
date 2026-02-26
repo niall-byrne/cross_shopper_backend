@@ -3,6 +3,7 @@
 from typing import TYPE_CHECKING
 
 from django.contrib import admin
+from pricing.admin.list_displays.price import price_list_display
 from pricing.admin.list_filters.price import price_list_filter
 
 if TYPE_CHECKING:  # no cover
@@ -45,6 +46,12 @@ class TestPriceAdmin:
             }
         ),
     )
+
+  def test_instantiate__has_correct_list_display(
+      self,
+      price_admin: "PriceAdmin",
+  ) -> None:
+    assert price_admin.list_display == tuple(map(str, price_list_display))
 
   def test_instantiate__has_correct_list_filter(
       self,

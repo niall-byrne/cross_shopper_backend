@@ -11,13 +11,13 @@ class TestReport:
       self,
       report: Report,
   ) -> None:
-    assert report.is_testing_only is False
+    assert report.is_testing is False
 
   def test_init__testing_only__attributes(
       self,
       report_testing: Report,
   ) -> None:
-    assert report_testing.is_testing_only is True
+    assert report_testing.is_testing is True
 
   def test_str__returns_report_name(
       self,

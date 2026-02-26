@@ -38,4 +38,6 @@ class TestReportSerializer:
                 report.store,
                 many=True,
             ).data,
+        "is_testing_only":
+            report.is_testing_only,
     }

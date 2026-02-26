@@ -9,7 +9,7 @@ class TestReportAdminListFilter:
 
   def test_list_filter(self) -> None:
     assert report_list_filter == (
-        'is_testing_only',
+        'is_testing',
         DynamicSubClass(
             base=GenericListFilter,
             attributes={

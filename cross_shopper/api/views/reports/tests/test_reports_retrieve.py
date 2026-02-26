@@ -1,13 +1,16 @@
 """Test for the ReportsReadOnlyViewSet retrieve view."""
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict
 
 import pytest
+from api.views.reports.qs import qs_item
+from django.db.models import Prefetch
+from reports.models import Report
 from reports.models.serializers.report import ReportSerializer
 from rest_framework import status
 
 if TYPE_CHECKING:  # no cover
-  from reports.models import Report
+  from django.db.models import QuerySet
   from rest_framework.test import APIClient
   from .conftest import AliasReportDetailUrl
 
@@ -20,6 +23,14 @@ if TYPE_CHECKING:  # no cover
 )
 class TestReportsReadOnlyViewSetRetrieve:
 
+  def get_sorted_report_qs(self, filter: Dict[str, Any]) -> "QuerySet[Report]":
+    return Report.objects.filter(**filter,).prefetch_related(
+        Prefetch(
+            'item',
+            queryset=qs_item(),
+        ),
+    )
+
   def test_retrieve__returns_correct_response(
       self,
       client: "APIClient",
@@ -27,7 +38,11 @@ class TestReportsReadOnlyViewSetRetrieve:
       report_detail_url: "AliasReportDetailUrl",
   ) -> None:
     res = client.get(report_detail_url(report.pk))
-    serializer = ReportSerializer(report)
+    serializer = ReportSerializer(
+        self.get_sorted_report_qs({
+            "id": report.pk
+        }).first()
+    )
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == serializer.data

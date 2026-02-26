@@ -129,3 +129,35 @@ class TestReportsViewSetList:
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == serializer.data
+
+  def test_list__filter_by_testing__is_testing__returns_correct_response(
+      self,
+      client: APIClient,
+      report: "Report",
+      report_testing: "Report",
+      report_list_url: AliasReportListUrl,
+  ) -> None:
+    res = client.get(report_list_url({"is_testing": "true"}))
+    serializer = ReportSerializer(
+        self.get_sorted_report_qs({"id": report_testing.id}),
+        many=True,
+    )
+
+    assert res.status_code == status.HTTP_200_OK
+    assert res.data == serializer.data
+
+  def test_list__filter_by_testing__not_testing__returns_correct_response(
+      self,
+      client: APIClient,
+      report: "Report",
+      report_testing: "Report",
+      report_list_url: AliasReportListUrl,
+  ) -> None:
+    res = client.get(report_list_url({"is_testing": "false"}))
+    serializer = ReportSerializer(
+        self.get_sorted_report_qs({"id": report.id}),
+        many=True,
+    )
+
+    assert res.status_code == status.HTTP_200_OK
+    assert res.data == serializer.data

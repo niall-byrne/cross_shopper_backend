@@ -19,10 +19,11 @@ class ReportFilter(django_filters.FilterSet):
       field_name="is_active",
       method="get_query_set__is_active",
   )
+  is_testing = django_filters.BooleanFilter(field_name="is_testing_only")
 
   class Meta:
     model = Report
-    fields = ['id', 'name', 'is_active']
+    fields = ['id', 'name', 'is_active', 'is_testing']
 
   def get_query_set__is_active(
       self,

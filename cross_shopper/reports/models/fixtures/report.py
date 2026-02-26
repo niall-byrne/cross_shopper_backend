@@ -18,7 +18,9 @@ AliasGetReportStores = Callable[["Report"], Tuple["Store", "Store"]]
 AliasGetReportItem = Callable[["Report"], "Item"]
 
 
-def create_report(user: AbstractBaseUser) -> "Report":
+def create_report(
+    user: AbstractBaseUser, testing_only: bool = False
+) -> "Report":
   return ReportFactory.create(
       items=[
           ItemFactory.create(scraper_configs=[ScraperConfigFactory.create()]),
@@ -29,6 +31,7 @@ def create_report(user: AbstractBaseUser) -> "Report":
           StoreFactory.create(),
       ],
       user=user,
+      is_testing_only=testing_only,
   )
 
 
@@ -40,6 +43,11 @@ def report(user: AbstractBaseUser) -> "Report":
 @pytest.fixture
 def report_alternate(user: AbstractBaseUser) -> "Report":
   return create_report(user)
+
+
+@pytest.fixture
+def report_testing(user: AbstractBaseUser) -> "Report":
+  return create_report(user, testing_only=True)
 
 
 @pytest.fixture

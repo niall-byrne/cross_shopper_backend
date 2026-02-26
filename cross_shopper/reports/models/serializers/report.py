@@ -16,10 +16,11 @@ class ReportSerializer(serializers.ModelSerializer):
   user = serializers.HiddenField(default=serializers.CurrentUserDefault())
   item = serializers.SerializerMethodField()
   store = StoreSerializer(many=True)
+  is_testing_only = serializers.BooleanField(default=False)
 
   class Meta:
     model = Report
-    fields = ('id', 'name', 'item', 'store', 'user')
+    fields = ('id', 'name', 'item', 'store', 'user', 'is_testing_only')
 
   ITEM_FIELD_ORDERING = (
       'name',

@@ -10,7 +10,7 @@ class ReportAdmin(admin.ModelAdmin[Report]):
       (
           "IDENTIFICATION",
           {
-              "fields": ('name', 'user')
+              "fields": ('name', 'user', 'is_testing_only')
           },
       ),
       (

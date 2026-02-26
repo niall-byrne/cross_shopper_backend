@@ -18,7 +18,7 @@ class TestReportAdmin:
         (
             "IDENTIFICATION",
             {
-                "fields": ("name", "user")
+                "fields": ("name", "user", "is_testing_only")
             },
         ),
         (

@@ -3,7 +3,7 @@
 from utilities.admin.list_filters import GenericListFilter
 
 report_list_filter = (
-    "is_testing_only",
+    "is_testing",
     GenericListFilter.create(
         title="has franchise",
         parameter_name="store__franchise__name",

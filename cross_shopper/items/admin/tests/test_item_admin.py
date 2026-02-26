@@ -154,7 +154,7 @@ class TestItemAdmin:
         mocked_request, mocked_object, mocked_form, model_change
     )
 
-    mocked_report_manger.filter.assert_called_once_with(is_testing_only=False)
+    mocked_report_manger.filter.assert_called_once_with(is_testing=False)
     for mocked_report in mocked_report_manger.filter.return_value:
       mocked_report.item.add.assert_called_once_with(mocked_object)
 

@@ -31,7 +31,7 @@ def create_report(user: AbstractBaseUser, testing_only: bool = False) -> Report:
           StoreFactory.create(),
       ],
       user=user,
-      is_testing_only=testing_only,
+      is_testing=testing_only,
   )
 
 

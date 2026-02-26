@@ -20,7 +20,7 @@ class ReportFilter(django_filters.FilterSet):
       field_name="is_active",
       method="get_query_set__is_active",
   )
-  is_testing = django_filters.BooleanFilter(field_name="is_testing_only")
+  is_testing = django_filters.BooleanFilter(field_name="is_testing")
 
   class Meta:
     model = Report

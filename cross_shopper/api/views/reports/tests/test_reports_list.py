@@ -138,7 +138,7 @@ class TestReportsReadOnlyViewSetList:
   ) -> None:
     res = client.get(report_list_url({"is_testing": is_testing}))
     serializer = ReportSerializer(
-        self.get_sorted_report_qs({"is_testing_only": is_testing}),
+        self.get_sorted_report_qs({"is_testing": is_testing}),
         many=True,
     )
 

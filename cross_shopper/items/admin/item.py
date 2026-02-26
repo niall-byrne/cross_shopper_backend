@@ -82,5 +82,5 @@ class ItemAdmin(admin.ModelAdmin[Item]):
     super().save_model(request, obj, form, change)
 
     if config.ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS:
-      for report in Report.objects.filter(is_testing_only=False):
+      for report in Report.objects.filter(is_testing=False):
         report.item.add(obj)

@@ -10,6 +10,7 @@ from stores.models.serializers.store import StoreSerializer
 
 if TYPE_CHECKING:
   from reports.models import Report
+  from .conftest import AliasCreateMockedRequest
 
 
 @pytest.mark.django_db
@@ -18,26 +19,22 @@ class TestReportSerializer:
   def test_serialization__correct_representation(
       self,
       report: Report,
+      create_mocked_request: AliasCreateMockedRequest,
   ) -> None:
-    serialized = ReportSerializer(report, context={})
+    serialized = ReportSerializer(
+        report, context={"request": create_mocked_request({})}
+    )
 
     assert serialized.data == {
-        "id":
-            report.pk,
-        "name":
-            report.name,
-        "item":
-            ItemSerializer(
-                report.item.all().order_by(
-                    *ReportSerializer.ITEM_FIELD_ORDERING
-                ),
-                many=True,
-            ).data,
-        "store":
-            StoreSerializer(
-                report.store,
-                many=True,
-            ).data,
-        "is_testing_only":
-            report.is_testing_only,
+        "id": report.pk,
+        "name": report.name,
+        "item": ItemSerializer(
+            report.item.all(),
+            many=True,
+        ).data,
+        "store": StoreSerializer(
+            report.store,
+            many=True,
+        ).data,
+        "is_testing_only": report.is_testing_only,
     }

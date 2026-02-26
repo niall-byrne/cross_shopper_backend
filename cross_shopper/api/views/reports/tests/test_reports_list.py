@@ -127,3 +127,20 @@ class TestReportsReadOnlyViewSetList:
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == serializer.data
+
+  @pytest.mark.usefixtures("report", "report_testing")
+  @pytest.mark.parametrize('is_testing', (True, False))
+  def test_list__filter_by_testing__is_testing__returns_correct_response(
+      self,
+      client: "APIClient",
+      report_list_url: "AliasReportListUrl",
+      is_testing: bool,
+  ) -> None:
+    res = client.get(report_list_url({"is_testing": is_testing}))
+    serializer = ReportSerializer(
+        self.get_sorted_report_qs({"is_testing_only": is_testing}),
+        many=True,
+    )
+
+    assert res.status_code == status.HTTP_200_OK
+    assert res.data == serializer.data

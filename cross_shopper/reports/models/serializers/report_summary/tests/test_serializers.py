@@ -1,37 +1,46 @@
 """Tests for the JSON serializers."""
 
 import decimal
+
 import pytest
 from freezegun import freeze_time
 from pricing.models.factories.pricing import PriceFactory
-from reports.models.serializers.json.item import ItemJsonSerializer
-from reports.models.serializers.json.report import ReportJsonSerializer
-from reports.models.serializers.json.store import StoreJsonSerializer
+from reports.models.serializers.report_summary.item import (
+    ReportSummaryItemSerializer,
+)
+from reports.models.serializers.report_summary.report import (
+    ReportSummarySerializer,
+)
+from reports.models.serializers.report_summary.store import (
+    ReportSummaryStoreSerializer,
+)
+
 
 @pytest.mark.django_db
 class TestStoreJsonSerializer:
   """Tests for the StoreJsonSerializer."""
 
   def test_serialize(self, store):
-    serializer = StoreJsonSerializer(store)
+    serializer = ReportSummaryStoreSerializer(store)
     assert serializer.data == {
         'id': store.id,
         'franchise_name': store.franchise.name,
     }
+
 
 @pytest.mark.django_db
 class TestItemJsonSerializer:
   """Tests for the ItemJsonSerializer."""
 
   def test_serialize_no_report_in_context(self, item):
-    serializer = ItemJsonSerializer(item)
+    serializer = ReportSummaryItemSerializer(item)
     data = serializer.data
     assert data['best_price'] is None
     assert data['average_price'] is None
     assert data['prices'] == {}
 
   def test_serialize_no_prices(self, item, report):
-    serializer = ItemJsonSerializer(
+    serializer = ReportSummaryItemSerializer(
         item, context={
             'report': report,
             'week': 1,
@@ -64,7 +73,7 @@ class TestItemJsonSerializer:
     )
 
     # Context for week 2
-    serializer = ItemJsonSerializer(
+    serializer = ReportSummaryItemSerializer(
         item, context={
             'report': report,
             'week': 2,
@@ -79,7 +88,7 @@ class TestItemJsonSerializer:
     # Clear cache because @cache is used and context changed (but Item didn't)
     # Actually @cache on method caches based on (self, instance).
     # New serializer instance means new cache.
-    serializer2 = ItemJsonSerializer(
+    serializer2 = ReportSummaryItemSerializer(
         item, context={
             'report': report,
             'week': 1,
@@ -89,20 +98,26 @@ class TestItemJsonSerializer:
     data2 = serializer2.data
     assert data2['prices'][str(store1.id)] == '10.00'
 
+
 @pytest.mark.django_db
 class TestReportJsonSerializer:
   """Tests for the ReportJsonSerializer."""
 
   @freeze_time("2026-02-24 02:04:28")
   def test_serialize_no_time_context(self, report):
-    serializer = ReportJsonSerializer(report)
+    serializer = ReportSummarySerializer(report)
     data = serializer.data
     assert data['id'] == report.id
     assert data['generated_at'] == "Tue, 24 Feb 2026 02:04:28 GMT"
 
   @freeze_time("2026-02-24 02:04:28")
   def test_serialize(self, report):
-    serializer = ReportJsonSerializer(report, context={'week': 1, 'year': 2024})
+    serializer = ReportSummarySerializer(
+        report, context={
+            'week': 1,
+            'year': 2024
+        }
+    )
     data = serializer.data
     assert data['id'] == report.id
     assert data['name'] == report.name
@@ -123,7 +138,12 @@ class TestReportJsonSerializer:
         week=5,
     )
 
-    serializer = ReportJsonSerializer(report, context={'week': 5, 'year': 2024})
+    serializer = ReportSummarySerializer(
+        report, context={
+            'week': 5,
+            'year': 2024
+        }
+    )
     data = serializer.data
 
     # Find our item in the data

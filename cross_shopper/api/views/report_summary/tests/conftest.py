@@ -1,4 +1,4 @@
-"""Test fixtures for the report_json API views."""
+"""Test fixtures for the report_summary API views."""
 
 from typing import Callable, Dict, Optional, Protocol, Union
 
@@ -6,7 +6,7 @@ import pytest
 from django.urls import reverse
 from django.utils.http import urlencode
 
-REPORT_JSON_URL_BASENAME = "report_json"
+REPORT_JSON_URL_BASENAME = "report_summary"
 
 AliasReportJsonDetailUrl = Callable[[int], str]
 
@@ -21,7 +21,7 @@ class AliasReportJsonListUrl(Protocol):
 
 
 @pytest.fixture
-def report_json_detail_url() -> "AliasReportJsonDetailUrl":
+def report_summary_detail_url() -> "AliasReportJsonDetailUrl":
 
   def create(report_pk: int) -> str:
     return reverse(
@@ -33,7 +33,7 @@ def report_json_detail_url() -> "AliasReportJsonDetailUrl":
 
 
 @pytest.fixture
-def report_json_list_url() -> "AliasReportJsonListUrl":
+def report_summary_list_url() -> "AliasReportJsonListUrl":
 
   def create(query: Optional[Dict[str, Union[int, str]]] = None) -> str:
     url = reverse(f"{REPORT_JSON_URL_BASENAME}-list")

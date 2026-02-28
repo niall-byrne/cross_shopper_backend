@@ -1,11 +1,11 @@
-"""Serializer for the Store model in JSON format."""
+"""Serializer for Store instances in Report model summaries."""
 
 from rest_framework import serializers
 from stores.models import Store
 
 
-class StoreJsonSerializer(serializers.ModelSerializer):
-  """Serializer for the Store model in JSON format."""
+class ReportSummaryStoreSerializer(serializers.ModelSerializer):
+  """Serializer for Store instances in Report model summaries."""
 
   franchise_name = serializers.CharField(source='franchise.name')
 

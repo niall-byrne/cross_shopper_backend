@@ -18,16 +18,8 @@ class ReportSummaryFilter(filters.FilterSet):
 
   is_testing = filters.BooleanFilter(field_name="is_testing")
   name = filters.CharFilter(field_name="name", lookup_expr='iexact')
-  week = filters.NumberFilter(method="get_week")
-  year = filters.NumberFilter(method="get_year")
-
-  def __init__(self, *args: "Any", **kwargs: "Any") -> None:
-    super().__init__(*args, **kwargs)
-    self.data = self.data.copy()
-    if not self.data.get('week'):
-      self.data['week'] = default_pricing_week()
-    if not self.data.get('year'):
-      self.data['year'] = default_pricing_year()
+  week = filters.NumberFilter(method="filter_week")
+  year = filters.NumberFilter(method="filter_year")
 
   class Meta:
     model = Report
@@ -36,24 +28,20 @@ class ReportSummaryFilter(filters.FilterSet):
         'name',
     ]
 
-  def get_week(
+  def filter_week(
       self,
       queryset: "QuerySet[Report]",
       field_name: "str",
-      value: "bool",
+      value: "Any",
   ) -> "QuerySet[Report]":
     """Update the week query parameter."""
-    self.request.GET = self.request.GET.copy()
-    self.request.GET.update({'week': value})
     return queryset
 
-  def get_year(
+  def filter_year(
       self,
       queryset: "QuerySet[Report]",
       field_name: "str",
-      value: "bool",
+      value: "Any",
   ) -> "QuerySet[Report]":
     """Update the year query parameter."""
-    self.request.GET = self.request.GET.copy()
-    self.request.GET.update({'year': value})
     return queryset

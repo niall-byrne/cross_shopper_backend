@@ -25,11 +25,13 @@ class SerializerContextField(serializers.Field):
     kwargs['source'] = '*'
     kwargs['read_only'] = True
 
-    self.default_value = kwargs.get("default_field", None)
+    self.default_value = kwargs.pop("default_value", None)
+
     if "context_field" in kwargs:
       self.context_field = kwargs.pop("context_field")
-    if "default_value" in kwargs:
-      kwargs.pop("context_field")
+    else:
+      self.context_field = None
+
     super().__init__(*args, **kwargs)
 
   def to_representation(self, value: "Any") -> "Any":

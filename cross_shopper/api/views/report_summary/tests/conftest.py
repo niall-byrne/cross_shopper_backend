@@ -15,6 +15,7 @@ class AliasReportJsonListUrl(Protocol):
 
   def __call__(  # noqa: D102
       self,
+      report_pk: int,
       query: Optional[Dict[str, Union[int, str]]] = None,
   ) -> str:
     ...
@@ -26,7 +27,10 @@ def report_summary_detail_url() -> "AliasReportJsonDetailUrl":
   def create(report_pk: int) -> str:
     return reverse(
         f"{REPORT_JSON_URL_BASENAME}-detail",
-        kwargs={"pk": report_pk},
+        kwargs={
+            "report_pk": report_pk,
+            "pk": report_pk,
+        },
     )
 
   return create
@@ -35,8 +39,14 @@ def report_summary_detail_url() -> "AliasReportJsonDetailUrl":
 @pytest.fixture
 def report_summary_list_url() -> "AliasReportJsonListUrl":
 
-  def create(query: Optional[Dict[str, Union[int, str]]] = None) -> str:
-    url = reverse(f"{REPORT_JSON_URL_BASENAME}-list")
+  def create(
+      report_pk: int,
+      query: Optional[Dict[str, Union[int, str]]] = None,
+  ) -> str:
+    url = reverse(
+        f"{REPORT_JSON_URL_BASENAME}-list",
+        kwargs={"report_pk": report_pk},
+    )
     if query:
       url += ('?' + urlencode(query))
     return url

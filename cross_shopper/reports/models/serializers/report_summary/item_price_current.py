@@ -60,15 +60,14 @@ class ReportSummaryCurrentItemPriceSerializer(serializers.ModelSerializer):
         str(store.id): None for store in stores
     }
 
-    for store in stores:
-      price = Price.objects.filter(
-          item=instance,
-          store=store,
-          week=week,
-          year=year,
-      ).first()
+    prices = Price.objects.filter(
+        item=instance,
+        store__in=stores,
+        week=week,
+        year=year,
+    )
 
-      if price:
-        prices_dict[str(store.id)] = str(price.amount)
+    for price in prices:
+      prices_dict[str(price.store_id)] = str(price.amount)
 
     return prices_dict

@@ -4,8 +4,8 @@ from items.models import Item
 from reports.models.serializers.report_summary.item_price_current import (
     ReportSummaryCurrentItemPriceSerializer,
 )
-from reports.models.serializers.report_summary.price import (
-    ReportSummaryHistoricalItemPriceSerializer,
+from reports.models.serializers.report_summary.item_price_history import (
+    ReportSummaryItemPriceHistorySerializer,
 )
 from rest_framework import serializers
 
@@ -13,7 +13,7 @@ from rest_framework import serializers
 class ReportSummaryItemPriceSerializer(serializers.ModelSerializer):
   """Serializer for Item pricing in Report model summaries."""
 
-  last_52_weeks = ReportSummaryHistoricalItemPriceSerializer(
+  last_52_weeks = ReportSummaryItemPriceHistorySerializer(
       source='*',
       read_only=True,
   )

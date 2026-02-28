@@ -21,44 +21,38 @@ class ReportSummaryItemPriceHistorySerializer(serializers.ModelSerializer):
   def get_average(self, instance: Item) -> Optional[str]:
     """Get the average price for this item at the report stores."""
     report = self.context.get('report')
-    if not report:
-      return None
+    if report:
+      average = Price.aggregate_last_52_weeks.average(
+          item=instance,
+          store=report.store.all(),
+      )
 
-    average = Price.aggregate_last_52_weeks.average(
-        item=instance,
-        store=report.store.all(),
-    )
-
-    if average:
-      return str(average)
+      if average:
+        return str(average)
     return None
 
   def get_high(self, instance: Item) -> Optional[str]:
     """Get the average price for this item at the report stores."""
     report = self.context.get('report')
-    if not report:
-      return None
+    if report:
+      high = Price.aggregate_last_52_weeks.high(
+          item=instance,
+          store=report.store.all(),
+      )
 
-    high = Price.aggregate_last_52_weeks.high(
-        item=instance,
-        store=report.store.all(),
-    )
-
-    if high:
-      return str(high)
+      if high:
+        return str(high)
     return None
 
   def get_low(self, instance: Item) -> Optional[str]:
     """Get the average price for this item at the report stores."""
     report = self.context.get('report')
-    if not report:
-      return None
+    if report:
+      low = Price.aggregate_last_52_weeks.low(
+          item=instance,
+          store=report.store.all(),
+      )
 
-    low = Price.aggregate_last_52_weeks.low(
-        item=instance,
-        store=report.store.all(),
-    )
-
-    if low:
-      return str(low)
+      if low:
+        return str(low)
     return None

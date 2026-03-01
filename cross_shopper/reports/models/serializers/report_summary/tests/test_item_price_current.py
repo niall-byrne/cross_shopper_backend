@@ -42,7 +42,7 @@ class TestReportSummaryCurrentItemPriceSerializer:
       assert data['average'] == '15.00'
       assert data['best'] == '10.00'
 
-  def test_serialization__no_prices__none_values(
+  def test_serialization__no_prices__returns_none(
       self,
       report: Report,
       item: Item,

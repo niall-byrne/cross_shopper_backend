@@ -38,7 +38,7 @@ class TestReportSummaryHistoricalItemPriceSerializer:
         'low': '5.0',
     }
 
-  def test_serialization__no_report_context__none_values(
+  def test_serialization__no_report_context__returns_none(
       self,
       item: Item,
   ) -> None:
@@ -50,7 +50,7 @@ class TestReportSummaryHistoricalItemPriceSerializer:
         'low': None,
     }
 
-  def test_serialization__no_prices__none_values(
+  def test_serialization__no_prices__returns_none(
       self,
       report: Report,
       item: Item,

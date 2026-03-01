@@ -39,3 +39,15 @@ def current_prices(report: Report, item: Item) -> Dict[str, Price]:
     results[str(stores[i].id)] = price  # type: ignore[assignment]
 
   return results
+
+
+@pytest.fixture
+def report_prefetched(report: Report) -> Report:
+  from api.views.report_summary.qs import qs_item
+  from django.db.models import Prefetch
+
+  qs = Report.objects.filter(id=report.id).prefetch_related(
+      'store',
+      Prefetch('item', queryset=qs_item()),
+  )
+  return qs.get()

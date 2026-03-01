@@ -47,6 +47,12 @@ def report_summary_list_url() -> "AliasReportJsonListUrl":
 
 
 @pytest.fixture
-def report_with_item(report: "Report", item: "Item") -> "Report":
-  report.item.add(item)
-  return report
+def report_prefetched(report: Report) -> Report:
+  from api.views.report_summary.qs import qs_item
+  from django.db.models import Prefetch
+
+  qs = Report.objects.filter(id=report.id).prefetch_related(
+      'store',
+      Prefetch('item', queryset=qs_item()),
+  )
+  return qs.get()

@@ -74,3 +74,9 @@ def report_with_pricing() -> "Report":
   )
 
   return report
+
+
+@pytest.fixture
+def report_with_item(report: "Report", item: "Item") -> "Report":
+  report.item.add(item)
+  return report

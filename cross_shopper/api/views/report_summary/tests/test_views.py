@@ -5,10 +5,13 @@ from typing import Any
 
 import pytest
 from items.models import Item
+from pricing.models import Price
+from pricing.models.defaults.default_pricing_week import default_pricing_week
+from pricing.models.defaults.default_pricing_year import default_pricing_year
 from pricing.models.factories.pricing import PriceFactory
 from reports.models import Report
 from reports.models.serializers.report_summary.report import (
-  ReportSummarySerializer,
+    ReportSummarySerializer,
 )
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -30,15 +33,12 @@ class TestReportSummaryViewSet:
       report_summary_list_url: Any,
   ) -> None:
     res = client.get(report_summary_list_url())
-    serializer = ReportSummarySerializer(report)
 
     assert res.status_code == status.HTTP_200_OK
     assert len(res.data) == 1
     assert res.data[0]['id'] == report.id
     assert res.data[0]['name'] == report.name
-    # Check that generated_at exists and is a string
     assert isinstance(res.data[0]['generated_at'], str)
-    # Check that item and store are present
     assert 'item' in res.data[0]
     assert 'store' in res.data[0]
 
@@ -56,26 +56,10 @@ class TestReportSummaryViewSet:
   def test_retrieve__specified_report__correct_representation(
       self,
       client: APIClient,
-      report: Report,
+      report_prefetched: Report,
       report_summary_detail_url: Any,
   ) -> None:
-    res = client.get(report_summary_detail_url(report.id))
-    from api.views.report_summary.qs import qs_item
-
-    # We need to ensure the report in the serializer context has the same data
-    # as what's returned by the ViewSet's prefetched queryset.
-    from django.db.models import Prefetch
-    from pricing.models.defaults.default_pricing_week import (
-      default_pricing_week,
-    )
-    from pricing.models.defaults.default_pricing_year import (
-      default_pricing_year,
-    )
-    qs = Report.objects.filter(id=report.id).prefetch_related(
-        'store',
-        Prefetch('item', queryset=qs_item()),
-    )
-    report_prefetched = qs.get()
+    res = client.get(report_summary_detail_url(report_prefetched.id))
     serializer = ReportSummarySerializer(
         report_prefetched,
         context={
@@ -85,13 +69,12 @@ class TestReportSummaryViewSet:
     )
 
     assert res.status_code == status.HTTP_200_OK
-    assert res.data['id'] == report.id
-    assert res.data['name'] == report.name
-    # Verify that the API returns items in the correct order (database-level).
+    assert res.data['id'] == report_prefetched.id
+    assert res.data['name'] == report_prefetched.name
     assert res.data['item'] == serializer.data['item']
     assert res.data['store'] == serializer.data['store']
 
-  def test_retrieve__default_params__no_prices_found(
+  def test_retrieve__default_week_and_year__returns_none_for_missing_prices(
       self,
       client: APIClient,
       report_with_item: Report,
@@ -99,7 +82,7 @@ class TestReportSummaryViewSet:
       item: Item,
   ) -> None:
     store = list(report_with_item.store.all())[0]
-    PriceFactory(
+    Price.objects.create(
         item=item,
         store=store,
         amount=decimal.Decimal('99.99'),
@@ -108,13 +91,11 @@ class TestReportSummaryViewSet:
     )
 
     res = client.get(report_summary_detail_url(report_with_item.id))
-    item_data = next(i for i in res.data['item'] if i['id'] == item.id)
-    per_store = item_data['price']['selected_week']['per_store']
+    per_store = res.data['item'][0]['price']['selected_week']['per_store']
 
-    assert str(store.id) in per_store
-    assert per_store[str(store.id)] is None
+    assert per_store == {str(store.id): None}
 
-  def test_retrieve__specified_week_and_year__correct_prices_returned(
+  def test_retrieve__specified_week_and_year__returns_correct_prices(
       self,
       client: APIClient,
       report_with_item: Report,
@@ -122,7 +103,7 @@ class TestReportSummaryViewSet:
       item: Item,
   ) -> None:
     store = list(report_with_item.store.all())[0]
-    PriceFactory(
+    Price.objects.create(
         item=item,
         store=store,
         amount=decimal.Decimal('99.99'),
@@ -136,9 +117,8 @@ class TestReportSummaryViewSet:
             'year': 2025
         }
     )
-    item_data = next(i for i in res.data['item'] if i['id'] == item.id)
-    per_store = item_data['price']['selected_week']['per_store']
 
     assert res.status_code == status.HTTP_200_OK
-    assert str(store.id) in per_store
-    assert per_store[str(store.id)] == '99.99'
+    assert res.data['item'][0]['price']['selected_week']['per_store'] == {
+        str(store.id): '99.99'
+    }

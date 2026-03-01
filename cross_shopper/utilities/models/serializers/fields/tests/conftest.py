@@ -19,7 +19,7 @@ def serializer_with_context_fields() -> Type[serializers.Serializer]:
     field = context.SerializerContextField(context_field="test_key")
     field_with_default = context.SerializerContextField(
         context_field="missing_key",
-        default_value=lambda: "default_val",
+        default_value=lambda: "default_value",
     )
 
   return TestSerializer

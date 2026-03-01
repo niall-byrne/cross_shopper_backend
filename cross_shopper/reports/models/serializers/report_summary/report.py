@@ -41,8 +41,6 @@ class ReportSummarySerializer(serializers.ModelSerializer):
       self,
       instance: Report,
   ) -> ReturnDict[Any, Any]:
-    week = self.context.get('week')
-    year = self.context.get('year')
     items = instance.item.all()
 
     return ReportSummaryItemSerializer(
@@ -51,7 +49,5 @@ class ReportSummarySerializer(serializers.ModelSerializer):
         context={
             **self.context,
             'report': instance,
-            'week': week,
-            'year': year,
         },
     ).data

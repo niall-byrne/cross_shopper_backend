@@ -29,7 +29,3 @@ class PassThroughFilter(CharFilter, QuerySetRequestMixin):
     request.GET = request.GET.copy()
     request.GET.update({self.field_name: value})
     return qs
-
-  def label(self):
-    """Ensure the label method is called with the correct model."""
-    return super().label()

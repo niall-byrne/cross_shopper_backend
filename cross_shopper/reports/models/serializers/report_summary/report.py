@@ -49,7 +49,7 @@ class ReportSummarySerializer(serializers.ModelSerializer):
     week = self.context.get('week')
     year = self.context.get('year')
 
-    items = instance.item.all().order_by(*self.ITEM_FIELD_ORDERING)
+    items = instance.item.all()
 
     return ReportSummaryItemSerializer(
         items,

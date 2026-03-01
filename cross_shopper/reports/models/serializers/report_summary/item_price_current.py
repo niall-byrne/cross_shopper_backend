@@ -2,7 +2,6 @@
 
 import decimal
 import statistics
-from functools import cache
 from typing import Dict, Optional
 
 from items.models import Item
@@ -45,9 +44,14 @@ class ReportSummaryCurrentItemPriceSerializer(serializers.ModelSerializer):
 
     return str(min(numeric_prices))
 
-  @cache
   def get_per_store(self, instance: Item) -> Dict[str, Optional[str]]:
     """Get the price for this item across all stores in the report."""
+    if not hasattr(self, '_per_store_cache'):
+      self._per_store_cache: Dict[int, Dict[str, Optional[str]]] = {}
+
+    if instance.id in self._per_store_cache:
+      return self._per_store_cache[instance.id]
+
     report = self.context.get('report')
     week = self.context.get('week')
     year = self.context.get('year')
@@ -70,4 +74,5 @@ class ReportSummaryCurrentItemPriceSerializer(serializers.ModelSerializer):
     for price in prices:
       prices_dict[str(price.store.id)] = str(price.amount)
 
+    self._per_store_cache[instance.id] = prices_dict
     return prices_dict

@@ -1,15 +1,20 @@
 """Tests for the ReportSummaryItemSerializer."""
 
+from typing import TYPE_CHECKING
 from unittest import mock
 
 import pytest
-from items.models import Item
 from items.models.serializers.packaging import PackagingSerializer
-from pricing.models import Price
-from reports.models import Report
 from reports.models.serializers.report_summary.item import (
-  ReportSummaryItemSerializer,
+    ReportSummaryItemSerializer,
 )
+from reports.models.serializers.report_summary.item_price import (
+    ReportSummaryItemPriceSerializer,
+)
+
+if TYPE_CHECKING:
+  from items.models import Item
+  from reports.models.report import Report
 
 
 @pytest.mark.django_db
@@ -18,34 +23,31 @@ class TestReportSummaryItemSerializer:
 
   def test_serialization__specified_item__returns_correct_representation(
       self,
-      report: Report,
-      item_prefetched: Item,
-      mocked_aggregate_last_52_weeks_manager: mock.Mock,
+      report: "Report",
+      report_with_prefetched_item: "Item",
+      report_summary_mocked_aggregate_last_52_weeks_manager: mock.Mock,
   ) -> None:
-    from reports.models.serializers.report_summary.item_price import (
-        ReportSummaryItemPriceSerializer,
-    )
-    mocked_aggregate_last_52_weeks_manager.average.return_value = 10.50
-    mocked_aggregate_last_52_weeks_manager.high.return_value = 15.00
-    mocked_aggregate_last_52_weeks_manager.low.return_value = 5.00
+    report_summary_mocked_aggregate_last_52_weeks_manager.average.return_value = 10.50
+    report_summary_mocked_aggregate_last_52_weeks_manager.high.return_value = 15.00
+    report_summary_mocked_aggregate_last_52_weeks_manager.low.return_value = 5.00
     context = {'report': report}
     serializer = ReportSummaryItemSerializer(
-        item_prefetched,
+        report_with_prefetched_item,
         context=context,
     )
 
     data = serializer.data
 
     assert data == {
-        "id": item_prefetched.id,
-        "name": item_prefetched.name,
-        "brand": item_prefetched.brand.name,
-        "is_bulk": item_prefetched.is_bulk,
-        "is_organic": item_prefetched.is_organic,
-        "is_non_gmo": item_prefetched.is_non_gmo,
-        "packaging": PackagingSerializer(item_prefetched.packaging).data,
+        "id": report_with_prefetched_item.id,
+        "name": report_with_prefetched_item.name,
+        "brand": report_with_prefetched_item.brand.name,
+        "is_bulk": report_with_prefetched_item.is_bulk,
+        "is_organic": report_with_prefetched_item.is_organic,
+        "is_non_gmo": report_with_prefetched_item.is_non_gmo,
+        "packaging": PackagingSerializer(report_with_prefetched_item.packaging).data,
         "price": ReportSummaryItemPriceSerializer(
-            item_prefetched,
+            report_with_prefetched_item,
             context=context,
         ).data,
     }

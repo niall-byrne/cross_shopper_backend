@@ -14,17 +14,16 @@ from reports.models.serializers.report_summary.item_price_historical import (
 class TestReportSummaryHistoricalItemPriceSerializer:
   """Tests for the ReportSummaryHistoricalItemPriceSerializer."""
 
-  def test_serialization__specified_item__correct_representation(
+  def test_serialization__specified_item__returns_correct_representation(
       self,
-      report: Report,
-      item: Item,
-      mocked_aggregate_last_52_weeks_manager: mock.Mock,
+      report_with_item: "Report",
+      item: "Item",
+      report_summary_mocked_aggregate_last_52_weeks_manager: mock.Mock,
   ) -> None:
-    report.item.add(item)
-    mocked_aggregate_last_52_weeks_manager.average.return_value = 10.50
-    mocked_aggregate_last_52_weeks_manager.high.return_value = 15.00
-    mocked_aggregate_last_52_weeks_manager.low.return_value = 5.00
-    context = {'report': report}
+    report_summary_mocked_aggregate_last_52_weeks_manager.average.return_value = 10.50
+    report_summary_mocked_aggregate_last_52_weeks_manager.high.return_value = 15.00
+    report_summary_mocked_aggregate_last_52_weeks_manager.low.return_value = 5.00
+    context = {'report': report_with_item}
 
     serializer = ReportSummaryHistoricalItemPriceSerializer(
         item,

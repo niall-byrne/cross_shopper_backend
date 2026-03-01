@@ -5,7 +5,7 @@ from typing import Type
 import pytest
 from django.test import override_settings
 from rest_framework import serializers
-from ..lowercase import LowerCaseField
+from utilities.models.serializers.fields.lowercase import LowerCaseField
 
 
 class TestLowerCaseField:

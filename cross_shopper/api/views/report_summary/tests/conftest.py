@@ -5,8 +5,6 @@ from typing import Any, Callable, Dict, Optional, Protocol, Union
 import pytest
 from django.urls import reverse
 from django.utils.http import urlencode
-from items.models import Item
-from reports.models import Report
 
 REPORT_JSON_URL_BASENAME = "report_summary"
 
@@ -44,15 +42,3 @@ def report_summary_list_url() -> "AliasReportJsonListUrl":
     return url
 
   return create
-
-
-@pytest.fixture
-def report_prefetched(report: Report) -> Report:
-  from api.views.report_summary.qs import qs_item
-  from django.db.models import Prefetch
-
-  qs = Report.objects.filter(id=report.id).prefetch_related(
-      'store',
-      Prefetch('item', queryset=qs_item()),
-  )
-  return qs.get()

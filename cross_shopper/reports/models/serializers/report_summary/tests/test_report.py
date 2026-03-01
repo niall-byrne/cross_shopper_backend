@@ -1,18 +1,23 @@
 """Tests for the ReportSummarySerializer."""
 
-from datetime import datetime
-from typing import Any
-from unittest import mock
+from typing import TYPE_CHECKING
 
 import pytest
-from django.db.models import Prefetch
 from freezegun import freeze_time
-from items.models import Item
 from items.models.factories.item import ItemFactory
-from reports.models import Report
-from reports.models.serializers.report_summary.report import (
-  ReportSummarySerializer,
+from reports.models.report import Report
+from reports.models.serializers.report_summary.item import (
+    ReportSummaryItemSerializer,
 )
+from reports.models.serializers.report_summary.report import (
+    ReportSummarySerializer,
+)
+from reports.models.serializers.report_summary.store import (
+    ReportSummaryStoreSerializer,
+)
+
+if TYPE_CHECKING:
+  from items.models import Item
 
 
 @pytest.mark.django_db
@@ -22,14 +27,8 @@ class TestReportSummarySerializer:
   @freeze_time("2024-01-01 12:00:00")
   def test_serialization__specified_report__returns_correct_representation(
       self,
-      report_prefetched: Report,
+      report_prefetched: "Report",
   ) -> None:
-    from reports.models.serializers.report_summary.item import (
-        ReportSummaryItemSerializer,
-    )
-    from reports.models.serializers.report_summary.store import (
-        ReportSummaryStoreSerializer,
-    )
     context = {
         'week': 1,
         'year': 2024,
@@ -61,23 +60,11 @@ class TestReportSummarySerializer:
 
   def test_get_item__multiple_items__returns_items_in_name_order(
       self,
-      report: Report,
+      report_with_multiple_items_prefetched: "Report",
   ) -> None:
-    from api.views.report_summary.qs import qs_item
-    report.item.clear()
-    item1 = ItemFactory(name='B item')
-    item2 = ItemFactory(name='A item')
-    report.item.add(item1, item2)  # type: ignore[arg-type]
-    qs = Report.objects.filter(id=report.id).prefetch_related(
-        Prefetch(
-            'item',
-            queryset=qs_item(),
-        )
-    )
-    report_prefetched = qs.get()
-    serializer = ReportSummarySerializer(report_prefetched)
+    serializer = ReportSummarySerializer(report_with_multiple_items_prefetched)
 
-    item_data = serializer.get_item(report_prefetched)
+    item_data = serializer.get_item(report_with_multiple_items_prefetched)
+
     item_names = [i['name'] for i in item_data]
-
     assert item_names == ['A item', 'B item']

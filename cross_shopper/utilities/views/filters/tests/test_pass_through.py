@@ -9,25 +9,25 @@ from utilities.views.filters.pass_through import PassThroughFilter
 class TestPassThroughFilter:
   """Tests for the PassThroughFilter."""
 
-  def test_filter__field_name_provided__request_updated(
+  def test_filter__field_name_provided__returns_queryset_and_updates_request(
       self,
       pass_through_filter: PassThroughFilter,
       request_with_query_params: Mock,
       monkeypatch: "pytest.MonkeyPatch",
+      mock_queryset: Mock,
   ) -> None:
     monkeypatch.setattr(
         pass_through_filter,
         'get_request',
         Mock(return_value=request_with_query_params),
     )
-    qs = Mock()
-    result = pass_through_filter.filter(qs, 'test_value')
+    result = pass_through_filter.filter(mock_queryset, 'test_value')
 
-    assert result == qs
+    assert result == mock_queryset
     assert request_with_query_params.GET['test_field'] == 'test_value'
     assert request_with_query_params.GET['existing'] == 'value'
 
-  def test_label__label_provided__correct_label(
+  def test_label__label_provided__returns_label(
       self,
   ) -> None:
     filter_instance = PassThroughFilter(
@@ -37,13 +37,10 @@ class TestPassThroughFilter:
 
     assert filter_instance.label == 'Test Label'
 
-  def test_label__no_label_provided__correct_default_label(
+  def test_label__no_label_provided__returns_model_field_verbose_name(
       self,
+      mock_model: Mock,
   ) -> None:
-    mock_model = Mock()
-    mock_field = Mock()
-    mock_field.verbose_name = "Mock model"
-    mock_model._meta.get_field.return_value = mock_field
     filter_instance = PassThroughFilter(
         field_name='test_field',
         for_model=mock_model,
@@ -51,10 +48,10 @@ class TestPassThroughFilter:
 
     assert filter_instance.label == "Mock model"
 
-  def test_init__for_model_provided__sets_model(
+  def test_instantiate__for_model_provided__sets_model_attribute(
       self,
+      mock_model: Mock,
   ) -> None:
-    mock_model = Mock()
     filter_instance = PassThroughFilter(for_model=mock_model)
 
     assert filter_instance.model == mock_model

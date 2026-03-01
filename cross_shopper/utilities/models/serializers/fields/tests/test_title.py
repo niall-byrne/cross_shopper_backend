@@ -5,7 +5,7 @@ from typing import Type
 import pytest
 from django.test import override_settings
 from rest_framework import serializers
-from ..title import TitleField
+from utilities.models.serializers.fields.title import TitleField
 
 
 class TestTitleField:

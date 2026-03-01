@@ -1,28 +1,22 @@
 """Test fixtures for the ReportSummaryCurrentItemPriceSerializer."""
 
 import decimal
-from typing import Dict
+from typing import TYPE_CHECKING, Dict
 from unittest import mock
 
 import pytest
-from items.models import Item
 from pricing.models import Price
 from pricing.models.factories.pricing import PriceFactory
-from reports.models import Report
+from reports.models.report import Report
+
+if TYPE_CHECKING:  # pragma: no cover
+  from items.models import Item
 
 
 @pytest.fixture
-def mocked_aggregate_last_52_weeks_manager(
-    monkeypatch: pytest.MonkeyPatch
-) -> mock.Mock:
-  manager_mock = mock.Mock()
-  monkeypatch.setattr(Price, "aggregate_last_52_weeks", manager_mock)
-
-  return manager_mock
-
-
-@pytest.fixture
-def current_prices(report: Report, item: Item) -> Dict[str, Price]:
+def report_summary_current_prices(
+    report: Report, item: "Item"
+) -> Dict[str, Price]:
   report.item.add(item)
   stores = list(report.store.all())
   num_stores = len(stores)
@@ -42,25 +36,10 @@ def current_prices(report: Report, item: Item) -> Dict[str, Price]:
 
 
 @pytest.fixture
-def item_prefetched(report: Report, item: Item) -> Item:
-  from api.views.report_summary.qs import qs_item
-  from django.db.models import Prefetch
+def report_summary_mocked_aggregate_last_52_weeks_manager(
+    monkeypatch: pytest.MonkeyPatch
+) -> mock.Mock:
+  manager_mock = mock.Mock()
+  monkeypatch.setattr(Price, "aggregate_last_52_weeks", manager_mock)
 
-  qs = Report.objects.filter(id=report.id).prefetch_related(
-      'store',
-      Prefetch('item', queryset=qs_item()),
-  )
-  report_prefetched = qs.get()
-  return report_prefetched.item.get(id=item.id)
-
-
-@pytest.fixture
-def report_prefetched(report: Report) -> Report:
-  from api.views.report_summary.qs import qs_item
-  from django.db.models import Prefetch
-
-  qs = Report.objects.filter(id=report.id).prefetch_related(
-      'store',
-      Prefetch('item', queryset=qs_item()),
-  )
-  return qs.get()
+  return manager_mock

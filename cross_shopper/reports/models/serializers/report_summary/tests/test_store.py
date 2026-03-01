@@ -9,9 +9,12 @@ from ..store import ReportSummaryStoreSerializer
 class TestReportSummaryStoreSerializer:
   """Tests for the ReportSummaryStoreSerializer."""
 
-  def test_serialization(self, store: Store) -> None:
-    """Test that the serializer correctly represents a store."""
+  def test_serialization__specified_store__correct_representation(
+      self,
+      store: Store,
+  ) -> None:
     serializer = ReportSummaryStoreSerializer(store)
+
     assert serializer.data == {
         "id": store.id,
         "franchise_name": store.franchise.name,

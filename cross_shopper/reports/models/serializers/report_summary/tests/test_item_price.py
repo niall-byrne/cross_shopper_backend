@@ -9,9 +9,12 @@ from ..item_price import ReportSummaryItemPriceSerializer
 class TestReportSummaryItemPriceSerializer:
   """Tests for the ReportSummaryItemPriceSerializer."""
 
-  def test_serialization(self, item: Item) -> None:
-    """Test the ReportSummaryItemPriceSerializer representation."""
+  def test_serialization__specified_item__correct_representation(
+      self,
+      item: Item,
+  ) -> None:
     serializer = ReportSummaryItemPriceSerializer(item)
+
     assert serializer.data == {
         "last_52_weeks": {
             "average": None,

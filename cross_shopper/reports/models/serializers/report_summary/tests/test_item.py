@@ -10,9 +10,12 @@ from ..item import ReportSummaryItemSerializer
 class TestReportSummaryItemSerializer:
   """Tests for the ReportSummaryItemSerializer."""
 
-  def test_serialization(self, item: Item) -> None:
-    """Test that the serializer correctly represents an item."""
+  def test_serialization__specified_item__correct_representation(
+      self,
+      item: Item,
+  ) -> None:
     serializer = ReportSummaryItemSerializer(item)
+
     assert serializer.data == {
         "id": item.id,
         "name": item.name,
@@ -35,7 +38,10 @@ class TestReportSummaryItemSerializer:
         },
     }
 
-  def test_serialization__with_context(self, item: Item) -> None:
-    """Test that context is passed down through the serializer."""
+  def test_serialization__with_context__context_passed(
+      self,
+      item: Item,
+  ) -> None:
     serializer = ReportSummaryItemSerializer(item, context={'some': 'context'})
+
     assert serializer.context['some'] == 'context'

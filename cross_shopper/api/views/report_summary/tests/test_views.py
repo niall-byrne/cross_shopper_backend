@@ -20,43 +20,53 @@ from items.models import Item
 class TestReportSummaryViewSet:
   """Tests for the ReportSummaryViewSet."""
 
-  def test_list(
-      self, client: APIClient, report: Report, report_summary_list_url: Any
+  def test_list__all_reports__correct_representation(
+      self,
+      client: APIClient,
+      report: Report,
+      report_summary_list_url: Any,
   ) -> None:
-    """Test the list endpoint of ReportSummaryViewSet."""
     res = client.get(report_summary_list_url())
-    assert res.status_code == status.HTTP_200_OK
 
+    assert res.status_code == status.HTTP_200_OK
     assert len(res.data) == 1
     assert res.data[0]['id'] == report.id
     assert 'generated_at' in res.data[0]
     assert 'store' in res.data[0]
     assert 'item' in res.data[0]
 
-  def test_list__filter_by_id(
-      self, client: APIClient, report: Report, report_summary_list_url: Any
+  def test_list__filter_by_id__one_report(
+      self,
+      client: APIClient,
+      report: Report,
+      report_summary_list_url: Any,
   ) -> None:
-    """Test filtering the list endpoint by ID."""
     res = client.get(report_summary_list_url({'id': report.id}))
+
     assert res.status_code == status.HTTP_200_OK
     assert len(res.data) == 1
 
-  def test_retrieve(
-      self, client: APIClient, report: Report, report_summary_detail_url: Any
+  def test_retrieve__specified_report__correct_representation(
+      self,
+      client: APIClient,
+      report: Report,
+      report_summary_detail_url: Any,
   ) -> None:
-    """Test the detail endpoint of ReportSummaryViewSet."""
     res = client.get(report_summary_detail_url(report.id))
+
     assert res.status_code == status.HTTP_200_OK
     assert res.data['id'] == report.id
     assert 'generated_at' in res.data
     assert 'store' in res.data
     assert 'item' in res.data
 
-  def test_retrieve__with_week_year_params(
-      self, client: APIClient, report: Report, report_summary_detail_url: Any,
-      item: Item
+  def test_retrieve__week_year_params__filtered_prices(
+      self,
+      client: APIClient,
+      report: Report,
+      report_summary_detail_url: Any,
+      item: Item,
   ) -> None:
-    """Test the detail endpoint with week and year query parameters."""
     report.item.add(item)
     stores = list(report.store.all())
     store = stores[0]
@@ -72,6 +82,7 @@ class TestReportSummaryViewSet:
     res = client.get(report_summary_detail_url(report.id))
     item_data = next(i for i in res.data['item'] if i['id'] == item.id)
     per_store = item_data['price']['selected_week']['per_store']
+
     assert str(store.id) in per_store
     assert per_store[str(store.id)] is None
 
@@ -82,8 +93,9 @@ class TestReportSummaryViewSet:
             'year': 2025
         }
     )
-    assert res.status_code == status.HTTP_200_OK
     item_data = next(i for i in res.data['item'] if i['id'] == item.id)
     per_store = item_data['price']['selected_week']['per_store']
+
+    assert res.status_code == status.HTTP_200_OK
     assert str(store.id) in per_store
     assert per_store[str(store.id)] == '99.99'

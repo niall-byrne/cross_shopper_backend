@@ -35,10 +35,12 @@ def current_prices(report: Report, item: Item) -> Dict[str, Price]:
 class TestReportSummaryCurrentItemPriceSerializer:
   """Tests for the ReportSummaryCurrentItemPriceSerializer."""
 
-  def test_serialization(
-      self, report: Report, item: Item, current_prices: Dict[str, Price]
+  def test_serialization__specified_item__correct_representation(
+      self,
+      report: Report,
+      item: Item,
+      current_prices: Dict[str, Price],
   ) -> None:
-    """Test that the serializer correctly calculates current price stats."""
     context = {
         'report': report,
         'year': 2024,
@@ -48,7 +50,6 @@ class TestReportSummaryCurrentItemPriceSerializer:
         item,
         context=context,
     )
-
     expected_per_store = {
         str(store.id): None for store in report.store.all()
     }
@@ -56,17 +57,19 @@ class TestReportSummaryCurrentItemPriceSerializer:
       expected_per_store[store_id] = str(price.amount)
 
     data = serializer.data
-    assert data['per_store'] == expected_per_store
 
+    assert data['per_store'] == expected_per_store
     if len(current_prices) >= 2:
       assert data['average'] == '15.00'
       assert data['best'] == '10.00'
 
-  def test_serialization__no_prices(self, report: Report, item: Item) -> None:
-    """Test that the serializer handles cases with no prices."""
+  def test_serialization__no_prices__none_values(
+      self,
+      report: Report,
+      item: Item,
+  ) -> None:
     report.item.add(item)
     stores = report.store.all()
-
     context = {
         'report': report,
         'year': 2024,

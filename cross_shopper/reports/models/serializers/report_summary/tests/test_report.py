@@ -47,6 +47,7 @@ class TestReportSummarySerializer:
       self,
       report: Report,
   ) -> None:
+    from api.views.report_summary.qs import qs_item
     report.item.clear()
     item1 = ItemFactory(name='B item')
     item2 = ItemFactory(name='A item')
@@ -54,9 +55,7 @@ class TestReportSummarySerializer:
     qs = Report.objects.filter(id=report.id).prefetch_related(
         Prefetch(
             'item',
-            queryset=Item.objects.all().order_by(
-                *ReportSummarySerializer.ITEM_FIELD_ORDERING
-            ),
+            queryset=qs_item(),
         )
     )
     report_with_prefetch = qs.get()

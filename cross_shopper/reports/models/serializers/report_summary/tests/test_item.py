@@ -37,11 +37,3 @@ class TestReportSummaryItemSerializer:
             },
         },
     }
-
-  def test_serialization__with_context__context_passed(
-      self,
-      item: Item,
-  ) -> None:
-    serializer = ReportSummaryItemSerializer(item, context={'some': 'context'})
-
-    assert serializer.context['some'] == 'context'

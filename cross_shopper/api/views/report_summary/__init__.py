@@ -3,13 +3,13 @@
 from typing import TYPE_CHECKING, Any, Dict
 
 from django.db.models import Prefetch
-from items.models import Item
 from reports.models import Report
 from reports.models.serializers.report_summary.report import (
     ReportSummarySerializer,
 )
 from rest_framework import viewsets
 from .filters import ReportSummaryFilter
+from .qs import qs_item
 
 if TYPE_CHECKING:  # no cover
   from typing import Any, Dict
@@ -30,9 +30,7 @@ class ReportSummaryViewSet(
     return self.queryset.prefetch_related(
         Prefetch(
             'item',
-            queryset=Item.objects.all().order_by(
-                *ReportSummarySerializer.ITEM_FIELD_ORDERING
-            ),
+            queryset=qs_item(),
         )
     )
 

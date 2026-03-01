@@ -21,6 +21,7 @@ class TestReportSummaryHistoricalItemPriceSerializer:
     report.item.add(item)
     create_last_52_price_batch_from_report(report)
     context = {'report': report}
+
     serializer = ReportSummaryHistoricalItemPriceSerializer(
         item,
         context=context,
@@ -49,6 +50,7 @@ class TestReportSummaryHistoricalItemPriceSerializer:
       item: Item,
   ) -> None:
     context = {'report': report}
+
     serializer = ReportSummaryHistoricalItemPriceSerializer(
         item,
         context=context,

@@ -33,6 +33,12 @@ def report_summary_detail_url() -> "AliasReportJsonDetailUrl":
 
 
 @pytest.fixture
+def report_with_item(report: "Report", item: "Item") -> "Report":
+  report.item.add(item)
+  return report
+
+
+@pytest.fixture
 def report_summary_list_url() -> "AliasReportJsonListUrl":
 
   def create(query: Optional[Dict[str, Union[int, str]]] = None) -> str:

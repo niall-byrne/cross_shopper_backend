@@ -32,23 +32,17 @@ class ReportSummarySerializer(serializers.ModelSerializer):
         'item',
     )
 
-  ITEM_FIELD_ORDERING = (
-      'name',
-      'brand__name',
-      'is_organic',
-      'packaging__container',
-      'packaging__quantity',
-  )
 
   def get_generated_at(self, instance: Report) -> str:
     """Get the current time as the generation time."""
     return timezone.now().strftime("%a, %d %b %Y %H:%M:%S GMT")
 
-  def get_item(self, instance: Report) -> ReturnDict[Any, Any]:
-    """Get the serialized item model representation."""
+  def get_item(
+      self,
+      instance: Report,
+  ) -> ReturnDict[Any, Any]:
     week = self.context.get('week')
     year = self.context.get('year')
-
     items = instance.item.all()
 
     return ReportSummaryItemSerializer(

@@ -33,9 +33,6 @@ class PassThroughFilter(CharFilter, QuerySetRequestMixin):
   @property
   def label(self):
     """Ensure the label method is called with the correct model."""
-    # Django Filter.label is a data descriptor (property).
-    # We call the fget directly to bypass the setter conflict if we tried
-    # to redefine it as a method while the base class expects a property.
     return super(CharFilter, self.__class__).label.fget(self)
 
   @label.setter

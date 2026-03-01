@@ -37,6 +37,5 @@ class TestReportSummaryItemSerializer:
 
   def test_serialization__with_context(self, item: Item) -> None:
     """Test that context is passed down through the serializer."""
-    # This is more of an integration test but good for coverage/sanity
     serializer = ReportSummaryItemSerializer(item, context={'some': 'context'})
     assert serializer.context['some'] == 'context'

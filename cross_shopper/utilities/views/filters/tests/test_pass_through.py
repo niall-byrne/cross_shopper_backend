@@ -27,14 +27,25 @@ class TestPassThroughFilter:
     assert request.GET['test_field'] == 'test_value'
     assert request.GET['existing'] == 'value'
 
-  def test_label(self) -> None:
-    """Test the label method of PassThroughFilter."""
+  def test_label__with_label_provided(self) -> None:
+    """Test the label method of PassThroughFilter with label provided."""
     filter_instance = PassThroughFilter(
         field_name='test_field', label='Test Label'
     )
-    # label is a property on the filter, but PassThroughFilter doesn't override it in a way
-    # that makes it a method. CharFilter.label is a property.
+    # The property label returns the string.
     assert filter_instance.label == 'Test Label'
+
+  def test_label__no_label_provided(self) -> None:
+    """Test the label method of PassThroughFilter with no label provided."""
+    mock_model = Mock()
+    mock_model._meta.verbose_name = "mock model"
+
+    filter_instance = PassThroughFilter(
+        field_name='test_field',
+        for_model=mock_model
+    )
+    # Django CharFilter.label property will look up model verbose name if not set
+    assert filter_instance.label == "mock model"
 
   def test_init__sets_model(self) -> None:
     """Test that the model is correctly set in __init__."""

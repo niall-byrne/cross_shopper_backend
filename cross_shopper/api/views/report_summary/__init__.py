@@ -41,14 +41,8 @@ class ReportSummaryViewSet(
     context = super().get_serializer_context()
 
     # These query params are initialized in the filter.
-    # Note: filterset.data is populated in __init__ of DefaultFilterSet
-    filterset = self.filterset_class(
-        data=self.request.GET,
-        queryset=self.get_queryset(),
-        request=self.request,
-    )
-    week = filterset.data.get('week')
-    year = filterset.data.get('year')
+    week = self.request.GET.get('week')
+    year = self.request.GET.get('year')
 
     context.update({
         'week': week,

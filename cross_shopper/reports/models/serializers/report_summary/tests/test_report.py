@@ -2,9 +2,13 @@
 
 from datetime import datetime
 from typing import Any
+from unittest import mock
 from unittest.mock import patch
 
 import pytest
+from django.db.models import Prefetch
+from items.models import Item
+from items.models.factories.item import ItemFactory
 from reports.models import Report
 from ..report import ReportSummarySerializer
 
@@ -14,7 +18,7 @@ class TestReportSummarySerializer:
   """Tests for the ReportSummarySerializer."""
 
   @patch("django.utils.timezone.now")
-  def test_serialization(self, mock_now, report: Report) -> None:
+  def test_serialization(self, mock_now: mock.Mock, report: Report) -> None:
     """Test that the serializer correctly represents a report summary."""
     mock_now.return_value = datetime(2024, 1, 1, 12, 0, 0)
     serializer = ReportSummarySerializer(
@@ -38,20 +42,12 @@ class TestReportSummarySerializer:
 
   def test_get_item_ordering(self, report: Report) -> None:
     """Test that items are correctly ordered in the serialized representation."""
-    # Clearing items to have a controlled test
     report.item.clear()
 
-    # Adding more items to test ordering
-    from items.models.factories.item import ItemFactory
     item1 = ItemFactory(name='B item')
     item2 = ItemFactory(name='A item')
     report.item.add(item1, item2)
 
-    # We need to use the viewset's logic or manually order for this test
-    # since the serializer just calls instance.item.all()
-    # and expects it to be ordered by the prefetch.
-    from django.db.models import Prefetch
-    from items.models import Item
     qs = Report.objects.filter(id=report.id).prefetch_related(
         Prefetch(
             'item',
@@ -66,5 +62,4 @@ class TestReportSummarySerializer:
     item_data = serializer.get_item(report_with_prefetch)
     item_names = [i['name'] for i in item_data]
 
-    # Verify order is based on name
     assert item_names == ['A item', 'B item']

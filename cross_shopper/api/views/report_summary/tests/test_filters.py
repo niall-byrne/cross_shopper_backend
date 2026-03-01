@@ -1,5 +1,7 @@
 """Tests for the ReportSummaryFilter."""
 
+from typing import Any
+
 import pytest
 from pricing.models.defaults.default_pricing_week import default_pricing_week
 from pricing.models.defaults.default_pricing_year import default_pricing_year

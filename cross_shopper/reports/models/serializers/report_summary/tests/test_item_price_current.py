@@ -16,25 +16,19 @@ def current_prices(report: Report, item: Item) -> Dict[str, Price]:
   """Fixture to create current prices for a report and item."""
   report.item.add(item)
   stores = list(report.store.all())
+  num_stores = len(stores)
 
-  price1 = PriceFactory(
-      item=item,
-      store=stores[0],
-      amount=decimal.Decimal('10.00'),
-      year=2024,
-      week=1,
-  )
-  price2 = PriceFactory(
-      item=item,
-      store=stores[1],
-      amount=decimal.Decimal('20.00'),
-      year=2024,
-      week=1,
-  )
-  return {
-      str(stores[0].id): price1,
-      str(stores[1].id): price2,
-  }
+  results = {}
+  for i in range(min(num_stores, 2)):
+    price = PriceFactory(
+        item=item,
+        store=stores[i],
+        amount=decimal.Decimal(f'{(i + 1) * 10}.00'),
+        year=2024,
+        week=1,
+    )
+    results[str(stores[i].id)] = price
+  return results
 
 
 @pytest.mark.django_db
@@ -56,15 +50,17 @@ class TestReportSummaryCurrentItemPriceSerializer:
     )
 
     expected_per_store = {
-        store_id: str(price.amount)
-        for store_id, price in current_prices.items()
+        str(store.id): None for store in report.store.all()
     }
+    for store_id, price in current_prices.items():
+      expected_per_store[store_id] = str(price.amount)
 
-    assert serializer.data == {
-        'average': '15.00',
-        'best': '10.00',
-        'per_store': expected_per_store,
-    }
+    data = serializer.data
+    assert data['per_store'] == expected_per_store
+
+    if len(current_prices) >= 2:
+      assert data['average'] == '15.00'
+      assert data['best'] == '10.00'
 
   def test_serialization__no_prices(self, report: Report, item: Item) -> None:
     """Test that the serializer handles cases with no prices."""

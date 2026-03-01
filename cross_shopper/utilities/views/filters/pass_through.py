@@ -23,11 +23,12 @@ class PassThroughFilter(CharFilter, QuerySetRequestMixin):
     self.model = for_model
     super().__init__(*args, **kwargs)
 
-  def filter(self, qs: "QuerySet[Model]", value: "Any"):
+  def filter(self, qs: "QuerySet[Model]", value: "Any") -> "QuerySet[Model]":
     """Pass through the queryset but attach the param value to the request."""
     request = self.get_request()
-    request.GET = request.GET.copy()
-    request.GET.update({self.field_name: value})
+    if request is not None:
+      request.GET = request.GET.copy()
+      request.GET.update({self.field_name: value})
     return qs
 
   def label(self):

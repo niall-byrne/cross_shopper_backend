@@ -15,8 +15,8 @@ class ReportSummarySerializer(serializers.ModelSerializer):
   """Serializer for Report model summaries."""
 
   generated_at = serializers.SerializerMethodField()
-  store = ReportSummaryStoreSerializer(many=True)
-  item = serializers.SerializerMethodField()
+  stores = ReportSummaryStoreSerializer(source="store", many=True)
+  items = serializers.SerializerMethodField()
   week = SerializerContextField(context_field="week")
   year = SerializerContextField(context_field="year")
 
@@ -28,8 +28,8 @@ class ReportSummarySerializer(serializers.ModelSerializer):
         'year',
         'week',
         'generated_at',
-        'store',
-        'item',
+        'stores',
+        'items',
     )
 
   ITEM_FIELD_ORDERING = (
@@ -44,7 +44,7 @@ class ReportSummarySerializer(serializers.ModelSerializer):
     """Get the current time as the generation time."""
     return timezone.now().strftime("%a, %d %b %Y %H:%M:%S GMT")
 
-  def get_item(self, instance: Report) -> ReturnDict[Any, Any]:
+  def get_items(self, instance: Report) -> ReturnDict[Any, Any]:
     """Get the serialized item model representation."""
     week = self.context.get('week')
     year = self.context.get('year')

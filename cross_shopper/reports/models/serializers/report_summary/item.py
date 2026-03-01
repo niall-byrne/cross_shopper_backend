@@ -14,7 +14,7 @@ class ReportSummaryItemSerializer(serializers.ModelSerializer):
   brand = serializers.CharField(source='brand.name')
   packaging = PackagingSerializer()
   is_bulk = serializers.BooleanField(read_only=True)
-  price = ReportSummaryItemPriceSerializer(source='*', read_only=True)
+  prices = ReportSummaryItemPriceSerializer(source='*', read_only=True)
 
   class Meta:
     model = Item
@@ -26,5 +26,5 @@ class ReportSummaryItemSerializer(serializers.ModelSerializer):
         'is_organic',
         'is_non_gmo',
         'packaging',
-        'price',
+        'prices',
     )

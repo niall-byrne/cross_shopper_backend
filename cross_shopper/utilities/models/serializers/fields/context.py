@@ -27,7 +27,7 @@ class SerializerContextField(serializers.Field):
   ) -> None:
     kwargs['source'] = '*'
     kwargs['read_only'] = True
-    self.default_value = kwargs.pop("default_field", None)
+    self.default_value = kwargs.pop("default_value", None)
     self.context_field = kwargs.pop("context_field", None)
     super().__init__(*args, **kwargs)
 

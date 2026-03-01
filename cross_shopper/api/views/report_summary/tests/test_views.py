@@ -55,7 +55,7 @@ class TestReportJsonViewSet:
     # Request without params (default week/year)
     res = client.get(report_summary_detail_url(report.id))
     item_data = next(i for i in res.data['items'] if i['id'] == item.id)
-    assert item_data['prices'][str(store.id)] is None
+    assert item_data['prices']['selected_week']['per_store'][str(store.id)] is None
 
     # Request with params
     res = client.get(
@@ -66,4 +66,4 @@ class TestReportJsonViewSet:
     )
     assert res.status_code == status.HTTP_200_OK
     item_data = next(i for i in res.data['items'] if i['id'] == item.id)
-    assert item_data['prices'][str(store.id)] == '99.99'
+    assert item_data['prices']['selected_week']['per_store'][str(store.id)] == '99.99'

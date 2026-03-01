@@ -14,28 +14,36 @@ from reports.models.serializers.report_summary.item_price import (
 class TestReportSummaryItemPriceSerializer:
   """Tests for the ReportSummaryItemPriceSerializer."""
 
-  def test_serialization__specified_item__correct_representation(
+  def test_serialization__specified_item__returns_correct_representation(
       self,
       report: Report,
-      item: Item,
+      item_prefetched: Item,
       mocked_aggregate_last_52_weeks_manager: mock.Mock,
   ) -> None:
+    from reports.models.serializers.report_summary.item_price_current import (
+        ReportSummaryCurrentItemPriceSerializer,
+    )
+    from reports.models.serializers.report_summary.item_price_historical import (
+        ReportSummaryHistoricalItemPriceSerializer,
+    )
     mocked_aggregate_last_52_weeks_manager.average.return_value = 10.50
     mocked_aggregate_last_52_weeks_manager.high.return_value = 15.00
     mocked_aggregate_last_52_weeks_manager.low.return_value = 5.00
-    serializer = ReportSummaryItemPriceSerializer(item, context={'report': report})
+    context = {'report': report}
+    serializer = ReportSummaryItemPriceSerializer(
+        item_prefetched,
+        context=context,
+    )
 
     data = serializer.data
 
     assert data == {
-        "last_52_weeks": {
-            "average": "10.5",
-            "high": "15.0",
-            "low": "5.0",
-        },
-        "selected_week": {
-            "average": None,
-            "best": None,
-            "per_store": {},
-        },
+        "last_52_weeks": ReportSummaryHistoricalItemPriceSerializer(
+            item_prefetched,
+            context=context,
+        ).data,
+        "selected_week": ReportSummaryCurrentItemPriceSerializer(
+            item_prefetched,
+            context=context,
+        ).data,
     }

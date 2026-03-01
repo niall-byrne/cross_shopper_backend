@@ -26,23 +26,20 @@ from rest_framework.test import APIClient
 class TestReportSummaryViewSet:
   """Tests for the ReportSummaryViewSet."""
 
-  def test_list__all_reports__correct_representation(
+  def test_list__all_reports__returns_correct_representation(
       self,
       client: APIClient,
       report: Report,
       report_summary_list_url: Any,
   ) -> None:
     res = client.get(report_summary_list_url())
+    serializer = ReportSummarySerializer(report)
 
     assert res.status_code == status.HTTP_200_OK
     assert len(res.data) == 1
-    assert res.data[0]['id'] == report.id
-    assert res.data[0]['name'] == report.name
-    assert isinstance(res.data[0]['generated_at'], str)
-    assert 'item' in res.data[0]
-    assert 'store' in res.data[0]
+    assert res.data[0] == serializer.data
 
-  def test_list__filter_by_id__one_report(
+  def test_list__filter_by_id__returns_one_report(
       self,
       client: APIClient,
       report: Report,
@@ -53,7 +50,7 @@ class TestReportSummaryViewSet:
     assert res.status_code == status.HTTP_200_OK
     assert len(res.data) == 1
 
-  def test_retrieve__specified_report__correct_representation(
+  def test_retrieve__specified_report__returns_correct_report_data(
       self,
       client: APIClient,
       report_prefetched: Report,
@@ -71,8 +68,45 @@ class TestReportSummaryViewSet:
     assert res.status_code == status.HTTP_200_OK
     assert res.data['id'] == report_prefetched.id
     assert res.data['name'] == report_prefetched.name
-    assert res.data['item'] == serializer.data['item']
+    assert res.data['week'] == serializer.data['week']
+    assert res.data['year'] == serializer.data['year']
+    assert res.data['generated_at'] == serializer.data['generated_at']
+
+  def test_retrieve__specified_report__returns_correct_store_data(
+      self,
+      client: APIClient,
+      report_prefetched: Report,
+      report_summary_detail_url: Any,
+  ) -> None:
+    res = client.get(report_summary_detail_url(report_prefetched.id))
+    serializer = ReportSummarySerializer(
+        report_prefetched,
+        context={
+            'week': default_pricing_week(),
+            'year': default_pricing_year(),
+        },
+    )
+
+    assert res.status_code == status.HTTP_200_OK
     assert res.data['store'] == serializer.data['store']
+
+  def test_retrieve__specified_report__returns_correct_item_data(
+      self,
+      client: APIClient,
+      report_prefetched: Report,
+      report_summary_detail_url: Any,
+  ) -> None:
+    res = client.get(report_summary_detail_url(report_prefetched.id))
+    serializer = ReportSummarySerializer(
+        report_prefetched,
+        context={
+            'week': default_pricing_week(),
+            'year': default_pricing_year(),
+        },
+    )
+
+    assert res.status_code == status.HTTP_200_OK
+    assert res.data['item'] == serializer.data['item']
 
   def test_retrieve__default_week_and_year__returns_none_for_missing_prices(
       self,

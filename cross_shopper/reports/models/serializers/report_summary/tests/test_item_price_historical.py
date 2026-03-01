@@ -1,10 +1,13 @@
 """Tests for the ReportSummaryHistoricalItemPriceSerializer."""
 
+from unittest import mock
+
 import pytest
 from items.models import Item
-from pricing.models.fixtures.pricing import AliasCreateLast52PriceBatchFromReport
 from reports.models import Report
-from ..item_price_historical import ReportSummaryHistoricalItemPriceSerializer
+from reports.models.serializers.report_summary.item_price_historical import (
+    ReportSummaryHistoricalItemPriceSerializer,
+)
 
 
 @pytest.mark.django_db
@@ -15,11 +18,12 @@ class TestReportSummaryHistoricalItemPriceSerializer:
       self,
       report: Report,
       item: Item,
-      create_last_52_price_batch_from_report:
-      AliasCreateLast52PriceBatchFromReport,
+      mocked_aggregate_last_52_weeks_manager: mock.Mock,
   ) -> None:
     report.item.add(item)
-    create_last_52_price_batch_from_report(report)
+    mocked_aggregate_last_52_weeks_manager.average.return_value = 10.50
+    mocked_aggregate_last_52_weeks_manager.high.return_value = 15.00
+    mocked_aggregate_last_52_weeks_manager.low.return_value = 5.00
     context = {'report': report}
 
     serializer = ReportSummaryHistoricalItemPriceSerializer(
@@ -28,9 +32,11 @@ class TestReportSummaryHistoricalItemPriceSerializer:
     )
     data = serializer.data
 
-    assert 'average' in data
-    assert 'high' in data
-    assert 'low' in data
+    assert data == {
+        'average': '10.5',
+        'high': '15.0',
+        'low': '5.0',
+    }
 
   def test_serialization__no_report_context__none_values(
       self,

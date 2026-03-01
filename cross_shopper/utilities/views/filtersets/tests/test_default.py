@@ -2,7 +2,7 @@
 
 from typing import Type
 
-from ...filtersets.default import DefaultFilterSet
+from utilities.views.filtersets.default import DefaultFilterSet
 
 
 class TestDefaultFilterSet:

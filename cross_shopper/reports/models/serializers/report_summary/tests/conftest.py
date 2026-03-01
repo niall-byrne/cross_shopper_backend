@@ -2,6 +2,7 @@
 
 import decimal
 from typing import Dict
+from unittest import mock
 
 import pytest
 from items.models import Item
@@ -11,13 +12,22 @@ from reports.models import Report
 
 
 @pytest.fixture
+def mocked_aggregate_last_52_weeks_manager(
+    monkeypatch: pytest.MonkeyPatch
+) -> mock.Mock:
+  manager_mock = mock.Mock()
+  monkeypatch.setattr(Price, "aggregate_last_52_weeks", manager_mock)
+
+  return manager_mock
+
+
+@pytest.fixture
 def current_prices(report: Report, item: Item) -> Dict[str, Price]:
-  """Fixture to create current prices for a report and item."""
   report.item.add(item)
   stores = list(report.store.all())
   num_stores = len(stores)
 
-  results = {}
+  results: Dict[str, Price] = {}
   for i in range(min(num_stores, 2)):
     price = PriceFactory(
         item=item,
@@ -26,6 +36,6 @@ def current_prices(report: Report, item: Item) -> Dict[str, Price]:
         year=2024,
         week=1,
     )
-    results[str(stores[i].id)] = price
+    results[str(stores[i].id)] = price  # type: ignore[assignment]
 
   return results

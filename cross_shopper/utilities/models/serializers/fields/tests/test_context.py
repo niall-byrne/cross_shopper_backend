@@ -4,18 +4,17 @@ from typing import Type
 
 import pytest
 from rest_framework import serializers
-
-from ..context import SerializerContextField
+from utilities.models.serializers.fields.context import SerializerContextField
 
 
 class TestSerializerContextField:
   """Tests for the SerializerContextField."""
 
-  def test_to_representation__context_value_exists__correct_representation(
+  def test_to_representation__context_key_exists__correct_value_returned(
       self,
-      context_field_serializer: Type[serializers.Serializer],
+      serializer_with_context_fields: Type[serializers.Serializer],
   ) -> None:
-    serializer = context_field_serializer(
+    serializer = serializer_with_context_fields(
         data={},
         context={"test_key": "expected_value"},
     )
@@ -24,9 +23,9 @@ class TestSerializerContextField:
 
   def test_to_representation__missing_context__default_value_returned(
       self,
-      context_field_serializer: Type[serializers.Serializer],
+      serializer_with_context_fields: Type[serializers.Serializer],
   ) -> None:
-    serializer = context_field_serializer(
+    serializer = serializer_with_context_fields(
         data={},
         context={},
     )
@@ -45,11 +44,11 @@ class TestSerializerContextField:
 
     assert str(excinfo.value) == SerializerContextField.Messages.no_context_field
 
-  def test_to_representation__missing_context_no_default__none_returned(
+  def test_to_representation__missing_context__no_default_value__none_returned(
       self,
-      context_field_serializer: Type[serializers.Serializer],
+      serializer_with_context_fields: Type[serializers.Serializer],
   ) -> None:
-    serializer = context_field_serializer(
+    serializer = serializer_with_context_fields(
         data={},
         context={},
     )

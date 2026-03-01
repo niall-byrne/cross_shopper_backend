@@ -1,10 +1,12 @@
 """Test fixtures for the report_summary API views."""
 
-from typing import Callable, Dict, Optional, Protocol, Union
+from typing import Any, Callable, Dict, Optional, Protocol, Union
 
 import pytest
 from django.urls import reverse
 from django.utils.http import urlencode
+from items.models import Item
+from reports.models import Report
 
 REPORT_JSON_URL_BASENAME = "report_summary"
 
@@ -33,12 +35,6 @@ def report_summary_detail_url() -> "AliasReportJsonDetailUrl":
 
 
 @pytest.fixture
-def report_with_item(report: "Report", item: "Item") -> "Report":
-  report.item.add(item)
-  return report
-
-
-@pytest.fixture
 def report_summary_list_url() -> "AliasReportJsonListUrl":
 
   def create(query: Optional[Dict[str, Union[int, str]]] = None) -> str:
@@ -48,3 +44,9 @@ def report_summary_list_url() -> "AliasReportJsonListUrl":
     return url
 
   return create
+
+
+@pytest.fixture
+def report_with_item(report: "Report", item: "Item") -> "Report":
+  report.item.add(item)
+  return report

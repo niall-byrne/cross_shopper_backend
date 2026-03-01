@@ -5,7 +5,7 @@ from typing import Type
 import pytest
 from django.db import models
 from django_filters import rest_framework as filters
-from ...filtersets.default import DefaultFilterSet
+from utilities.views.filtersets.default import DefaultFilterSet
 
 
 class MockModel(models.Model):

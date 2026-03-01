@@ -13,7 +13,7 @@ from utilities.models.serializers.fields import (
 
 
 @pytest.fixture
-def context_field_serializer() -> Type[serializers.Serializer]:
+def serializer_with_context_fields() -> Type[serializers.Serializer]:
 
   class TestSerializer(serializers.Serializer):
     field = context.SerializerContextField(context_field="test_key")

@@ -3,7 +3,7 @@
 from django.db.models import QuerySet
 from items.models import Item
 
-ITEM_FIELD_ORDERING = (
+REPORT_ITEM_ORDERING = (
     'name',
     'brand__name',
     'is_organic',
@@ -14,4 +14,4 @@ ITEM_FIELD_ORDERING = (
 
 def qs_item() -> QuerySet[Item]:
   """Return a queryset for Item models in the report summary."""
-  return Item.objects.all().order_by(*ITEM_FIELD_ORDERING)
+  return Item.objects.all().order_by(*REPORT_ITEM_ORDERING)

@@ -3,27 +3,27 @@
 from datetime import datetime
 from typing import Any
 from unittest import mock
-from unittest.mock import patch
 
 import pytest
 from django.db.models import Prefetch
+from freezegun import freeze_time
 from items.models import Item
 from items.models.factories.item import ItemFactory
 from reports.models import Report
-from ..report import ReportSummarySerializer
+from reports.models.serializers.report_summary.report import (
+  ReportSummarySerializer,
+)
 
 
 @pytest.mark.django_db
 class TestReportSummarySerializer:
   """Tests for the ReportSummarySerializer."""
 
-  @patch("django.utils.timezone.now")
+  @freeze_time("2024-01-01 12:00:00")
   def test_serialization__specified_report__correct_representation(
       self,
-      mock_now: mock.Mock,
       report: Report,
   ) -> None:
-    mock_now.return_value = datetime(2024, 1, 1, 12, 0, 0)
     serializer = ReportSummarySerializer(
         report,
         context={
@@ -38,8 +38,6 @@ class TestReportSummarySerializer:
     assert data['week'] == 1
     assert data['year'] == 2024
     assert data['generated_at'] == "Mon, 01 Jan 2024 12:00:00 GMT"
-    assert 'store' in data
-    assert 'item' in data
     assert len(data['store']) == report.store.count()
     assert len(data['item']) == report.item.count()
 
@@ -51,7 +49,7 @@ class TestReportSummarySerializer:
     report.item.clear()
     item1 = ItemFactory(name='B item')
     item2 = ItemFactory(name='A item')
-    report.item.add(item1, item2)
+    report.item.add(item1, item2)  # type: ignore[arg-type]
     qs = Report.objects.filter(id=report.id).prefetch_related(
         Prefetch(
             'item',
@@ -60,6 +58,7 @@ class TestReportSummarySerializer:
     )
     report_with_prefetch = qs.get()
     serializer = ReportSummarySerializer(report_with_prefetch)
+
     item_data = serializer.get_item(report_with_prefetch)
     item_names = [i['name'] for i in item_data]
 

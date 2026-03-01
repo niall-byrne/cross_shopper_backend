@@ -2,27 +2,30 @@
 
 from unittest.mock import Mock
 
-from django.http import QueryDict
-from ..pass_through import PassThroughFilter
+import pytest
+from utilities.views.filters.pass_through import PassThroughFilter
 
 
 class TestPassThroughFilter:
   """Tests for the PassThroughFilter."""
 
-  def test_filter__field_name__request_updated(
+  def test_filter__field_name_provided__request_updated(
       self,
+      pass_through_filter: PassThroughFilter,
+      request_with_query_params: Mock,
+      monkeypatch: "pytest.MonkeyPatch",
   ) -> None:
-    request = Mock()
-    request.GET = QueryDict('', mutable=True)
-    request.GET.update({'existing': 'value'})
-    filter_instance = PassThroughFilter(field_name='test_field')
-    filter_instance.get_request = Mock(return_value=request)
+    monkeypatch.setattr(
+        pass_through_filter,
+        'get_request',
+        Mock(return_value=request_with_query_params),
+    )
     qs = Mock()
-    result = filter_instance.filter(qs, 'test_value')
+    result = pass_through_filter.filter(qs, 'test_value')
 
     assert result == qs
-    assert request.GET['test_field'] == 'test_value'
-    assert request.GET['existing'] == 'value'
+    assert request_with_query_params.GET['test_field'] == 'test_value'
+    assert request_with_query_params.GET['existing'] == 'value'
 
   def test_label__label_provided__correct_label(
       self,
@@ -34,15 +37,13 @@ class TestPassThroughFilter:
 
     assert filter_instance.label == 'Test Label'
 
-  def test_label__no_label_provided__correct_default(
+  def test_label__no_label_provided__correct_default_label(
       self,
   ) -> None:
     mock_model = Mock()
-    # Mocking the way django-filters extracts the verbose name
     mock_field = Mock()
-    mock_field.verbose_name = "mock model"
+    mock_field.verbose_name = "Mock model"
     mock_model._meta.get_field.return_value = mock_field
-
     filter_instance = PassThroughFilter(
         field_name='test_field',
         for_model=mock_model,

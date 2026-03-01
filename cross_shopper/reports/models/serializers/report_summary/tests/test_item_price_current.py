@@ -28,7 +28,8 @@ class TestReportSummaryCurrentItemPriceSerializer:
         item,
         context=context,
     )
-    expected_per_store = {
+    from typing import Optional
+    expected_per_store: Dict[str, Optional[str]] = {
         str(store.id): None for store in report.store.all()
     }
     for store_id, price in current_prices.items():

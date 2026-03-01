@@ -1,18 +1,16 @@
 """Tests for the ReportSummaryFilter."""
 
-from typing import Any
-
 import pytest
+from api.views.report_summary.filters import ReportSummaryFilter
 from pricing.models.defaults.default_pricing_week import default_pricing_week
 from pricing.models.defaults.default_pricing_year import default_pricing_year
-from ..filters import ReportSummaryFilter
 
 
 @pytest.mark.django_db
 class TestReportSummaryFilter:
   """Tests for the ReportSummaryFilter."""
 
-  def test_init__missing_week_year__populates_default_values(
+  def test_init__unspecified_week_and_year__populates_default_values(
       self,
   ) -> None:
     filter_set = ReportSummaryFilter(data={})
@@ -20,7 +18,7 @@ class TestReportSummaryFilter:
     assert filter_set.data['week'] == default_pricing_week()
     assert filter_set.data['year'] == default_pricing_year()
 
-  def test_init__provided_week_year__respects_values(
+  def test_init__specified_week_and_year__respects_values(
       self,
   ) -> None:
     filter_set = ReportSummaryFilter(data={'week': 10, 'year': 2025})

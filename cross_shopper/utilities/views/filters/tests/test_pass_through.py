@@ -32,7 +32,9 @@ class TestPassThroughFilter:
     filter_instance = PassThroughFilter(
         field_name='test_field', label='Test Label'
     )
-    assert filter_instance.label() == 'Test Label'
+    # label is a property on the filter, but PassThroughFilter doesn't override it in a way
+    # that makes it a method. CharFilter.label is a property.
+    assert filter_instance.label == 'Test Label'
 
   def test_init__sets_model(self) -> None:
     """Test that the model is correctly set in __init__."""

@@ -55,6 +55,7 @@ class ReportSummarySerializer(serializers.ModelSerializer):
         items,
         many=True,
         context={
+            **self.context,
             'report': instance,
             'week': week,
             'year': year,

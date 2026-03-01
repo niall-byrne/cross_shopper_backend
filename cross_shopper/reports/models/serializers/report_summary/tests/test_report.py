@@ -36,10 +36,10 @@ class TestReportSummarySerializer:
     assert len(data['store']) == report.store.count()
     assert len(data['item']) == report.item.count()
 
-  def test_get_item_ordering(self, report: Report, item: Any) -> None:
+  def test_get_item_ordering(self, report: Report) -> None:
     """Test that items are correctly ordered in the serialized representation."""
-    report.item.add(item)
-    serializer = ReportSummarySerializer(report)
+    # Clearing items to have a controlled test
+    report.item.clear()
 
     # Adding more items to test ordering
     from items.models.factories.item import ItemFactory
@@ -47,10 +47,24 @@ class TestReportSummarySerializer:
     item2 = ItemFactory(name='A item')
     report.item.add(item1, item2)
 
-    item_data = serializer.get_item(report)
+    # We need to use the viewset's logic or manually order for this test
+    # since the serializer just calls instance.item.all()
+    # and expects it to be ordered by the prefetch.
+    from django.db.models import Prefetch
+    from items.models import Item
+    qs = Report.objects.filter(id=report.id).prefetch_related(
+        Prefetch(
+            'item',
+            queryset=Item.objects.all().order_by(
+                *ReportSummarySerializer.ITEM_FIELD_ORDERING
+            ),
+        )
+    )
+    report_with_prefetch = qs.get()
+
+    serializer = ReportSummarySerializer(report_with_prefetch)
+    item_data = serializer.get_item(report_with_prefetch)
     item_names = [i['name'] for i in item_data]
 
     # Verify order is based on name
-    assert 'A item' in item_names
-    assert 'B item' in item_names
-    assert item_names.index('A item') < item_names.index('B item')
+    assert item_names == ['A item', 'B item']

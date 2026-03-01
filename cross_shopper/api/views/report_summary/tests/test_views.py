@@ -47,7 +47,9 @@ class TestReportSummaryViewSet:
   ):
     """Test the detail endpoint with week and year query parameters."""
     report.item.add(item)
-    store = report.store.all()[0]
+    # Using a list to ensure we have consistent access to stores
+    stores = list(report.store.all())
+    store = stores[0]
     PriceFactory(
         item=item,
         store=store,
@@ -59,7 +61,12 @@ class TestReportSummaryViewSet:
     # Request without params (default week/year)
     res = client.get(report_summary_detail_url(report.id))
     item_data = next(i for i in res.data['item'] if i['id'] == item.id)
-    assert item_data['price']['selected_week']['per_store'][str(store.id)] is None
+    # The per_store dict keys are store IDs as strings
+    per_store = item_data['price']['selected_week']['per_store']
+    # If the default week/year is not 10/2025, it should be None or missing if the dict is empty
+    # Wait, the serializer ALWAYS populates the dict with all stores in the report
+    assert str(store.id) in per_store
+    assert per_store[str(store.id)] is None
 
     # Request with params
     res = client.get(
@@ -70,4 +77,6 @@ class TestReportSummaryViewSet:
     )
     assert res.status_code == status.HTTP_200_OK
     item_data = next(i for i in res.data['item'] if i['id'] == item.id)
-    assert item_data['price']['selected_week']['per_store'][str(store.id)] == '99.99'
+    per_store = item_data['price']['selected_week']['per_store']
+    assert str(store.id) in per_store
+    assert per_store[str(store.id)] == '99.99'

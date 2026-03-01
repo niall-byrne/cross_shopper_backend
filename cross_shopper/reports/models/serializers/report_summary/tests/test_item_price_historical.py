@@ -1,10 +1,8 @@
 """Tests for the ReportSummaryHistoricalItemPriceSerializer."""
 
-import decimal
-
 import pytest
 from items.models import Item
-from pricing.models.factories.pricing import PriceFactory
+from pricing.models.fixtures.pricing import AliasCreateLast52PriceBatchFromReport
 from reports.models import Report
 from ..item_price_historical import ReportSummaryHistoricalItemPriceSerializer
 
@@ -13,26 +11,16 @@ from ..item_price_historical import ReportSummaryHistoricalItemPriceSerializer
 class TestReportSummaryHistoricalItemPriceSerializer:
   """Tests for the ReportSummaryHistoricalItemPriceSerializer."""
 
-  def test_serialization(self, report: Report, item: Item) -> None:
+  def test_serialization(
+      self,
+      report: Report,
+      item: Item,
+      create_last_52_price_batch_from_report:
+      AliasCreateLast52PriceBatchFromReport,
+  ) -> None:
     """Test that the serializer correctly calculates historical price stats."""
     report.item.add(item)
-    store = report.store.all()[0]
-
-    # Add historical prices
-    PriceFactory(
-        item=item,
-        store=store,
-        amount=decimal.Decimal('10.00'),
-        year=2024,
-        week=1,
-    )
-    PriceFactory(
-        item=item,
-        store=store,
-        amount=decimal.Decimal('20.00'),
-        year=2024,
-        week=2,
-    )
+    create_last_52_price_batch_from_report(report)
 
     context = {'report': report}
     serializer = ReportSummaryHistoricalItemPriceSerializer(
@@ -40,9 +28,6 @@ class TestReportSummaryHistoricalItemPriceSerializer:
         context=context,
     )
 
-    # Note: AggregateLast52WeeksManager will depend on current date.
-    # For now, let's assume it picks these up if they are recent.
-    # The actual calculations are tested in the manager tests.
     data = serializer.data
     assert 'average' in data
     assert 'high' in data

@@ -1,24 +1,24 @@
-"""Test the FranchiseSerializer class."""
+"""Test the FranchiseSerializerRO class."""
 
 from typing import TYPE_CHECKING
 
 import pytest
 from rest_framework.exceptions import ErrorDetail, ValidationError
 from stores.models.franchise import Franchise
-from stores.models.serializers.franchise import FranchiseSerializer
+from stores.models.serializers.read_only.franchise import FranchiseSerializerRO
 
 if TYPE_CHECKING:
   from scrapers.models import Scraper
 
 
 @pytest.mark.django_db
-class TestFranchiseSerializer:
+class TestFranchiseSerializerRO:
 
   def test_serialization__correct_representation(
       self,
       franchise: Franchise,
   ) -> None:
-    serialized = FranchiseSerializer(franchise)
+    serialized = FranchiseSerializerRO(franchise)
 
     assert serialized.data == {
         "name": franchise.name,
@@ -34,7 +34,7 @@ class TestFranchiseSerializer:
         "scraper": scraper.name,
     }
 
-    serialized = FranchiseSerializer(data=franchise_data)
+    serialized = FranchiseSerializerRO(data=franchise_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -51,7 +51,7 @@ class TestFranchiseSerializer:
     }
 
     with pytest.raises(ValidationError) as exc:
-      serialized = FranchiseSerializer(data=franchise_data)
+      serialized = FranchiseSerializerRO(data=franchise_data)
       serialized.is_valid(raise_exception=True)
 
     assert str(exc.value) == str(

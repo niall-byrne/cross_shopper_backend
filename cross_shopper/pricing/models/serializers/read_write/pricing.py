@@ -1,4 +1,4 @@
-"""Serializer for the Pricing model."""
+"""Serializer to retrieve, list, create or update Prices."""
 
 from typing import List
 
@@ -7,8 +7,8 @@ from pricing.models.defaults import default_pricing_week, default_pricing_year
 from rest_framework import serializers, validators
 
 
-class PricingSerializer(serializers.ModelSerializer[Price]):
-  """Serializer for creating or updating a Pricing model instance."""
+class PricingSerializerRW(serializers.ModelSerializer[Price]):
+  """Serializer to retrieve, list, create or update Prices."""
 
   week = serializers.IntegerField(
       default=default_pricing_week.default_pricing_week,

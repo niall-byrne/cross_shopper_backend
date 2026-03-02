@@ -6,11 +6,11 @@ import pytest
 from pricing.models.defaults.default_pricing_week import default_pricing_week
 from pricing.models.defaults.default_pricing_year import default_pricing_year
 from reports.models.report import Report
-from reports.models.serializers.report_summary.item import (
-    ReportSummaryItemSerializer,
+from reports.models.serializers.read_only.report_summary import (
+    ReportSummarySerializerRO,
 )
-from reports.models.serializers.report_summary.report import (
-    ReportSummarySerializer,
+from reports.models.serializers.read_only.report_summary.item import (
+    ReportSummaryItemSerializerRO,
 )
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -36,7 +36,7 @@ class TestReportSummaryReadOnlyViewSet:
       self,
       target_report: "Report",
   ) -> "Dict[str, Any]":
-    serializer = ReportSummarySerializer(
+    serializer = ReportSummarySerializerRO(
         target_report,
         context={
             'week': str(default_pricing_week()),
@@ -102,7 +102,7 @@ class TestReportSummaryReadOnlyViewSet:
         },
     )
 
-    assert res.data['item'] == ReportSummaryItemSerializer(
+    assert res.data['item'] == ReportSummaryItemSerializerRO(
         report_prefetched.item.all(),
         many=True,
         context={

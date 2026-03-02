@@ -1,20 +1,20 @@
-"""Tests for the ReportSummaryStoreSerializer."""
+"""Tests for the ReportSummaryStoreSerializerRO."""
 
 import pytest
-from reports.models.serializers.report_summary.store import (
-    ReportSummaryStoreSerializer,
+from reports.models.serializers.read_only.report_summary.store import (
+    ReportSummaryStoreSerializerRO,
 )
 from stores.models import Store
 
 
 @pytest.mark.django_db
-class TestReportSummaryStoreSerializer:
+class TestReportSummaryStoreSerializerRO:
 
   def test_serialization__specified_store__returns_correct_representation(
       self,
       store: "Store",
   ) -> None:
-    serializer = ReportSummaryStoreSerializer(store)
+    serializer = ReportSummaryStoreSerializerRO(store)
 
     assert serializer.data == {
         "id": store.pk,

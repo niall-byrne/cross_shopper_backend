@@ -1,10 +1,11 @@
-"""Tests for the ReportSummaryHistoricalItemPriceSerializer."""
+"""Tests for the ReportSummaryHistoricalItemPriceSerializerRO."""
 
 from typing import TYPE_CHECKING
 
 import pytest
-from reports.models.serializers.report_summary.item_price_historical import (
-    ReportSummaryHistoricalItemPriceSerializer,
+from reports.models.serializers.read_only.report_summary.\
+  item_price_historical import (
+    ReportSummaryHistoricalItemPriceSerializerRO,
 )
 
 if TYPE_CHECKING:  # no cover
@@ -14,7 +15,7 @@ if TYPE_CHECKING:  # no cover
 
 
 @pytest.mark.django_db
-class TestReportSummaryHistoricalItemPriceSerializer:
+class TestReportSummaryHistoricalItemPriceSerializerRO:
 
   @pytest.mark.usefixtures(
       "report_summary_mocked_pricing_aggregate_last_52_weeks_manager"
@@ -24,7 +25,7 @@ class TestReportSummaryHistoricalItemPriceSerializer:
       report_prefetched: "Report",
       report_summary_mocked_pricing_aggregate_attributes: "Dict[str, str]",
   ) -> None:
-    serializer = ReportSummaryHistoricalItemPriceSerializer(
+    serializer = ReportSummaryHistoricalItemPriceSerializerRO(
         report_prefetched.item.all()[0],
         context={"report": report_prefetched},
     )
@@ -35,7 +36,7 @@ class TestReportSummaryHistoricalItemPriceSerializer:
       self,
       report_prefetched: "Report",
   ) -> None:
-    serializer = ReportSummaryHistoricalItemPriceSerializer(
+    serializer = ReportSummaryHistoricalItemPriceSerializerRO(
         report_prefetched.item.all()[0],
         context={},
     )
@@ -50,7 +51,7 @@ class TestReportSummaryHistoricalItemPriceSerializer:
       self,
       report_prefetched: "Report",
   ) -> None:
-    serializer = ReportSummaryHistoricalItemPriceSerializer(
+    serializer = ReportSummaryHistoricalItemPriceSerializerRO(
         report_prefetched.item.all()[0],
         context={"report": report_prefetched},
     )

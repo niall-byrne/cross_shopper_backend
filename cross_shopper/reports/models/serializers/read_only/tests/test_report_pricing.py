@@ -1,9 +1,12 @@
-"""Test the ReportPricingSerializer class."""
+"""Test the ReportPricingSerializerRO class."""
+
 import decimal
 from typing import TYPE_CHECKING
 
 import pytest
-from reports.models.serializers.report_pricing import ReportPricingSerializer
+from reports.models.serializers.read_only.report_pricing import (
+    ReportPricingSerializerRO,
+)
 
 if TYPE_CHECKING:  # no cover
   from unittest import mock
@@ -12,7 +15,7 @@ if TYPE_CHECKING:  # no cover
 
 
 @pytest.mark.django_db
-class TestReportPricingSerializerSerializer:
+class TestReportPricingSerializerRO:
 
   def test_serialization__without_pricing__correct_representation(
       self,
@@ -23,7 +26,7 @@ class TestReportPricingSerializerSerializer:
     mocked_aggregate_last_52_weeks_manager.high.return_value = None
     mocked_aggregate_last_52_weeks_manager.low.return_value = None
 
-    serialized = ReportPricingSerializer(
+    serialized = ReportPricingSerializerRO(
         report.item.first(),
         context={"report": report},
     )
@@ -51,7 +54,7 @@ class TestReportPricingSerializerSerializer:
         decimal.Decimal("1.50")
     )
 
-    serialized = ReportPricingSerializer(
+    serialized = ReportPricingSerializerRO(
         report.item.first(),
         context={"report": report},
     )

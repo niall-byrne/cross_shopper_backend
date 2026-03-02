@@ -6,7 +6,7 @@ import pytest
 from api.views.reports.qs import qs_item
 from django.db.models import Prefetch
 from reports.models import Report
-from reports.models.serializers.report import ReportSerializer
+from reports.models.serializers.read_only.report import ReportSerializerRO
 from rest_framework import status
 
 if TYPE_CHECKING:  # no cover
@@ -38,7 +38,7 @@ class TestReportsReadOnlyViewSetRetrieve:
       report_detail_url: "AliasReportDetailUrl",
   ) -> None:
     res = client.get(report_detail_url(report.pk))
-    serializer = ReportSerializer(
+    serializer = ReportSerializerRO(
         self.get_sorted_report_qs({
             "id": report.pk
         }).first()

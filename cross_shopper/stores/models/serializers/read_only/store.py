@@ -1,4 +1,4 @@
-"""Serializer for the Store model."""
+"""Serializer to retrieve or list Stores."""
 
 from typing import Any, Dict
 
@@ -7,16 +7,16 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueTogetherValidator
 from stores.models import Franchise, Store
+from stores.models.serializers.read_write.address import AddressSerializerRW
 from utilities.models.serializers.fields.blonde import BlondeCharField
-from .address import AddressSerializer
-from .franchise import FranchiseSerializer
+from .franchise import FranchiseSerializerRO
 
 
-class StoreSerializer(serializers.ModelSerializer[Store]):
-  """Serializer for the Store model."""
+class StoreSerializerRO(serializers.ModelSerializer[Store]):
+  """Serializer to retrieve or list Stores."""
 
-  address = AddressSerializer()
-  franchise = FranchiseSerializer()
+  address = AddressSerializerRW()
+  franchise = FranchiseSerializerRO()
   franchise_location = BlondeCharField(max_length=80, allow_blank=False)
 
   class Meta:
@@ -32,7 +32,7 @@ class StoreSerializer(serializers.ModelSerializer[Store]):
   def create(self, validated_data: Dict[str, Any]) -> "Store":
     """Create a new instance."""
     franchise = validated_data.pop("franchise")
-    address = AddressSerializer().create(validated_data.pop("address"))
+    address = AddressSerializerRW().create(validated_data.pop("address"))
 
     return Store.objects.create(
         **validated_data,

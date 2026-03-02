@@ -1,11 +1,11 @@
-"""Test the StoreSerializer class."""
+"""Test the StoreSerializerRO class."""
 
 from typing import TYPE_CHECKING
 
 import pytest
 from rest_framework.exceptions import ErrorDetail, ValidationError
-from stores.models.serializers.franchise import FranchiseSerializer
-from stores.models.serializers.store import StoreSerializer
+from stores.models.serializers.read_only.franchise import FranchiseSerializerRO
+from stores.models.serializers.read_only.store import StoreSerializerRO
 
 if TYPE_CHECKING:  # no cover
   from scrapers.models import Scraper
@@ -13,13 +13,13 @@ if TYPE_CHECKING:  # no cover
 
 
 @pytest.mark.django_db
-class TestStoreSerializer:
+class TestStoreSerializerRO:
 
   def test_serialization__correct_representation(
       self,
       store: "Store",
   ) -> None:
-    serialized = StoreSerializer(store)
+    serialized = StoreSerializerRO(store)
 
     assert serialized.data == {
         "id": store.pk,
@@ -32,7 +32,7 @@ class TestStoreSerializer:
                 "postal_code": store.address.locality.postal_code,
                 "country": store.address.locality.state.country.name,
             },
-        "franchise": FranchiseSerializer(store.franchise).data,
+        "franchise": FranchiseSerializerRO(store.franchise).data,
         "franchise_location": store.franchise_location,
     }
 
@@ -50,11 +50,11 @@ class TestStoreSerializer:
                 "postal_code": "mocked postal code",
                 "country": "mocked country",
             },
-        "franchise": FranchiseSerializer(franchise).data,
+        "franchise": FranchiseSerializerRO(franchise).data,
         "franchise_location": "franchise location string",
     }
 
-    serialized = StoreSerializer(data=franchise_data)
+    serialized = StoreSerializerRO(data=franchise_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -65,11 +65,11 @@ class TestStoreSerializer:
       self,
       store: "Store",
   ) -> None:
-    store_data = StoreSerializer(store).data
+    store_data = StoreSerializerRO(store).data
     store_data["address"]["city"] = "some other city"
 
     with pytest.raises(ValidationError) as exc:
-      serialized = StoreSerializer(data=store_data)
+      serialized = StoreSerializerRO(data=store_data)
       serialized.is_valid(raise_exception=True)
       serialized.save()
 
@@ -110,7 +110,7 @@ class TestStoreSerializer:
     }
 
     with pytest.raises(ValidationError) as exc:
-      serialized = StoreSerializer(data=franchise_data)
+      serialized = StoreSerializerRO(data=franchise_data)
       serialized.is_valid(raise_exception=True)
       serialized.save()
 

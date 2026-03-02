@@ -1,48 +1,19 @@
-"""Serializers for the Address model."""
+"""Serializer to retrieve, list, create or update Addresses."""
 
 from typing import TYPE_CHECKING, Dict, Union
 
 from address.models import Address, Country, Locality, State
 from rest_framework import serializers
 from utilities.models.serializers.fields.blonde import BlondeCharField
+from .address_internal import AddressSerializerInternal
 
 if TYPE_CHECKING:  # no cover
   from django.db import models
 
 
-class CountrySerializer(serializers.ModelSerializer[Country]):
+class AddressSerializerRW(serializers.ModelSerializer[Address]):
+  """Serializer to retrieve, list, create or update Addresses."""
 
-  class Meta:
-    model = Country
-    fields = "__all__"
-
-
-class StateSerializer(serializers.ModelSerializer[State]):
-  country = CountrySerializer()
-
-  class Meta:
-    model = State
-    fields = "__all__"
-
-
-class LocalitySerializer(serializers.ModelSerializer[Locality]):
-  state = StateSerializer()
-
-  class Meta:
-    model = Locality
-    fields = "__all__"
-
-
-class AddressSerializerInternal(serializers.ModelSerializer[Address]):
-  locality = LocalitySerializer()
-
-  class Meta:
-    model = Address
-    fields = ("street_number", "route", "locality")
-    read_only = fields
-
-
-class AddressSerializer(serializers.ModelSerializer[Address]):
   street_number = serializers.IntegerField()
   street_name = BlondeCharField()
   city = BlondeCharField()
@@ -76,7 +47,8 @@ class AddressSerializer(serializers.ModelSerializer[Address]):
     }
 
   def create(
-      self, validated_data: Dict[str, Union[str, "models.Model"]]
+      self,
+      validated_data: Dict[str, Union[str, "models.Model"]],
   ) -> Address:
     """Create a new instance and all sub instances as needed."""
     country = Country.objects.get_or_create(name=validated_data["country"])[0]

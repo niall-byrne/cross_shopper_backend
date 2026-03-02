@@ -1,22 +1,23 @@
-"""Test the ReportSerializer class."""
+"""Test the TestReportSerializerRO class."""
 
 import pytest
 from items.models.serializers.item import ItemSerializer
 from reports.models import Report
+from reports.models.serializers.read_only.report import ReportSerializerRO
 from stores.models.serializers.read_only.store import StoreSerializerRO
-from ..report import ReportSerializer
 from .conftest import AliasCreateMockedRequest
 
 
 @pytest.mark.django_db
-class TestReportSerializer:
+class TestReportSerializerRO:
+  """Test the TestReportSerializerRO class."""
 
   def test_serialization__correct_representation(
       self,
       report: Report,
       create_mocked_request: AliasCreateMockedRequest,
   ) -> None:
-    serialized = ReportSerializer(
+    serialized = ReportSerializerRO(
         report, context={'request': create_mocked_request({})}
     )
 

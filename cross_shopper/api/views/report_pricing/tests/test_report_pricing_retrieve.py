@@ -3,7 +3,9 @@
 from typing import TYPE_CHECKING, cast
 
 import pytest
-from reports.models.serializers.report_pricing import ReportPricingSerializer
+from reports.models.serializers.read_only.report_pricing import (
+    ReportPricingSerializerRO,
+)
 from rest_framework import status
 
 if TYPE_CHECKING:  # no cover
@@ -28,7 +30,7 @@ class TestReportPricingReadOnlyViewSetRetrieve:
       report_pricing_detail_url: "AliasReportPricingDetailUrl",
       report_with_pricing: "Report",
   ) -> None:
-    serializer = ReportPricingSerializer(
+    serializer = ReportPricingSerializerRO(
         report_with_pricing.item.first(),
         context={"report": report_with_pricing},
     )

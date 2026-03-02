@@ -1,4 +1,4 @@
-"""Serializer for current Item pricing in Report model summaries."""
+"""Serializer for current Item pricing in summarized results of Reports."""
 
 import decimal
 import statistics
@@ -9,8 +9,8 @@ from pricing.models import Price
 from rest_framework import serializers
 
 
-class ReportSummaryCurrentItemPriceSerializer(serializers.ModelSerializer):
-  """Serializer for current Item pricing in Report model summaries."""
+class ReportSummaryCurrentItemPriceSerializerRO(serializers.ModelSerializer):
+  """Serializer for current Item pricing in summarized results of Reports."""
 
   average = serializers.SerializerMethodField()
   best = serializers.SerializerMethodField()

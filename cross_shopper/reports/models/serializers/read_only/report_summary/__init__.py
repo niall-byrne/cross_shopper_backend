@@ -1,4 +1,4 @@
-"""Serializer for the Report model in JSON format."""
+"""Serializer to retrieve or list summarized results of Reports."""
 
 from typing import Any
 
@@ -7,15 +7,15 @@ from reports.models import Report
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnDict
 from utilities.models.serializers.fields.context import SerializerContextField
-from .item import ReportSummaryItemSerializer
-from .store import ReportSummaryStoreSerializer
+from .item import ReportSummaryItemSerializerRO
+from .store import ReportSummaryStoreSerializerRO
 
 
-class ReportSummarySerializer(serializers.ModelSerializer):
-  """Serializer for Report model summaries."""
+class ReportSummarySerializerRO(serializers.ModelSerializer):
+  """Serializer to retrieve or list summarized results of Reports."""
 
   generated_at = serializers.SerializerMethodField()
-  store = ReportSummaryStoreSerializer(many=True)
+  store = ReportSummaryStoreSerializerRO(many=True)
   item = serializers.SerializerMethodField()
   week = SerializerContextField(context_field="week")
   year = SerializerContextField(context_field="year")
@@ -41,7 +41,7 @@ class ReportSummarySerializer(serializers.ModelSerializer):
       instance: Report,
   ) -> ReturnDict[Any, Any]:
     """Serialize the report items with the appropriate context."""
-    return ReportSummaryItemSerializer(
+    return ReportSummaryItemSerializerRO(
         instance.item.all(),
         many=True,
         context={

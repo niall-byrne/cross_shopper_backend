@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 import pytest
-from errors.models.serializers.error import ErrorSerializer
+from errors.models.serializers.read_write.error import ErrorSerializerRW
 from rest_framework import status
 
 if TYPE_CHECKING:  # no cover
@@ -27,7 +27,7 @@ class TestErrorsViewSetRetrieve:
       error_detail_url: "AliasErrorDetailUrl",
   ) -> None:
     res = client.get(error_detail_url(error.pk))
-    serializer = ErrorSerializer(error)
+    serializer = ErrorSerializerRW(error)
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == serializer.data

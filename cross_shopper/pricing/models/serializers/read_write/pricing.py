@@ -7,7 +7,7 @@ from pricing.models.defaults import default_pricing_week, default_pricing_year
 from rest_framework import serializers, validators
 
 
-class PricingSerializer(serializers.ModelSerializer[Price]):
+class PricingSerializerRW(serializers.ModelSerializer[Price]):
   """Serializer to retrieve, list, create or update Prices."""
 
   week = serializers.IntegerField(

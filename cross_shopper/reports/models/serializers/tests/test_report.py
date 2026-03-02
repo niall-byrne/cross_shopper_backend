@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 import pytest
 from items.models.serializers.item import ItemSerializer
 from reports.models.serializers.report import ReportSerializer
-from stores.models.serializers.store import StoreSerializer
+from stores.models.serializers.read_only.store import StoreSerializerRO
 
 if TYPE_CHECKING:
   from reports.models import Report
@@ -32,7 +32,7 @@ class TestReportSerializer:
             report.item.all(),
             many=True,
         ).data,
-        "store": StoreSerializer(
+        "store": StoreSerializerRO(
             report.store,
             many=True,
         ).data,

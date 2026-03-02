@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 import pytest
-from errors.models.serializers.error import ErrorSerializer
+from errors.models.serializers.read_write.error import ErrorSerializerRW
 from rest_framework import status
 
 if TYPE_CHECKING:  # no cover
@@ -21,7 +21,7 @@ class TestErrorsViewSetModifyNoAuthentication:
       error_detail_url: "AliasErrorDetailUrl",
       error: "Error",
   ) -> None:
-    serializer = ErrorSerializer(error)
+    serializer = ErrorSerializerRW(error)
 
     res = unauthenticated_client.put(
         error_detail_url(error.pk),
@@ -40,7 +40,7 @@ class TestErrorsViewSetModifyAuthentication:
       error_detail_url: "AliasErrorDetailUrl",
       error: "Error",
   ) -> None:
-    serializer = ErrorSerializer(error)
+    serializer = ErrorSerializerRW(error)
 
     res = authenticated_client.put(
         error_detail_url(error.pk),

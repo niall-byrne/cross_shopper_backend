@@ -1,4 +1,4 @@
-"""Tests for the ReportSummaryCurrentItemPriceSerializer."""
+"""Tests for the ReportSummaryCurrentItemPriceSerializerRO."""
 from __future__ import annotations
 
 import decimal
@@ -7,8 +7,9 @@ from typing import TYPE_CHECKING
 import pytest
 from django.db.models import Avg, Min
 from pricing.models import Price
-from reports.models.serializers.report_summary.item_price_current import (
-    ReportSummaryCurrentItemPriceSerializer,
+from reports.models.serializers.read_only.report_summary.\
+  item_price_current import (
+    ReportSummaryCurrentItemPriceSerializerRO,
 )
 
 if TYPE_CHECKING:
@@ -16,7 +17,7 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.django_db
-class TestReportSummaryCurrentItemPriceSerializer:
+class TestReportSummaryCurrentItemPriceSerializerRO:
 
   def test_serialization__specified_item__returns_correct_representation(
       self,
@@ -24,7 +25,7 @@ class TestReportSummaryCurrentItemPriceSerializer:
   ) -> None:
     prices = Price.objects.all()
 
-    serializer = ReportSummaryCurrentItemPriceSerializer(
+    serializer = ReportSummaryCurrentItemPriceSerializerRO(
         report_with_2024_prices.item.all()[0],
         context={
             "report": report_with_2024_prices,
@@ -60,7 +61,7 @@ class TestReportSummaryCurrentItemPriceSerializer:
       self,
       report: Report,
   ) -> None:
-    serializer = ReportSummaryCurrentItemPriceSerializer(
+    serializer = ReportSummaryCurrentItemPriceSerializerRO(
         report.item.all()[0],
         context={
             "report": report,

@@ -4,7 +4,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
-from reports.models.serializers.report_pricing import ReportPricingSerializer
+from reports.models.serializers.read_only.report_pricing import (
+    ReportPricingSerializerRO,
+)
 from rest_framework import status
 
 if TYPE_CHECKING:
@@ -27,7 +29,7 @@ class TestReportPricingReadOnlyViewSetList:
       report_pricing_list_url: AliasReportPricingListUrl,
       report_with_pricing: Report,
   ) -> None:
-    serializer = ReportPricingSerializer(
+    serializer = ReportPricingSerializerRO(
         report_with_pricing.item,
         context={"report": report_with_pricing},
         many=True,

@@ -6,7 +6,9 @@ from typing import TYPE_CHECKING, Any
 from django.utils.functional import cached_property
 from items.models import Item
 from reports.models import Report
-from reports.models.serializers.report_pricing import ReportPricingSerializer
+from reports.models.serializers.read_only.report_pricing import (
+    ReportPricingSerializerRO,
+)
 from rest_framework import generics, viewsets
 
 if TYPE_CHECKING:
@@ -19,7 +21,7 @@ class ReportPricingReadOnlyViewSet(
   """Report pricing per item read only API endpoint."""
 
   queryset = Item.objects.all()
-  serializer_class = ReportPricingSerializer
+  serializer_class = ReportPricingSerializerRO
 
   @cached_property
   def report(self) -> Report:

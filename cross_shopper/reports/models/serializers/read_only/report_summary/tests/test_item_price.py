@@ -1,17 +1,19 @@
-"""Tests for the ReportSummaryItemPriceSerializer."""
+"""Tests for the ReportSummaryItemPriceSerializerRO."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
 import pytest
-from reports.models.serializers.report_summary.item_price import (
-    ReportSummaryItemPriceSerializer,
+from reports.models.serializers.read_only.report_summary.\
+  item_price_current import (
+    ReportSummaryCurrentItemPriceSerializerRO,
 )
-from reports.models.serializers.report_summary.item_price_current import (
-    ReportSummaryCurrentItemPriceSerializer,
+from reports.models.serializers.read_only.report_summary.\
+  item_price_historical import (
+    ReportSummaryHistoricalItemPriceSerializerRO,
 )
-from reports.models.serializers.report_summary.item_price_historical import (
-    ReportSummaryHistoricalItemPriceSerializer,
+from reports.models.serializers.read_only.report_summary.item_price import (
+    ReportSummaryItemPriceSerializerRO,
 )
 
 if TYPE_CHECKING:
@@ -19,7 +21,7 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.django_db
-class TestReportSummaryItemPriceSerializer:
+class TestReportSummaryItemPriceSerializerRO:
 
   @pytest.mark.usefixtures(
       "report_summary_mocked_pricing_aggregate_last_52_weeks_manager"
@@ -29,19 +31,19 @@ class TestReportSummaryItemPriceSerializer:
       report_prefetched: Report,
   ) -> None:
     item = report_prefetched.item.all()[0]
-    serializer = ReportSummaryItemPriceSerializer(
+    serializer = ReportSummaryItemPriceSerializerRO(
         item,
         context={"report": report_prefetched},
     )
 
     assert serializer.data == {
         "last_52_weeks":
-            ReportSummaryHistoricalItemPriceSerializer(
+            ReportSummaryHistoricalItemPriceSerializerRO(
                 item,
                 context=serializer.context,
             ).data,
         "selected_week":
-            ReportSummaryCurrentItemPriceSerializer(
+            ReportSummaryCurrentItemPriceSerializerRO(
                 item,
                 context=serializer.context,
             ).data,

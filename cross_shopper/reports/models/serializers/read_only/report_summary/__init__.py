@@ -1,4 +1,4 @@
-"""Serializer for the Report model in JSON format."""
+"""Serializer to retrieve or list summarized results of Reports."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
@@ -7,18 +7,18 @@ from django.utils import timezone
 from reports.models import Report
 from rest_framework import serializers
 from utilities.models.serializers.fields.context import ContextField
-from .item import ReportSummaryItemSerializer
-from .store import ReportSummaryStoreSerializer
+from .item import ReportSummaryItemSerializerRO
+from .store import ReportSummaryStoreSerializerRO
 
 if TYPE_CHECKING:
   from rest_framework.utils.serializer_helpers import ReturnDict
 
 
-class ReportSummarySerializer(serializers.ModelSerializer[Report]):
-  """Serializer for Report model summaries."""
+class ReportSummarySerializerRO(serializers.ModelSerializer[Report]):
+  """Serializer to retrieve or list summarized results of Reports."""
 
   generated_at = serializers.SerializerMethodField()
-  store = ReportSummaryStoreSerializer(many=True)
+  store = ReportSummaryStoreSerializerRO(many=True)
   item = serializers.SerializerMethodField()
   week = ContextField(context_key="week")
   year = ContextField(context_key="year")
@@ -44,7 +44,7 @@ class ReportSummarySerializer(serializers.ModelSerializer[Report]):
       instance: Report,
   ) -> ReturnDict[Any, Any]:
     """Serialize the report items with the appropriate context."""
-    return ReportSummaryItemSerializer(
+    return ReportSummaryItemSerializerRO(
         instance.item.all(),
         many=True,
         context={

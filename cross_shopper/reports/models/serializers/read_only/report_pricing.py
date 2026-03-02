@@ -1,4 +1,4 @@
-"""Serializer for aggregate Pricing per Item per Report."""
+"""Serializer to retrieve or list aggregate Pricing per Item per Report."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -11,8 +11,8 @@ if TYPE_CHECKING:
   import decimal
 
 
-class ReportPricingSerializer(serializers.ModelSerializer[Item]):
-  """Serializer for aggregate Pricing per Item per Report."""
+class ReportPricingSerializerRO(serializers.ModelSerializer[Item]):
+  """Serializer to retrieve or list aggregate Pricing per Item per Report."""
 
   name = serializers.SerializerMethodField(read_only=True)
   last_52_weeks_average = serializers.SerializerMethodField(

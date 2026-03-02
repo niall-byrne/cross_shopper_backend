@@ -1,11 +1,11 @@
-"""Tests for the ReportSummaryStoreSerializer."""
+"""Tests for the ReportSummaryStoreSerializerRO."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
 import pytest
-from reports.models.serializers.report_summary.store import (
-    ReportSummaryStoreSerializer,
+from reports.models.serializers.read_only.report_summary.store import (
+    ReportSummaryStoreSerializerRO,
 )
 
 if TYPE_CHECKING:
@@ -13,13 +13,13 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.django_db
-class TestReportSummaryStoreSerializer:
+class TestReportSummaryStoreSerializerRO:
 
   def test_serialization__specified_store__returns_correct_representation(
       self,
       store: Store,
   ) -> None:
-    serializer = ReportSummaryStoreSerializer(store)
+    serializer = ReportSummaryStoreSerializerRO(store)
 
     assert serializer.data == {
         "id": store.pk,

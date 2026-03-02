@@ -1,18 +1,18 @@
-"""Tests for the ReportSummarySerializer."""
+"""Tests for the ReportSummarySerializerRO."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
 import pytest
 from freezegun import freeze_time
-from reports.models.serializers.report_summary.item import (
-    ReportSummaryItemSerializer,
+from reports.models.serializers.read_only.report_summary import (
+    ReportSummarySerializerRO,
 )
-from reports.models.serializers.report_summary.report import (
-    ReportSummarySerializer,
+from reports.models.serializers.read_only.report_summary.item import (
+    ReportSummaryItemSerializerRO,
 )
-from reports.models.serializers.report_summary.store import (
-    ReportSummaryStoreSerializer,
+from reports.models.serializers.read_only.report_summary.store import (
+    ReportSummaryStoreSerializerRO,
 )
 
 if TYPE_CHECKING:
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.django_db
-class TestReportSummarySerializer:
+class TestReportSummarySerializerRO:
 
   @freeze_time("2024-01-01 12:00:00")
   @pytest.mark.parametrize(
@@ -33,7 +33,7 @@ class TestReportSummarySerializer:
       week: str,
       year: str,
   ) -> None:
-    serializer = ReportSummarySerializer(
+    serializer = ReportSummarySerializerRO(
         report_prefetched,
         context={
             "week": week,
@@ -53,12 +53,12 @@ class TestReportSummarySerializer:
         "generated_at":
             timestamp,
         "store":
-            ReportSummaryStoreSerializer(
+            ReportSummaryStoreSerializerRO(
                 report_prefetched.store.all(),
                 many=True,
             ).data,
         "item":
-            ReportSummaryItemSerializer(
+            ReportSummaryItemSerializerRO(
                 report_prefetched.item.all(),
                 many=True,
                 context={

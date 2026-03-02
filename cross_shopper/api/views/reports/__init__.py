@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from django.db.models import Prefetch
 from reports.models import Report
-from reports.models.serializers.report import ReportSerializer
+from reports.models.serializers.read_only.report import ReportSerializerRO
 from rest_framework import viewsets
 from .filters import ReportFilter
 from .qs import qs_item
@@ -20,7 +20,7 @@ class ReportsReadOnlyViewSet(
   """Reports read only API endpoint."""
 
   queryset = Report.objects.all()
-  serializer_class = ReportSerializer
+  serializer_class = ReportSerializerRO
   filterset_class = ReportFilter
 
   def get_queryset(self) -> QuerySet[Report]:

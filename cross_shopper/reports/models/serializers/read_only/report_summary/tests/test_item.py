@@ -1,15 +1,15 @@
-"""Tests for the ReportSummaryItemSerializer."""
+"""Tests for the ReportSummaryItemPriceSerializerRO."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
 import pytest
 from items.models.serializers.packaging import PackagingSerializer
-from reports.models.serializers.report_summary.item import (
-    ReportSummaryItemSerializer,
+from reports.models.serializers.read_only.report_summary.item import (
+    ReportSummaryItemSerializerRO,
 )
-from reports.models.serializers.report_summary.item_price import (
-    ReportSummaryItemPriceSerializer,
+from reports.models.serializers.read_only.report_summary.item_price import (
+    ReportSummaryItemPriceSerializerRO,
 )
 
 if TYPE_CHECKING:
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.django_db
-class TestReportSummaryItemSerializer:
+class TestReportSummaryItemSerializerRO:
 
   @pytest.mark.usefixtures(
       "report_summary_mocked_pricing_aggregate_last_52_weeks_manager"
@@ -28,7 +28,7 @@ class TestReportSummaryItemSerializer:
   ) -> None:
     item = report_prefetched.item.all()[0]
 
-    serializer = ReportSummaryItemSerializer(
+    serializer = ReportSummaryItemSerializerRO(
         item,
         context={"report": report_prefetched},
     )
@@ -49,7 +49,7 @@ class TestReportSummaryItemSerializer:
         "packaging":
             PackagingSerializer(item.packaging).data,
         "price":
-            ReportSummaryItemPriceSerializer(
+            ReportSummaryItemPriceSerializerRO(
                 item,
                 context=serializer.context,
             ).data,

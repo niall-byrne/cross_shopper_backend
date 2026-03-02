@@ -6,11 +6,11 @@ from typing import TYPE_CHECKING, Any
 import pytest
 from pricing.models.defaults.default_pricing_week import default_pricing_week
 from pricing.models.defaults.default_pricing_year import default_pricing_year
-from reports.models.serializers.report_summary.item import (
-    ReportSummaryItemSerializer,
+from reports.models.serializers.read_only.report_summary import (
+    ReportSummarySerializerRO,
 )
-from reports.models.serializers.report_summary.report import (
-    ReportSummarySerializer,
+from reports.models.serializers.read_only.report_summary.item import (
+    ReportSummaryItemSerializerRO,
 )
 from rest_framework import status
 
@@ -35,7 +35,7 @@ class TestReportSummaryReadOnlyViewSet:
       self,
       target_report: Report,
   ) -> dict[str, Any]:
-    serializer = ReportSummarySerializer(
+    serializer = ReportSummarySerializerRO(
         target_report,
         context={
             "week": str(default_pricing_week()),
@@ -143,7 +143,7 @@ class TestReportSummaryReadOnlyViewSet:
     for response, report in zip(
         res.data, [report_prefetched, report_prefetched_alternate]
     ):
-      assert response["item"] == ReportSummaryItemSerializer(
+      assert response["item"] == ReportSummaryItemSerializerRO(
           report.item.all(),
           many=True,
           context={

@@ -1,4 +1,4 @@
-"""Test fixtures for the ReportSummaryCurrentItemPriceSerializer."""
+"""Test fixtures for the summary family of serializers for Reports."""
 from __future__ import annotations
 
 import decimal

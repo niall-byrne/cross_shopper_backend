@@ -1,4 +1,4 @@
-"""Test fixtures for the reports_pricing API views."""
+"""Test fixtures for the report_pricing API views."""
 
 from typing import Callable
 

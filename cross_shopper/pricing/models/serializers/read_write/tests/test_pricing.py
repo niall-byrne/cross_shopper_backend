@@ -1,4 +1,4 @@
-"""Test the PricingSerializer class."""
+"""Test the PricingSerializerRW class."""
 
 import decimal
 from typing import TYPE_CHECKING, Dict, Union
@@ -7,7 +7,7 @@ import pytest
 from django.core.exceptions import ValidationError
 from pricing.models import Price
 from pricing.models.defaults import default_pricing_week, default_pricing_year
-from pricing.models.serializers.pricing import PricingSerializer
+from pricing.models.serializers.read_write.pricing import PricingSerializerRW
 from rest_framework.exceptions import (
     ValidationError as SerializerValidationError,
 )
@@ -18,13 +18,13 @@ if TYPE_CHECKING:  # no cover
 
 
 @pytest.mark.django_db
-class TestPricingSerializer:
+class TestPricingSerializeRW:
 
   def test_serialization__correct_representation(
       self,
       price: "Price",
   ) -> None:
-    serialized = PricingSerializer(price)
+    serialized = PricingSerializerRW(price)
 
     assert serialized.data == {
         'id': price.pk,
@@ -46,7 +46,7 @@ class TestPricingSerializer:
         'store': store.pk,
     }
 
-    serialized = PricingSerializer(data=pricing_data)
+    serialized = PricingSerializerRW(data=pricing_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -73,7 +73,7 @@ class TestPricingSerializer:
     )
     instance.save()
 
-    serialized = PricingSerializer(data=duplicate_pricing_data)
+    serialized = PricingSerializerRW(data=duplicate_pricing_data)
     serialized.is_valid(raise_exception=True)
 
     with pytest.raises(ValidationError) as exc:

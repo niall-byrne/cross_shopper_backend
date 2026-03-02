@@ -3,7 +3,7 @@
 from typing import Any, Dict, Optional
 
 from pricing.models import Price
-from pricing.models.serializers.pricing import PricingSerializer
+from pricing.models.serializers.read_write.pricing import PricingSerializerRW
 from rest_framework import viewsets
 from rest_framework.request import Request
 from .filters import PricingFilter
@@ -15,7 +15,7 @@ class PricingViewSet(
   """Pricing API endpoint."""
 
   queryset = Price.objects.all()
-  serializer_class = PricingSerializer
+  serializer_class = PricingSerializerRW
   filterset_class = PricingFilter
 
   def create(self, request: Request, *args: Any, **kwargs: Dict[str, Any]):

@@ -46,13 +46,13 @@ def report_alternate(user: AbstractBaseUser) -> "Report":
 
 
 @pytest.fixture
-def report_testing(user: AbstractBaseUser) -> "Report":
-  return create_report(user, testing_only=True)
+def report_store() -> "ReportStore":
+  return ReportStoreFactory.create()
 
 
 @pytest.fixture
-def report_store() -> "ReportStore":
-  return ReportStoreFactory.create()
+def report_testing(user: AbstractBaseUser) -> "Report":
+  return create_report(user, testing_only=True)
 
 
 @pytest.fixture

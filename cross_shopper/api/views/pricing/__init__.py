@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pricing.models import Price
-from pricing.models.serializers.pricing import PricingSerializer
+from pricing.models.serializers.read_write.pricing import PricingSerializerRW
 from rest_framework import viewsets
 from utilities.views.viewsets.mixins import upsert
 from .filters import PricingFilter
@@ -15,5 +15,5 @@ class PricingViewSet(
   """Pricing API endpoint."""
 
   queryset = Price.objects.all()
-  serializer_class = PricingSerializer
+  serializer_class = PricingSerializerRW
   filterset_class = PricingFilter

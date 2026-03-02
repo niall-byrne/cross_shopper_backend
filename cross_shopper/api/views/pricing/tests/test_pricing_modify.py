@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
-from pricing.models.serializers.pricing import PricingSerializer
+from pricing.models.serializers.read_write.pricing import PricingSerializerRW
 from rest_framework import status
 
 if TYPE_CHECKING:
@@ -22,7 +22,7 @@ class TestPricingViewSetModifyNoAuthentication:
       pricing_detail_url: AliasPricingDetailUrl,
       price_today: Price,
   ) -> None:
-    serializer = PricingSerializer(price_today)
+    serializer = PricingSerializerRW(price_today)
 
     res = unauthenticated_client.put(
         pricing_detail_url(price_today.pk),
@@ -41,7 +41,7 @@ class TestPricingViewSetModifyAuthentication:
       pricing_detail_url: AliasPricingDetailUrl,
       price_today: Price,
   ) -> None:
-    serializer = PricingSerializer(price_today)
+    serializer = PricingSerializerRW(price_today)
 
     res = authenticated_client.put(
         pricing_detail_url(price_today.pk),

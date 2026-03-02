@@ -1,4 +1,4 @@
-"""Test the PricingSerializer class."""
+"""Test the PricingSerializerRW class."""
 from __future__ import annotations
 
 import decimal
@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 import pytest
 from pricing.models import Price
 from pricing.models.defaults import default_pricing_week, default_pricing_year
-from pricing.models.serializers.pricing import PricingSerializer
+from pricing.models.serializers.read_write.pricing import PricingSerializerRW
 
 if TYPE_CHECKING:
   from items.models import Item
@@ -15,13 +15,13 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.django_db
-class TestPricingSerializer:
+class TestPricingSerializeRW:
 
   def test_serialization__correct_representation(
       self,
       price: Price,
   ) -> None:
-    serialized = PricingSerializer(price)
+    serialized = PricingSerializerRW(price)
 
     assert serialized.data == {
         "id": price.pk,
@@ -43,7 +43,7 @@ class TestPricingSerializer:
         "store": store.pk,
     }
 
-    serialized = PricingSerializer(data=pricing_data)
+    serialized = PricingSerializerRW(data=pricing_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -70,7 +70,7 @@ class TestPricingSerializer:
     )
     instance.save()
 
-    serialized = PricingSerializer(data=pricing_data)
+    serialized = PricingSerializerRW(data=pricing_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 

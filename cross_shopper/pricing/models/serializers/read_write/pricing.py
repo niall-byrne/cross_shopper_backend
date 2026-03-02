@@ -11,7 +11,7 @@ if TYPE_CHECKING:
   from rest_framework import validators
 
 
-class PricingSerializer(serializers.ModelSerializer[Price]):
+class PricingSerializerRW(serializers.ModelSerializer[Price]):
   """Serializer to retrieve, list, create or update Prices."""
 
   week = serializers.IntegerField(

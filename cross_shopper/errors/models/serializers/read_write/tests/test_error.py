@@ -1,11 +1,11 @@
-"""Test the ErrorSerializer class."""
+"""Test the ErrorSerializerRW class."""
 
 from typing import TYPE_CHECKING, Dict, Union
 
 import pytest
 from django.core.exceptions import ValidationError
 from errors.models import Error, ErrorType
-from errors.models.serializers.error import ErrorSerializer
+from errors.models.serializers.read_write.error import ErrorSerializerRW
 from rest_framework.exceptions import (
     ValidationError as SerializerValidationError,
 )
@@ -17,13 +17,13 @@ if TYPE_CHECKING:  # no cover
 
 
 @pytest.mark.django_db
-class TestErrorSerializer:
+class TestErrorSerializerRW:
 
   def test_serialization__correct_representation(
       self,
       error: "Error",
   ) -> None:
-    serialized = ErrorSerializer(error)
+    serialized = ErrorSerializerRW(error)
 
     assert serialized.data == {
         "id": error.pk,
@@ -48,7 +48,7 @@ class TestErrorSerializer:
         "store": store.pk,
     }
 
-    serialized = ErrorSerializer(data=error_data)
+    serialized = ErrorSerializerRW(data=error_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -78,7 +78,7 @@ class TestErrorSerializer:
     )
     instance.save()
 
-    serialized = ErrorSerializer(data=duplicate_data)
+    serialized = ErrorSerializerRW(data=duplicate_data)
     serialized.is_valid(raise_exception=True)
 
     with pytest.raises(ValidationError) as exc:

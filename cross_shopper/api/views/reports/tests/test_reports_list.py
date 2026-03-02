@@ -6,7 +6,7 @@ import pytest
 from api.views.reports.qs import qs_item, qs_scraper_config
 from django.db.models import Prefetch, QuerySet
 from reports.models import Report
-from reports.models.serializers.report import ReportSerializer
+from reports.models.serializers.read_only.report import ReportSerializerRO
 from rest_framework import status
 
 if TYPE_CHECKING:  # no cover
@@ -39,7 +39,7 @@ class TestReportsReadOnlyViewSetList:
       report_list_url: "AliasReportListUrl",
   ) -> None:
     res = client.get(report_list_url())
-    serializer = ReportSerializer(
+    serializer = ReportSerializerRO(
         self.get_sorted_report_qs({"id": report.pk}),
         many=True,
     )
@@ -55,7 +55,7 @@ class TestReportsReadOnlyViewSetList:
       report_list_url: "AliasReportListUrl",
   ) -> None:
     res = client.get(report_list_url({"id": report_alternate.pk}))
-    serializer = ReportSerializer(
+    serializer = ReportSerializerRO(
         self.get_sorted_report_qs({"id": report_alternate.pk}),
         many=True,
     )
@@ -71,7 +71,7 @@ class TestReportsReadOnlyViewSetList:
       report_list_url: "AliasReportListUrl",
   ) -> None:
     res = client.get(report_list_url({"name": report_alternate.name}))
-    serializer = ReportSerializer(
+    serializer = ReportSerializerRO(
         self.get_sorted_report_qs({"id": report_alternate.pk}),
         many=True,
     )
@@ -87,7 +87,7 @@ class TestReportsReadOnlyViewSetList:
       report_list_url: "AliasReportListUrl",
   ) -> None:
     res = client.get(report_list_url({"name": report_alternate.name.upper()}))
-    serializer = ReportSerializer(
+    serializer = ReportSerializerRO(
         self.get_sorted_report_qs({"id": report_alternate.pk}),
         many=True,
     )
@@ -119,7 +119,7 @@ class TestReportsReadOnlyViewSetList:
         )
     )
 
-    serializer = ReportSerializer(
+    serializer = ReportSerializerRO(
         filtered_reports,
         many=True,
     )
@@ -136,7 +136,7 @@ class TestReportsReadOnlyViewSetList:
       is_testing: bool,
   ) -> None:
     res = client.get(report_list_url({"is_testing": is_testing}))
-    serializer = ReportSerializer(
+    serializer = ReportSerializerRO(
         self.get_sorted_report_qs({"is_testing": is_testing}),
         many=True,
     )

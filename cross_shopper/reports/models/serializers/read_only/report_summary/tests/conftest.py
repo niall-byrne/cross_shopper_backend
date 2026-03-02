@@ -1,4 +1,4 @@
-"""Test fixtures for the ReportSummaryCurrentItemPriceSerializer."""
+"""Test fixtures for the summary family of serializers for Reports."""
 
 import decimal
 from typing import TYPE_CHECKING

@@ -1,4 +1,4 @@
-"""Serializer for historical Item pricing in Report model summaries."""
+"""Serializer for historical Item pricing in summarized results of Reports."""
 
 from typing import Optional
 
@@ -7,10 +7,10 @@ from pricing.models import Price
 from rest_framework import serializers
 
 
-class ReportSummaryHistoricalItemPriceSerializer(
+class ReportSummaryHistoricalItemPriceSerializerRO(
     serializers.ModelSerializer[Item],
 ):
-  """Serializer for historical Item pricing in Report model summaries."""
+  """Serializer for historical Item pricing in summarized results of Reports."""
 
   average = serializers.SerializerMethodField()
   high = serializers.SerializerMethodField()

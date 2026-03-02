@@ -1,19 +1,19 @@
-"""Test the AddressSerializer class."""
+"""Test the AddressSerializerRW class."""
 
 import pytest
 from address.models import Address
 from rest_framework.exceptions import ErrorDetail, ValidationError
-from ..address import AddressSerializer
+from stores.models.serializers.read_write.address import AddressSerializerRW
 
 
 @pytest.mark.django_db
-class TestAddressSerializer:
+class TestAddressSerializerRW:
 
   def test_serialization__correct_representation(
       self,
       address: Address,
   ) -> None:
-    serialized = AddressSerializer(address)
+    serialized = AddressSerializerRW(address)
 
     assert serialized.data == {
         'street_number': str(address.street_number),
@@ -36,7 +36,7 @@ class TestAddressSerializer:
         'country': "mocked country",
     }
 
-    serialized = AddressSerializer(data=address_data)
+    serialized = AddressSerializerRW(data=address_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -60,7 +60,7 @@ class TestAddressSerializer:
         'country': address.locality.state.country.name,
     }
 
-    serialized = AddressSerializer(data=address_data)
+    serialized = AddressSerializerRW(data=address_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -81,7 +81,7 @@ class TestAddressSerializer:
     }
 
     with pytest.raises(ValidationError) as exc:
-      serialized = AddressSerializer(data=address_data)
+      serialized = AddressSerializerRW(data=address_data)
       serialized.is_valid(raise_exception=True)
 
     assert str(exc.value) == str(

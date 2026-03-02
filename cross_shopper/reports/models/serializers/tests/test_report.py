@@ -3,7 +3,7 @@
 import pytest
 from items.models.serializers.item import ItemSerializer
 from reports.models import Report
-from stores.models.serializers.store import StoreSerializer
+from stores.models.serializers.read_only.store import StoreSerializerRO
 from ..report import ReportSerializer
 from .conftest import AliasCreateMockedRequest
 
@@ -27,7 +27,7 @@ class TestReportSerializer:
             report.item.all(),
             many=True,
         ).data,
-        "store": StoreSerializer(
+        "store": StoreSerializerRO(
             report.store,
             many=True,
         ).data,

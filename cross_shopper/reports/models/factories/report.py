@@ -12,11 +12,11 @@ if TYPE_CHECKING:
   from items.models import Item
   from reports.models import Report, ReportStore  # noqa: F401
   from stores.models import Store
-  from .typing import AliasFaker, AliasSubFactory
+  from .typing import AliasSubFactory
 
 
 class ReportFactory(factory.django.DjangoModelFactory["Report"]):
-  name: AliasFaker[str] = factory.Faker("company")
+  name: factory.Sequence[str] = factory.Sequence(lambda n: "Report %03d" % n)
   user: AliasSubFactory[AbstractBaseUser] = factory.SubFactory(UserFactory)
 
   class Meta:

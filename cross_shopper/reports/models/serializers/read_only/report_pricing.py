@@ -1,4 +1,4 @@
-"""Serializer for aggregate Pricing per Item per Report."""
+"""Serializer to retrieve or list aggregate Pricing per Item per Report."""
 
 import decimal
 from typing import Optional
@@ -8,8 +8,8 @@ from pricing.models import Price
 from rest_framework import serializers
 
 
-class ReportPricingSerializer(serializers.ModelSerializer[Item]):
-  """Serializer for aggregate Pricing per Item per Report."""
+class ReportPricingSerializerRO(serializers.ModelSerializer[Item]):
+  """Serializer to retrieve or list aggregate Pricing per Item per Report."""
 
   name = serializers.SerializerMethodField(read_only=True)
   last_52_weeks_average = serializers.SerializerMethodField(

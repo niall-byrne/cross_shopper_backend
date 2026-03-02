@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 import pytest
-from pricing.models.serializers.pricing import PricingSerializer
+from pricing.models.serializers.read_write.pricing import PricingSerializerRW
 from rest_framework import status
 
 if TYPE_CHECKING:  # no cover
@@ -28,7 +28,7 @@ class TestPricingViewSetRetrieve:
       pricing_detail_url: "AliasPricingDetailUrl",
   ) -> None:
     res = client.get(pricing_detail_url(price_today.pk))
-    serializer = PricingSerializer(price_today)
+    serializer = PricingSerializerRW(price_today)
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == serializer.data

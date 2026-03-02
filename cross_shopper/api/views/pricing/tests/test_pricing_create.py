@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 import pytest
-from pricing.models.serializers.pricing import PricingSerializer
+from pricing.models.serializers.read_write.pricing import PricingSerializerRW
 from rest_framework import status
 
 if TYPE_CHECKING:  # no cover
@@ -22,7 +22,7 @@ class TestPricingViewSetCreateNoAuthentication:
       pricing_list_url: "AliasPricingListUrl",
       price_today: "Price",
   ) -> None:
-    serializer = PricingSerializer(price_today)
+    serializer = PricingSerializerRW(price_today)
 
     res = unauthenticated_client.post(pricing_list_url(), data=serializer.data)
 
@@ -39,7 +39,7 @@ class TestPricingViewSetCreateAuthentication:
       pricing_list_url: "AliasPricingListUrl",
       price_today: "Price",
   ) -> None:
-    serializer = PricingSerializer(price_today)
+    serializer = PricingSerializerRW(price_today)
 
     res = authenticated_client.post(pricing_list_url(), data=serializer.data)
 
@@ -52,7 +52,7 @@ class TestPricingViewSetCreateAuthentication:
       pricing_list_url: "AliasPricingListUrl",
       price_today: "Price",
   ) -> None:
-    serializer = PricingSerializer(price_today)
+    serializer = PricingSerializerRW(price_today)
     data = serializer.data
     data.pop('id')
     price_today.delete()

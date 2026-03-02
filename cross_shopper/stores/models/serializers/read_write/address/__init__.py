@@ -1,4 +1,4 @@
-"""Serializers for the Address model."""
+"""Serializer to retrieve, list, create or update Addresses."""
 
 from typing import Dict, Union
 
@@ -6,41 +6,12 @@ from address.models import Address, Country, Locality, State
 from django.db import models
 from rest_framework import serializers
 from utilities.models.serializers.fields.blonde import BlondeCharField
+from .address_internal import AddressSerializerInternal
 
 
-class CountrySerializer(serializers.ModelSerializer):
+class AddressSerializerRW(serializers.ModelSerializer):
+  """Serializer to retrieve, list, create or update Addresses."""
 
-  class Meta:
-    model = Country
-    fields = '__all__'
-
-
-class StateSerializer(serializers.ModelSerializer):
-  country = CountrySerializer()
-
-  class Meta:
-    model = State
-    fields = '__all__'
-
-
-class LocalitySerializer(serializers.ModelSerializer):
-  state = StateSerializer()
-
-  class Meta:
-    model = Locality
-    fields = '__all__'
-
-
-class AddressSerializerInternal(serializers.ModelSerializer):
-  locality = LocalitySerializer()
-
-  class Meta:
-    model = Address
-    fields = ('street_number', 'route', 'locality')
-    read_only = fields
-
-
-class AddressSerializer(serializers.ModelSerializer):
   street_number = serializers.IntegerField()
   street_name = BlondeCharField()
   city = BlondeCharField()

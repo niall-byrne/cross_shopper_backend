@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
-from errors.models.serializers.error import ErrorSerializer
+from errors.models.serializers.read_write.error import ErrorSerializerRW
 from rest_framework import status
 
 if TYPE_CHECKING:
@@ -22,7 +22,7 @@ class TestErrorsViewSetUpdateNoAuthentication:
       error_detail_url: AliasErrorDetailUrl,
       error: Error,
   ) -> None:
-    serializer = ErrorSerializer(error)
+    serializer = ErrorSerializerRW(error)
     data = dict(serializer.data)
 
     res = unauthenticated_client.put(error_detail_url(error.pk), data=data)
@@ -39,7 +39,7 @@ class TestErrorsViewSetUpdateAuthentication:
       error_detail_url: AliasErrorDetailUrl,
       error: Error,
   ) -> None:
-    serializer = ErrorSerializer(error)
+    serializer = ErrorSerializerRW(error)
     update_data = dict(serializer.data)
 
     res = authenticated_client.put(
@@ -56,7 +56,7 @@ class TestErrorsViewSetUpdateAuthentication:
       error_detail_url: AliasErrorDetailUrl,
       error: Error,
   ) -> None:
-    serializer = ErrorSerializer(error)
+    serializer = ErrorSerializerRW(error)
     update_data = dict(serializer.data)
 
     authenticated_client.put(

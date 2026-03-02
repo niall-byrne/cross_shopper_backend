@@ -1,11 +1,11 @@
-"""Test the ErrorSerializer class."""
+"""Test the ErrorSerializerRW class."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
 import pytest
 from errors.models import Error
-from errors.models.serializers.error import ErrorSerializer
+from errors.models.serializers.read_write.error import ErrorSerializerRW
 
 if TYPE_CHECKING:
   from errors.models import ErrorType
@@ -15,13 +15,13 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.django_db
-class TestErrorSerializer:
+class TestErrorSerializerRW:
 
   def test_serialization__correct_representation(
       self,
       error: Error,
   ) -> None:
-    serialized = ErrorSerializer(error)
+    serialized = ErrorSerializerRW(error)
 
     assert serialized.data == {
         "id": error.pk,
@@ -46,7 +46,7 @@ class TestErrorSerializer:
         "store": store.pk,
     }
 
-    serialized = ErrorSerializer(data=error_data)
+    serialized = ErrorSerializerRW(data=error_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -77,7 +77,7 @@ class TestErrorSerializer:
     )
     instance.save()
 
-    serialized = ErrorSerializer(data=duplicate_data)
+    serialized = ErrorSerializerRW(data=duplicate_data)
     serialized.is_valid(raise_exception=True)
     serialized.save()
 

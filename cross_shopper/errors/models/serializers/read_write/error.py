@@ -10,7 +10,7 @@ if TYPE_CHECKING:
   from rest_framework import validators
 
 
-class ErrorSerializer(serializers.ModelSerializer[Error]):
+class ErrorSerializerRW(serializers.ModelSerializer[Error]):
   """Serializer for creating or updating an Error model instance."""
 
   type = serializers.SlugRelatedField(

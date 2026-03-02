@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, cast
 
 import pytest
 from errors.models import Error
-from errors.models.serializers.error import ErrorSerializer
+from errors.models.serializers.read_write.error import ErrorSerializerRW
 from rest_framework import status
 
 if TYPE_CHECKING:  # no cover
@@ -27,7 +27,7 @@ class TestErrorsViewSetListTest:
       error_list_url: "AliasErrorListUrl",
       error_batch: "QuerySet[Error]",
   ) -> None:
-    serializer = ErrorSerializer(error_batch, many=True)
+    serializer = ErrorSerializerRW(error_batch, many=True)
 
     res = client.get(error_list_url())
 
@@ -44,7 +44,7 @@ class TestErrorsViewSetListTest:
     query = Error.objects.filter(item=first_item.pk,)
 
     res = client.get(error_list_url({"itemId": first_item.pk}))
-    serializer = ErrorSerializer(query, many=True)
+    serializer = ErrorSerializerRW(query, many=True)
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == serializer.data
@@ -58,7 +58,7 @@ class TestErrorsViewSetListTest:
     query = Error.objects.filter(is_reoccurring=True)
 
     res = client.get(error_list_url({"is_reoccurring": True}))
-    serializer = ErrorSerializer(query, many=True)
+    serializer = ErrorSerializerRW(query, many=True)
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == serializer.data
@@ -73,7 +73,7 @@ class TestErrorsViewSetListTest:
     query = Error.objects.filter(store=last_store.pk,)
 
     res = client.get(error_list_url({"storeId": last_store.pk}))
-    serializer = ErrorSerializer(query, many=True)
+    serializer = ErrorSerializerRW(query, many=True)
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == serializer.data
@@ -88,7 +88,7 @@ class TestErrorsViewSetListTest:
     query = Error.objects.filter(type=first_type.pk,)
 
     res = client.get(error_list_url({"type": first_type.name}))
-    serializer = ErrorSerializer(query, many=True)
+    serializer = ErrorSerializerRW(query, many=True)
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == serializer.data

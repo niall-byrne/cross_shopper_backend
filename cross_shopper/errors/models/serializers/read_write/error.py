@@ -1,4 +1,4 @@
-"""Serializer for the Error model."""
+"""Serializer to retrieve, list, create or update Errors."""
 
 from typing import Any, Dict, List, cast
 
@@ -6,8 +6,8 @@ from errors.models import Error, ErrorType
 from rest_framework import request, serializers, validators
 
 
-class ErrorSerializer(serializers.ModelSerializer[Error]):
-  """Serializer for creating or updating an Error model instance."""
+class ErrorSerializerRW(serializers.ModelSerializer[Error]):
+  """Serializer to retrieve, list, create or update Errors."""
 
   type = serializers.SlugRelatedField(
       queryset=ErrorType.objects.all(),

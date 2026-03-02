@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from errors.models import Error
-from errors.models.serializers.error import ErrorSerializer
+from errors.models.serializers.read_write.error import ErrorSerializerRW
 from rest_framework import status
 
 if TYPE_CHECKING:
@@ -21,7 +21,7 @@ class TestErrorsViewSetCreateNoAuthentication:
       error_list_url: "AliasErrorListUrl",
       error: "Error",
   ) -> None:
-    serializer = ErrorSerializer(error)
+    serializer = ErrorSerializerRW(error)
     create_data = dict(serializer.data)
 
     res = unauthenticated_client.post(error_list_url(), data=create_data)
@@ -38,7 +38,7 @@ class TestErrorsViewSetCreateAuthentication:
       error_list_url: "AliasErrorListUrl",
       error: "Error",
   ) -> None:
-    serializer = ErrorSerializer(error)
+    serializer = ErrorSerializerRW(error)
     update_data = dict(serializer.data)
 
     res = authenticated_client.post(
@@ -55,7 +55,7 @@ class TestErrorsViewSetCreateAuthentication:
       error_list_url: "AliasErrorListUrl",
       error: "Error",
   ) -> None:
-    serializer = ErrorSerializer(error)
+    serializer = ErrorSerializerRW(error)
     update_data = dict(serializer.data)
 
     authenticated_client.post(
@@ -72,7 +72,7 @@ class TestErrorsViewSetCreateAuthentication:
       error_list_url: "AliasErrorListUrl",
       error: "Error",
   ) -> None:
-    serializer = ErrorSerializer(error)
+    serializer = ErrorSerializerRW(error)
     update_data_without_id = dict(serializer.data)
     update_data_without_id.pop("id")
     error.delete()
@@ -93,7 +93,7 @@ class TestErrorsViewSetCreateAuthentication:
       error_list_url: "AliasErrorListUrl",
       error: "Error",
   ) -> None:
-    serializer = ErrorSerializer(error)
+    serializer = ErrorSerializerRW(error)
     create_data_without_id = dict(serializer.data)
     create_data_without_id.pop("id")
     error.delete()

@@ -5,6 +5,7 @@ from typing import Optional
 from items.models import Item
 from pricing.models import Price
 from rest_framework import serializers
+from utilities.cache import memoize
 
 
 class ReportSummaryHistoricalItemPriceSerializerRO(serializers.ModelSerializer):
@@ -18,6 +19,7 @@ class ReportSummaryHistoricalItemPriceSerializerRO(serializers.ModelSerializer):
     model = Item
     fields = ('average', 'high', 'low')
 
+  @memoize(timeout=60)
   def get_average(self, instance: Item) -> Optional[str]:
     """Get the average price for this item at the report stores."""
     report = self.context.get('report')
@@ -33,6 +35,7 @@ class ReportSummaryHistoricalItemPriceSerializerRO(serializers.ModelSerializer):
       return str(average)
     return None
 
+  @memoize(timeout=60)
   def get_high(self, instance: Item) -> Optional[str]:
     """Get the average price for this item at the report stores."""
     report = self.context.get('report')
@@ -48,6 +51,7 @@ class ReportSummaryHistoricalItemPriceSerializerRO(serializers.ModelSerializer):
       return str(high)
     return None
 
+  @memoize(timeout=60)
   def get_low(self, instance: Item) -> Optional[str]:
     """Get the average price for this item at the report stores."""
     report = self.context.get('report')
@@ -62,3 +66,15 @@ class ReportSummaryHistoricalItemPriceSerializerRO(serializers.ModelSerializer):
     if low:
       return str(low)
     return None
+
+  def __repr__(self) -> str:
+    return ":".join(
+        map(
+            repr, [
+                self.context.get('week', None),
+                self.context.get('year', None),
+                self.context.get('report', None),
+                self.__class__,
+            ]
+        )
+    )

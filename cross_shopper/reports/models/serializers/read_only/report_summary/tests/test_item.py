@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 import pytest
-from items.models.serializers.packaging import PackagingSerializer
+from items.models.serializers.read_write.packaging import PackagingSerializerRW
 from reports.models.serializers.read_only.report_summary.item import (
     ReportSummaryItemSerializerRO,
 )
@@ -46,7 +46,7 @@ class TestReportSummaryItemSerializerRO:
         "is_non_gmo":
             item.is_non_gmo,
         "packaging":
-            PackagingSerializer(item.packaging).data,
+            PackagingSerializerRW(item.packaging).data,
         "price":
             ReportSummaryItemPriceSerializerRO(
                 item,

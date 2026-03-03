@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 import pytest
-from items.models.serializers.item import ItemSerializer
+from items.models.serializers.read_write.item import ItemSerializerRW
 from reports.models.serializers.read_only.report import ReportSerializerRO
 from stores.models.serializers.read_only.store import StoreSerializerRO
 
@@ -27,7 +27,7 @@ class TestReportSerializerRO:
     assert serialized.data == {
         "id": report.pk,
         "name": report.name,
-        "item": ItemSerializer(
+        "item": ItemSerializerRW(
             report.item.all(),
             many=True,
         ).data,

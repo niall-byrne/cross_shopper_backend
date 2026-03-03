@@ -6,7 +6,9 @@ from items.models import Brand, Item
 from items.models.serializers.read_write.packaging import PackagingSerializerRW
 from rest_framework import serializers
 from scrapers.models.scraper_config import ScraperConfig
-from scrapers.models.serializers.scraper_config import ScraperConfigSerializer
+from scrapers.models.serializers.read_only.scraper_config import (
+    ScraperConfigSerializerRO,
+)
 from utilities.models.serializers.fields.blonde import BlondeCharField
 
 
@@ -22,7 +24,7 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
   )
   packaging = PackagingSerializerRW()
   is_bulk = serializers.BooleanField(read_only=True)
-  scraper_config = ScraperConfigSerializer(many=True)
+  scraper_config = ScraperConfigSerializerRO(many=True)
 
   class Meta:
     model = Item
@@ -50,7 +52,7 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
     scraper_config = cast(
         Sequence[ScraperConfig],
         cast(
-            ScraperConfigSerializer,
+            ScraperConfigSerializerRO,
             self.fields["scraper_config"],
         ).create(validated_data.pop("scraper_config")),
     )

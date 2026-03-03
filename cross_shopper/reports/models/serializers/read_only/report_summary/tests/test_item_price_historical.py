@@ -17,7 +17,6 @@ if TYPE_CHECKING:  # no cover
 
 @pytest.mark.django_db
 class TestReportSummaryHistoricalItemPriceSerializerRO:
-  """Tests for the ReportSummaryHistoricalItemPriceSerializerRO."""
 
   @pytest.mark.usefixtures(
       "report_summary_mocked_pricing_aggregate_last_52_weeks_manager"
@@ -32,7 +31,9 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
         context={'report': report_prefetched},
     )
 
-    assert serializer.data == report_summary_mocked_pricing_aggregate_attributes
+    data = serializer.data
+
+    assert data == report_summary_mocked_pricing_aggregate_attributes
 
   def test_serialization__no_report_context__returns_none(
       self,
@@ -43,7 +44,9 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
         context={},
     )
 
-    assert serializer.data == {
+    data = serializer.data
+
+    assert data == {
         'average': None,
         'high': None,
         'low': None,
@@ -59,7 +62,9 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
         context=report_2024_context,
     )
 
-    assert repr(serializer) == ":".join(
+    serializer_repr = repr(serializer)
+
+    assert serializer_repr == ":".join(
         [
             repr(report_2024_context['week']),
             repr(report_2024_context['year']),
@@ -74,7 +79,6 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
       report_2024_context: Dict,
   ) -> None:
     item = report_prefetched.item.all()[0]
-
     serializer1 = ReportSummaryHistoricalItemPriceSerializerRO(
         item,
         context=report_2024_context,
@@ -90,12 +94,11 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
         return_value=10.0,
     ) as mock_average:
       mock_average.__name__ = "average"
-
       res1 = serializer1.get_average(item)
       res2 = serializer2.get_average(item)
 
-      assert res1 == res2
-      assert mock_average.call_count == 1
+    assert res1 == res2
+    assert mock_average.call_count == 1
 
   def test_get_average__multiple_instances_different_context__isolated_cache(
       self,
@@ -104,7 +107,6 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
       report_2024_different_week_context: Dict,
   ) -> None:
     item = report_prefetched.item.all()[0]
-
     serializer1 = ReportSummaryHistoricalItemPriceSerializerRO(
         item,
         context=report_2024_context,
@@ -120,11 +122,10 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
         return_value=10.0,
     ) as mock_average:
       mock_average.__name__ = "average_isolated"
-
       serializer1.get_average(item)
       serializer2.get_average(item)
 
-      assert mock_average.call_count == 2
+    assert mock_average.call_count == 2
 
   def test_serialization__no_prices__returns_none(
       self,
@@ -135,7 +136,9 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
         context={'report': report_prefetched},
     )
 
-    assert serializer.data == {
+    data = serializer.data
+
+    assert data == {
         'average': None,
         'high': None,
         'low': None,

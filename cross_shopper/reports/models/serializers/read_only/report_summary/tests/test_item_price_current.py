@@ -16,7 +16,6 @@ from reports.models.serializers.read_only.report_summary.\
 
 @pytest.mark.django_db
 class TestReportSummaryCurrentItemPriceSerializerRO:
-  """Tests for the ReportSummaryCurrentItemPriceSerializerRO."""
 
   def test_serialization__specified_item__returns_correct_representation(
       self,
@@ -24,19 +23,19 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
       report_2024_context: Dict,
   ) -> None:
     prices = Price.objects.all()
-
     serializer = ReportSummaryCurrentItemPriceSerializerRO(
         report_with_2024_prices.item.all()[0],
         context=report_2024_context,
     )
-
     expected_per_store: Dict[str, Optional[str]] = {}
     for store in report_with_2024_prices.store.all():
       price = prices.filter(store=store).first()
       if price:
         expected_per_store[str(store.pk)] = str(price.amount)
 
-    assert serializer.data == {
+    data = serializer.data
+
+    assert data == {
         'per_store':
             expected_per_store,
         'best':
@@ -63,7 +62,9 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
         context=report_no_prices_context,
     )
 
-    assert serializer.data == {
+    data = serializer.data
+
+    assert data == {
         'average': None,
         'best': None,
         'per_store': {
@@ -81,7 +82,9 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
         context=report_2024_context,
     )
 
-    assert repr(serializer) == ":".join(
+    serializer_repr = repr(serializer)
+
+    assert serializer_repr == ":".join(
         [
             repr(report_2024_context['week']),
             repr(report_2024_context['year']),
@@ -96,7 +99,6 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
       report_2024_context: Dict,
   ) -> None:
     item = report_with_2024_prices.item.all()[0]
-
     serializer1 = ReportSummaryCurrentItemPriceSerializerRO(
         item,
         context=report_2024_context,
@@ -112,12 +114,11 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
         wraps=serializer1.get_per_store,
     ) as mock_get_per_store:
       mock_get_per_store.__name__ = "get_per_store_mocked"
-
       res1 = serializer1.get_average(item)
       res2 = serializer2.get_average(item)
 
-      assert res1 == res2
-      assert mock_get_per_store.call_count == 1
+    assert res1 == res2
+    assert mock_get_per_store.call_count == 1
 
   def test_get_average__multiple_instances_different_context__isolated_cache(
       self,
@@ -126,7 +127,6 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
       report_2024_different_week_context: Dict,
   ) -> None:
     item = report_with_2024_prices.item.all()[0]
-
     serializer1 = ReportSummaryCurrentItemPriceSerializerRO(
         item,
         context=report_2024_context,
@@ -142,8 +142,7 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
         wraps=serializer1.get_per_store,
     ) as mock_get_per_store:
       mock_get_per_store.__name__ = "get_per_store_mocked_isolated"
-
       serializer1.get_average(item)
       serializer2.get_average(item)
 
-      assert mock_get_per_store.call_count == 2
+    assert mock_get_per_store.call_count == 2

@@ -7,8 +7,8 @@ from typing import Any
 from django.core.cache import cache
 
 
-class _NullValue:
-  """A sentinel for identifying a cached 'None' value."""
+class _CacheMiss:
+  """A sentinel for identifying a cache miss."""
 
 
 def memoize(timeout=None):
@@ -29,17 +29,13 @@ def memoize(timeout=None):
 
       hashed_key = hashlib.sha256(cache_key.encode('utf-8')).hexdigest()
 
-      result = cache.get(hashed_key)
-      if result is not None:
-        if isinstance(result, _NullValue):
-          return None
+      result = cache.get(hashed_key, default=_CacheMiss)
+      if result is not _CacheMiss:
         return result
 
       result = func(*args, **kwargs)
 
-      cache.set(
-          hashed_key, result if result is not None else _NullValue(), timeout
-      )
+      cache.set(hashed_key, result, timeout)
       return result
 
     return wrapper

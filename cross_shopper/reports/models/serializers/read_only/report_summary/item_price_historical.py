@@ -68,7 +68,7 @@ class ReportSummaryHistoricalItemPriceSerializerRO(serializers.ModelSerializer):
     return None
 
   def __repr__(self) -> str:
-    """Control caching behaviour accross instances."""
+    """Control caching behaviour across instances."""
     return ":".join(
         map(
             repr, [

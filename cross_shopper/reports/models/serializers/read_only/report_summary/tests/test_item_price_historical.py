@@ -1,6 +1,6 @@
 """Tests for the ReportSummaryHistoricalItemPriceSerializerRO."""
 
-from typing import TYPE_CHECKING, Dict
+from typing import Dict
 from unittest import mock
 
 import pytest
@@ -10,9 +10,6 @@ from reports.models.serializers.read_only.report_summary.\
   item_price_historical import (
     ReportSummaryHistoricalItemPriceSerializerRO,
 )
-
-if TYPE_CHECKING:  # no cover
-  pass
 
 
 @pytest.mark.django_db

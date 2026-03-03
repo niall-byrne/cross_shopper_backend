@@ -1,6 +1,6 @@
 """Serializer to retrieve or list Reports."""
 
-from items.models.serializers.item import ItemSerializer
+from items.models.serializers.read_write.item import ItemSerializerRW
 from reports.models import Report
 from rest_framework import serializers
 from stores.models.serializers.read_only.store import StoreSerializerRO
@@ -12,7 +12,7 @@ class ReportSerializerRO(serializers.ModelSerializer):
 
   name = TitleField(max_length=80, allow_blank=False)
   user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-  item = ItemSerializer(many=True)
+  item = ItemSerializerRW(many=True)
   store = StoreSerializerRO(many=True)
   is_testing = serializers.BooleanField(default=False)
 

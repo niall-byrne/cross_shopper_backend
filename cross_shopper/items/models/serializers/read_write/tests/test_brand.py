@@ -1,21 +1,21 @@
-"""Test the BrandSerializer class."""
+"""Test the BrandSerializerRW class."""
 
 from typing import Dict
 
 import pytest
 from items.models import Brand
-from items.models.serializers.brand import BrandSerializer
+from items.models.serializers.read_write.brand import BrandSerializerRW
 from rest_framework.exceptions import ErrorDetail, ValidationError
 
 
 @pytest.mark.django_db
-class TestBrandSerializer:
+class TestBrandSerializerRW:
 
   def test_serialization__correct_representation(
       self,
       brand: Brand,
   ) -> None:
-    serialized = BrandSerializer(brand)
+    serialized = BrandSerializerRW(brand)
 
     assert serialized.data == {
         'name': brand.name,
@@ -26,7 +26,7 @@ class TestBrandSerializer:
         'name': 'mock_brand_name',
     }
 
-    serialized = BrandSerializer(data=brand_data)
+    serialized = BrandSerializerRW(data=brand_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -36,7 +36,7 @@ class TestBrandSerializer:
     brand_data: Dict[str, str] = {}
 
     with pytest.raises(ValidationError) as exc:
-      serialized = BrandSerializer(data=brand_data)
+      serialized = BrandSerializerRW(data=brand_data)
       serialized.is_valid(raise_exception=True)
 
     assert str(exc.value) == str(

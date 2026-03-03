@@ -1,4 +1,4 @@
-"""Serializers for the Packaging model."""
+"""Serializer to retrieve, list, create or update Packaging."""
 
 from decimal import Decimal
 from typing import Any, Dict, Optional
@@ -8,21 +8,12 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from utilities.models.serializers.fields.blonde import BlondeCharField
 from utilities.models.serializers.fields.title import TitleField
-from .packaging_container import PackagingContainerSerializer
-from .packaging_unit import PackagingUnitSerializer
+from .packaging_internal import PackagingSerializerInternal
 
 
-class PackagingSerializerInternal(serializers.ModelSerializer):
+class PackagingSerializerRW(serializers.ModelSerializer):
+  """Serializer to retrieve, list, create or update Packaging."""
 
-  container = PackagingContainerSerializer()
-  unit = PackagingUnitSerializer()
-
-  class Meta:
-    model = Packaging
-    fields = ('quantity', 'unit', 'container')
-
-
-class PackagingSerializer(serializers.ModelSerializer):
   ERROR_MESSAGE_QUANTITY_IS_NULL = (
       "This field cannot be null if a container is specified."
   )

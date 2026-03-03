@@ -2,7 +2,7 @@
 
 from rest_framework import viewsets
 from scrapers.models import Scraper
-from scrapers.models.serializers.scraper import ScraperSerializer
+from scrapers.models.serializers.read_only.scraper import ScraperSerializerRO
 from .filters import ScraperFilter
 
 
@@ -12,5 +12,5 @@ class ScrapersReadOnlyViewSet(
   """Scrapers read only API endpoint."""
 
   queryset = Scraper.objects.all()
-  serializer_class = ScraperSerializer
+  serializer_class = ScraperSerializerRO
   filterset_class = ScraperFilter

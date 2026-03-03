@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from rest_framework import status
-from scrapers.models.serializers.scraper import ScraperSerializer
+from scrapers.models.serializers.read_only.scraper import ScraperSerializerRO
 
 if TYPE_CHECKING:  # no cover
   from rest_framework.test import APIClient
@@ -27,7 +27,7 @@ class TestScrapersReadOnlyViewSetRetrieve:
       scraper_detail_url: "AliasScraperDetailUrl",
   ) -> None:
     res = client.get(scraper_detail_url(scraper.pk))
-    serializer = ScraperSerializer(scraper)
+    serializer = ScraperSerializerRO(scraper)
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == serializer.data

@@ -85,3 +85,11 @@ repos:
           - "--schemafile"
           - ".github/config/schemas/workflows/workflow-push.json"
         stages: [pre-commit]
+  - repo: local
+    hooks:
+      - id: django-model-id
+        name: avoid referencing models by id
+        entry: '\.id'
+        language: pygrep
+        files: "^cross_shopper/.+\\.py$"
+        stages: [pre-commit]

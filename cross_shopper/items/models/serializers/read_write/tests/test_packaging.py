@@ -1,10 +1,10 @@
-"""Test the PackagingSerializer class."""
+"""Test the PackagingSerializerRW class."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
 import pytest
-from items.models.serializers.packaging import PackagingSerializer
+from items.models.serializers.read_write.packaging import PackagingSerializerRW
 from rest_framework.exceptions import ErrorDetail, ValidationError
 
 if TYPE_CHECKING:
@@ -12,13 +12,13 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.django_db
-class TestPackagingSerializer:
+class TestPackagingSerializerRW:
 
   def test_serialization__bulk__correct_representation(
       self,
       packaging_as_bulk: Packaging,
   ) -> None:
-    serialized = PackagingSerializer(packaging_as_bulk)
+    serialized = PackagingSerializerRW(packaging_as_bulk)
 
     assert serialized.data == {
         "quantity": packaging_as_bulk.quantity,
@@ -32,7 +32,7 @@ class TestPackagingSerializer:
   ) -> None:
     assert packaging_as_non_bulk.unit is not None
     assert packaging_as_non_bulk.container is not None
-    serialized = PackagingSerializer(packaging_as_non_bulk)
+    serialized = PackagingSerializerRW(packaging_as_non_bulk)
 
     assert serialized.data == {
         "quantity": str(packaging_as_non_bulk.quantity),
@@ -49,7 +49,7 @@ class TestPackagingSerializer:
         "container": "mocked packaging container",
     }
 
-    serialized = PackagingSerializer(data=packaging_data)
+    serialized = PackagingSerializerRW(data=packaging_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -71,7 +71,7 @@ class TestPackagingSerializer:
         "container": packaging_as_non_bulk.container.name,
     }
 
-    serialized = PackagingSerializer(data=packaging_data)
+    serialized = PackagingSerializerRW(data=packaging_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -83,13 +83,13 @@ class TestPackagingSerializer:
   @pytest.mark.parametrize(
       "field_name,error_message,error_code", [
           (
-              "quantity", PackagingSerializer.ERROR_MESSAGE_QUANTITY_IS_NULL,
+              "quantity", PackagingSerializerRW.ERROR_MESSAGE_QUANTITY_IS_NULL,
               "invalid"
           ),
           ("unit", "This field may not be null.", "null"),
           (
-              "container", PackagingSerializer.ERROR_MESSAGE_CONTAINER_IS_NULL,
-              "invalid"
+              "container",
+              PackagingSerializerRW.ERROR_MESSAGE_CONTAINER_IS_NULL, "invalid"
           ),
       ]
   )
@@ -109,7 +109,7 @@ class TestPackagingSerializer:
     packaging_data[field_name] = None
 
     with pytest.raises(ValidationError) as exc:
-      serialized = PackagingSerializer(data=packaging_data)
+      serialized = PackagingSerializerRW(data=packaging_data)
       serialized.is_valid(raise_exception=True)
 
     assert str(exc.value) == str(

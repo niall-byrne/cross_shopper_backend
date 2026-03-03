@@ -1,9 +1,9 @@
-"""Serializers for the Item model."""
+"""Serializer to retrieve, list, create or update an Item."""
 
 from typing import TYPE_CHECKING, Any, Sequence, cast
 
 from items.models import Brand, Item
-from items.models.serializers.packaging import PackagingSerializer
+from items.models.serializers.read_write.packaging import PackagingSerializerRW
 from rest_framework import serializers
 from scrapers.models.serializers.scraper_config import ScraperConfigSerializer
 from utilities.models.serializers.fields.blonde import BlondeCharField
@@ -12,8 +12,8 @@ if TYPE_CHECKING:
   from scrapers.models.scraper_config import ScraperConfig
 
 
-class ItemSerializer(serializers.ModelSerializer[Item]):
-  """Serializer for the Item model."""
+class ItemSerializerRW(serializers.ModelSerializer[Item]):
+  """Serializer to retrieve, list, create or update an Item."""
 
   name = BlondeCharField(max_length=80, allow_blank=False)
   full_name = serializers.CharField(read_only=True)
@@ -22,7 +22,7 @@ class ItemSerializer(serializers.ModelSerializer[Item]):
       allow_blank=False,
       source="brand.name",
   )
-  packaging = PackagingSerializer()
+  packaging = PackagingSerializerRW()
   is_bulk = serializers.BooleanField(read_only=True)
   scraper_config = ScraperConfigSerializer(many=True)
 
@@ -45,7 +45,7 @@ class ItemSerializer(serializers.ModelSerializer[Item]):
     brand = Brand.objects.get_or_create(**validated_data.pop("brand"))[0]
 
     packaging = cast(
-        "PackagingSerializer",
+        "PackagingSerializerRW",
         self.fields["packaging"],
     ).create(validated_data.pop("packaging"))
 

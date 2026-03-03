@@ -1,4 +1,4 @@
-"""Test the ScraperConfigSerializer class."""
+"""Test the ScraperConfigSerializerRO class."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -6,7 +6,9 @@ from typing import TYPE_CHECKING
 import pytest
 from rest_framework.exceptions import ErrorDetail, ValidationError
 from scrapers.models.scraper_config import CONSTRAINT_NAMES
-from scrapers.models.serializers.scraper_config import ScraperConfigSerializer
+from scrapers.models.serializers.read_only.scraper_config import (
+    ScraperConfigSerializerRO,
+)
 
 if TYPE_CHECKING:
   from scrapers.models import Scraper
@@ -14,13 +16,13 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.django_db
-class TestScraperConfigSerializer:
+class TestScraperConfigSerializerRO:
 
   def test_serialization__correct_representation(
       self,
       scraper_config: ScraperConfig,
   ) -> None:
-    serialized = ScraperConfigSerializer(scraper_config)
+    serialized = ScraperConfigSerializerRO(scraper_config)
 
     assert serialized.data == {
         "id": scraper_config.pk,
@@ -38,7 +40,7 @@ class TestScraperConfigSerializer:
         "scraper": scraper.name,
     }
 
-    serialized = ScraperConfigSerializer(data=scraper_config_data)
+    serialized = ScraperConfigSerializerRO(data=scraper_config_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -54,7 +56,7 @@ class TestScraperConfigSerializer:
     }
 
     with pytest.raises(ValidationError) as exc:
-      serialized = ScraperConfigSerializer(data=scraper_config_data)
+      serialized = ScraperConfigSerializerRO(data=scraper_config_data)
       serialized.is_valid(raise_exception=True)
 
     assert str(exc.value) == str(
@@ -73,11 +75,11 @@ class TestScraperConfigSerializer:
       self,
       scraper_config: ScraperConfig,
   ) -> None:
-    serialized = ScraperConfigSerializer(scraper_config)
+    serialized = ScraperConfigSerializerRO(scraper_config)
     data = dict(serialized.data)
     data.pop("id")
 
-    serializer = ScraperConfigSerializer(data=data)
+    serializer = ScraperConfigSerializerRO(data=data)
 
     with pytest.raises(ValidationError) as exc:
       serializer.is_valid(raise_exception=True)

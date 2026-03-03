@@ -8,7 +8,9 @@ import pytest
 from items.models.serializers.read_write.item import ItemSerializerRW
 from items.models.serializers.read_write.packaging import PackagingSerializerRW
 from rest_framework.exceptions import ErrorDetail, ValidationError
-from scrapers.models.serializers.scraper_config import ScraperConfigSerializer
+from scrapers.models.serializers.read_only.scraper_config import (
+    ScraperConfigSerializerRO,
+)
 
 if TYPE_CHECKING:
   from items.models import Brand, Item, Packaging
@@ -75,7 +77,7 @@ class TestItemSerializerRW:
         "is_organic":
             item.is_organic,
         "scraper_config":
-            ScraperConfigSerializer(item.scraper_config, many=True).data
+            ScraperConfigSerializerRO(item.scraper_config, many=True).data
     }
 
   def test_deserialization__valid_input__existing_scraper__correct_model(

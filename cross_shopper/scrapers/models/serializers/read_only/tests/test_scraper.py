@@ -1,4 +1,4 @@
-"""Test the ScraperSerializer class."""
+"""Test the ScraperSerializerRO class."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -6,20 +6,20 @@ from typing import TYPE_CHECKING
 import pytest
 from rest_framework.exceptions import ErrorDetail, ValidationError
 from scrapers.models.scraper import CONSTRAINT_NAMES
-from scrapers.models.serializers.scraper import ScraperSerializer
+from scrapers.models.serializers.read_only.scraper import ScraperSerializerRO
 
 if TYPE_CHECKING:
   from scrapers.models import Scraper
 
 
 @pytest.mark.django_db
-class TestScraperSerializer:
+class TestScraperSerializerRO:
 
   def test_serialization__correct_representation(
       self,
       scraper: Scraper,
   ) -> None:
-    serialized = ScraperSerializer(scraper)
+    serialized = ScraperSerializerRO(scraper)
 
     assert serialized.data == {
         "id": scraper.pk,
@@ -35,7 +35,7 @@ class TestScraperSerializer:
             "mocked scraper.url_validation_regex_with_(two)(capture_groups)",
     }
 
-    serialized = ScraperSerializer(data=scraper_data)
+    serialized = ScraperSerializerRO(data=scraper_data)
     serialized.is_valid(raise_exception=True)
     serialized.save()
 
@@ -45,7 +45,7 @@ class TestScraperSerializer:
     }
 
     with pytest.raises(ValidationError) as exc:
-      serialized = ScraperSerializer(data=scraper_data)
+      serialized = ScraperSerializerRO(data=scraper_data)
       serialized.is_valid(raise_exception=True)
 
     assert str(exc.value) == str(
@@ -64,11 +64,11 @@ class TestScraperSerializer:
       self,
       scraper: Scraper,
   ) -> None:
-    serialized = ScraperSerializer(scraper)
+    serialized = ScraperSerializerRO(scraper)
     data = dict(serialized.data)
     data.pop("id")
 
-    serializer = ScraperSerializer(data=data)
+    serializer = ScraperSerializerRO(data=data)
 
     with pytest.raises(ValidationError) as exc:
       serializer.is_valid(raise_exception=True)

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from rest_framework import status
-from scrapers.models.serializers.scraper import ScraperSerializer
+from scrapers.models.serializers.read_only.scraper import ScraperSerializerRO
 
 if TYPE_CHECKING:
   from rest_framework.test import APIClient
@@ -28,7 +28,7 @@ class TestScrapersReadOnlyViewSetList:
       scraper_list_url: AliasScraperListUrl,
   ) -> None:
     res = client.get(scraper_list_url())
-    serializer = ScraperSerializer(scraper)
+    serializer = ScraperSerializerRO(scraper)
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == [serializer.data]
@@ -41,7 +41,7 @@ class TestScrapersReadOnlyViewSetList:
       scraper_list_url: AliasScraperListUrl,
   ) -> None:
     res = client.get(scraper_list_url({"id": scraper_alternate.pk}))
-    serializer = ScraperSerializer(scraper_alternate)
+    serializer = ScraperSerializerRO(scraper_alternate)
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == [serializer.data]
@@ -54,7 +54,7 @@ class TestScrapersReadOnlyViewSetList:
       scraper_list_url: AliasScraperListUrl,
   ) -> None:
     res = client.get(scraper_list_url({"name": scraper_alternate.name}))
-    serializer = ScraperSerializer(scraper_alternate)
+    serializer = ScraperSerializerRO(scraper_alternate)
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == [serializer.data]
@@ -67,7 +67,7 @@ class TestScrapersReadOnlyViewSetList:
       scraper_list_url: AliasScraperListUrl,
   ) -> None:
     res = client.get(scraper_list_url({"name": scraper_alternate.name.upper()}))
-    serializer = ScraperSerializer(scraper_alternate)
+    serializer = ScraperSerializerRO(scraper_alternate)
 
     assert res.status_code == status.HTTP_200_OK
     assert res.data == [serializer.data]

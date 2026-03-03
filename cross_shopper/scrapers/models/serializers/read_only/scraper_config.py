@@ -1,12 +1,12 @@
-"""Serializer for the ScraperConfig model."""
+"""Serializer to retrieve or list ScraperConfigs."""
 
 from rest_framework import serializers
 from scrapers.models import Scraper, ScraperConfig
 from scrapers.models.scraper_config import CONSTRAINT_NAMES
 
 
-class ScraperConfigSerializer(serializers.ModelSerializer):
-  """Serializer for the ScraperConfig model."""
+class ScraperConfigSerializerRO(serializers.ModelSerializer):
+  """Serializer to retrieve or list ScraperConfigs."""
 
   scraper = serializers.SlugRelatedField(
       queryset=Scraper.objects.all(),

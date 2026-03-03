@@ -1,12 +1,12 @@
-"""Serializer for the Scraper model."""
+"""Serializer to retrieve or list Scrapers."""
 
 from rest_framework import serializers
 from scrapers.models.scraper import CONSTRAINT_NAMES, Scraper
 from utilities.models.serializers.fields.title import TitleField
 
 
-class ScraperSerializer(serializers.ModelSerializer):
-  """Serializer for the Scraper model."""
+class ScraperSerializerRO(serializers.ModelSerializer):
+  """Serializer to retrieve or list Scrapers."""
 
   name = TitleField(max_length=80, allow_blank=False)
 

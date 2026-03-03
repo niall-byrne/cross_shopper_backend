@@ -115,6 +115,13 @@ repos:
           if found_changes:
               sys.exit(1)
           "
+      - id: imports
+        name: ensure multi-level relative imports are not used
+        entry: '\A.*from \.[\.]+.*\Z'
+        args: [--multiline]
+        language: pygrep
+        files: "^cross_shopper/(?!.*(migrations).*).+\\.py$"
+        stages: [pre-commit]
       - id: test-docstrings
         name: ensure docstrings are not used in test functions
         entry: '\A.+(\s*def test_[a-z0-9_]+\(.+\) -> None:\n\s*""".+"""\n).+\Z'

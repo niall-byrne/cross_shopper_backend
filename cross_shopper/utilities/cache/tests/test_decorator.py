@@ -6,65 +6,65 @@ from unittest import mock
 import pytest
 from django.core.cache import cache
 from utilities.cache import memoize
-from utilities.cache.tests.conftest import RealisticSerializer
+from utilities.cache.tests.conftest import MockSerializer
 
 
 class TestMemoizeDecorator:
 
-  def test_compute_expensive_value__same_instance_same_args__returns_cached_result(
+  def test_memoized_method__same_instance_same_args__returns_cached_result(
       self,
-      serializer: RealisticSerializer,
+      mocked_serializer: MockSerializer,
   ) -> None:
     arg = "arg1"
-    serializer.compute_expensive_value(arg)
+    mocked_serializer.memoized_method(arg)
 
-    result = serializer.compute_expensive_value(arg)
+    result = mocked_serializer.memoized_method(arg)
 
-    assert result == f"Result for {arg} with context {serializer.context}"
-    assert serializer.call_count == 1
+    assert result == f"Result for {arg} with context {mocked_serializer.context}"
+    assert mocked_serializer.call_count == 1
 
-  def test_compute_expensive_value__different_instances_same_repr__shares_cache(
+  def test_memoized_method__different_instances_same_repr__shares_cache(
       self,
-      serializer: RealisticSerializer,
-      identical_serializer: RealisticSerializer,
+      mocked_serializer: MockSerializer,
+      mocked_identical_serializer: MockSerializer,
   ) -> None:
     arg = "arg1"
-    serializer.compute_expensive_value(arg)
+    mocked_serializer.memoized_method(arg)
 
-    result = identical_serializer.compute_expensive_value(arg)
+    result = mocked_identical_serializer.memoized_method(arg)
 
-    assert repr(serializer) == repr(identical_serializer)
-    assert result == f"Result for {arg} with context {serializer.context}"
-    assert identical_serializer.call_count == 0
+    assert repr(mocked_serializer) == repr(mocked_identical_serializer)
+    assert result == f"Result for {arg} with context {mocked_serializer.context}"
+    assert mocked_identical_serializer.call_count == 0
 
-  def test_compute_expensive_value__different_instances_different_repr__uses_isolated_cache(
+  def test_memoized_method__different_instances_different_repr__uses_isolated_cache(
       self,
-      serializer: RealisticSerializer,
-      different_serializer: RealisticSerializer,
+      mocked_serializer: MockSerializer,
+      mocked_different_serializer: MockSerializer,
   ) -> None:
     arg = "arg1"
-    serializer.compute_expensive_value(arg)
+    mocked_serializer.memoized_method(arg)
 
-    result = different_serializer.compute_expensive_value(arg)
+    result = mocked_different_serializer.memoized_method(arg)
 
-    assert repr(serializer) != repr(different_serializer)
-    assert result != f"Result for {arg} with context {serializer.context}"
-    assert different_serializer.call_count == 1
+    assert repr(mocked_serializer) != repr(mocked_different_serializer)
+    assert result != f"Result for {arg} with context {mocked_serializer.context}"
+    assert mocked_different_serializer.call_count == 1
 
-  def test_compute_expensive_value__same_instance_different_args__uses_isolated_cache(
+  def test_memoized_method__same_instance_different_args__uses_isolated_cache(
       self,
-      serializer: RealisticSerializer,
+      mocked_serializer: MockSerializer,
   ) -> None:
     arg1 = "arg1"
     arg2 = "arg2"
-    serializer.compute_expensive_value(arg1)
+    mocked_serializer.memoized_method(arg1)
 
-    result = serializer.compute_expensive_value(arg2)
+    result = mocked_serializer.memoized_method(arg2)
 
-    assert result != f"Result for {arg1} with context {serializer.context}"
-    assert serializer.call_count == 2
+    assert result != f"Result for {arg1} with context {mocked_serializer.context}"
+    assert mocked_serializer.call_count == 2
 
-  def test_memoize__none_result__returns_cached_none(self) -> None:
+  def test_memoized_method__none_result__returns_cached_none(self) -> None:
     call_count = 0
 
     @memoize()
@@ -79,9 +79,7 @@ class TestMemoizeDecorator:
     assert result is None
     assert call_count == 1
 
-  def test_memoize__same_args_different_funcs__uses_isolated_cache(
-      self
-  ) -> None:
+  def test_memoized_method__same_args__vary_func__isolated_caches(self) -> None:
     call_counts = {"f1": 0, "f2": 0}
 
     @memoize()
@@ -102,9 +100,7 @@ class TestMemoizeDecorator:
     assert call_counts["f1"] == 1
     assert call_counts["f2"] == 1
 
-  def test_memoize__timeout_specified__passes_timeout_to_cache_backend(
-      self,
-  ) -> None:
+  def test_memoized_method__timeout__passes_timeout_backend(self,) -> None:
     timeout_value = 123
 
     @memoize(timeout=timeout_value)
@@ -125,7 +121,7 @@ class TestMemoizeDecorator:
       3.14,
       None,
   ])
-  def test_memoize__various_argument_types__returns_correct_cached_result(
+  def test_memoize__vary_args__returns_correct_cached_results(
       self,
       val: Any,
   ) -> None:

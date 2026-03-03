@@ -7,7 +7,7 @@ from typing import Any
 from django.core.cache import cache
 
 
-class _CacheMiss:
+class CacheMiss:
   """A sentinel for identifying a cache miss."""
 
 
@@ -29,8 +29,8 @@ def memoize(timeout=None):
 
       hashed_key = hashlib.sha256(cache_key.encode('utf-8')).hexdigest()
 
-      result = cache.get(hashed_key, default=_CacheMiss)
-      if result is not _CacheMiss:
+      result = cache.get(hashed_key, default=CacheMiss)
+      if result is not CacheMiss:
         return result
 
       result = func(*args, **kwargs)

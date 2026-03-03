@@ -1,10 +1,8 @@
 """Tests for the ReportSummaryHistoricalItemPriceSerializerRO."""
 
 from typing import Dict
-from unittest import mock
 
 import pytest
-from pricing.models import Price
 from reports.models import Report
 from reports.models.serializers.read_only.report_summary.\
   item_price_historical import (
@@ -74,6 +72,7 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
       self,
       report_prefetched: Report,
       report_2024_context: Dict,
+      report_summary_mocked_price_aggregate_average: pytest.fixture,
   ) -> None:
     item = report_prefetched.item.all()[0]
     serializer1 = ReportSummaryHistoricalItemPriceSerializerRO(
@@ -85,23 +84,18 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
         context=report_2024_context,
     )
 
-    with mock.patch.object(
-        Price.aggregate_last_52_weeks,
-        'average',
-        return_value=10.0,
-    ) as mock_average:
-      mock_average.__name__ = "average"
-      res1 = serializer1.get_average(item)
-      res2 = serializer2.get_average(item)
+    res1 = serializer1.get_average(item)
+    res2 = serializer2.get_average(item)
 
     assert res1 == res2
-    assert mock_average.call_count == 1
+    assert report_summary_mocked_price_aggregate_average.call_count == 1
 
   def test_get_average__multiple_instances_different_context__isolated_cache(
       self,
       report_prefetched: Report,
       report_2024_context: Dict,
       report_2024_different_week_context: Dict,
+      report_summary_mocked_price_aggregate_average: pytest.fixture,
   ) -> None:
     item = report_prefetched.item.all()[0]
     serializer1 = ReportSummaryHistoricalItemPriceSerializerRO(
@@ -113,16 +107,10 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
         context=report_2024_different_week_context,
     )
 
-    with mock.patch.object(
-        Price.aggregate_last_52_weeks,
-        'average',
-        return_value=10.0,
-    ) as mock_average:
-      mock_average.__name__ = "average_isolated"
-      serializer1.get_average(item)
-      serializer2.get_average(item)
+    serializer1.get_average(item)
+    serializer2.get_average(item)
 
-    assert mock_average.call_count == 2
+    assert report_summary_mocked_price_aggregate_average.call_count == 2
 
   def test_serialization__no_prices__returns_none(
       self,

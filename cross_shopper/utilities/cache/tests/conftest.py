@@ -1,12 +1,9 @@
-"""Test fixtures for the summary family of serializers for Reports."""
-
 import pytest
 from django.core.cache import cache
 from utilities.cache import memoize
 
 
-class RealisticModel:
-  """A realistic model-like class for testing."""
+class MockModel:
 
   def __init__(self, pk: int, name: str):
     self.pk = pk
@@ -16,10 +13,9 @@ class RealisticModel:
     return f"<{self.__class__.__name__}: {self.pk}>"
 
 
-class RealisticSerializer:
-  """A realistic serializer-like class for testing."""
+class MockSerializer:
 
-  def __init__(self, instance: RealisticModel, context: dict = None):
+  def __init__(self, instance: MockModel, context: dict = None):
     self.instance = instance
     self.context = context or {}
     self.call_count = 0
@@ -36,7 +32,7 @@ class RealisticSerializer:
     )
 
   @memoize(timeout=60)
-  def compute_expensive_value(self, arg: str) -> str:
+  def memoized_method(self, arg: str) -> str:
     self.call_count += 1
     return f"Result for {arg} with context {self.context}"
 
@@ -49,39 +45,42 @@ def clear_django_cache():
 
 
 @pytest.fixture
-def model_instance() -> RealisticModel:
-  return RealisticModel(pk=1, name="Test Item")
-
-
-@pytest.fixture
-def serializer_context() -> dict:
-  return {'week': 1, 'year': 2024, 'report': 'ReportA'}
-
-
-@pytest.fixture
-def serializer(
-    model_instance: RealisticModel,
-    serializer_context: dict,
-) -> RealisticSerializer:
-  return RealisticSerializer(model_instance, context=serializer_context)
-
-
-@pytest.fixture
-def identical_serializer(
-    model_instance: RealisticModel,
-    serializer_context: dict,
-) -> RealisticSerializer:
-  return RealisticSerializer(model_instance, context=dict(serializer_context))
-
-
-@pytest.fixture
-def different_serializer(
-    model_instance: RealisticModel,
-) -> RealisticSerializer:
-  return RealisticSerializer(
-      model_instance, context={
+def mocked_different_serializer(
+    mock_model_instance: MockModel,
+) -> MockSerializer:
+  return MockSerializer(
+      mock_model_instance,
+      context={
           'week': 2,
           'year': 2024,
           'report': 'ReportA'
       }
   )
+
+
+@pytest.fixture
+def mocked_identical_serializer(
+    mock_model_instance: MockModel,
+    mock_serializer_context: dict,
+) -> MockSerializer:
+  return MockSerializer(
+      mock_model_instance, context=dict(mock_serializer_context)
+  )
+
+
+@pytest.fixture
+def mocked_serializer(
+    mock_model_instance: MockModel,
+    mock_serializer_context: dict,
+) -> MockSerializer:
+  return MockSerializer(mock_model_instance, context=mock_serializer_context)
+
+
+@pytest.fixture
+def mock_model_instance() -> MockModel:
+  return MockModel(pk=1, name="Test Item")
+
+
+@pytest.fixture
+def mock_serializer_context() -> dict:
+  return {'week': 1, 'year': 2024, 'report': 'ReportA'}

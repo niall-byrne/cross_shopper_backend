@@ -7,27 +7,62 @@ from unittest import mock
 import pytest
 from pricing.models import Price
 from reports.models.report import Report
+from reports.models.serializers.read_only.report_summary.item_price_current import (
+    ReportSummaryCurrentItemPriceSerializerRO,
+)
 
 if TYPE_CHECKING:  # pragma: no cover
   from typing import Dict
 
 
 @pytest.fixture
-def report_with_2024_prices(report: Report) -> "Report":
-  stores = list(report.store.all())
-  item = report.item.all()[0]
-  num_stores = len(stores)
+def report_2024_context(report_with_2024_prices: Report) -> "Dict":
+  return {
+      'report': report_with_2024_prices,
+      'year': 2024,
+      'week': 1,
+  }
 
-  for i in range(min(num_stores, 2)):
-    Price.objects.create(
-        item=item,
-        store=stores[i],
-        amount=decimal.Decimal(f'{(i + 1) * 10}.00'),
-        year=2024,
-        week=1,
-    )
 
-  return report
+@pytest.fixture
+def report_2024_different_week_context(
+    report_with_2024_prices: Report
+) -> "Dict":
+  return {
+      'report': report_with_2024_prices,
+      'year': 2024,
+      'week': 2,
+  }
+
+
+@pytest.fixture
+def report_no_prices_context(report: Report) -> "Dict":
+  return {
+      'report': report,
+      'year': 2024,
+      'week': 1,
+  }
+
+
+@pytest.fixture
+def report_summary_mocked_get_per_store() -> mock.Mock:
+  with mock.patch.object(
+      ReportSummaryCurrentItemPriceSerializerRO,
+      'get_per_store',
+  ) as mocked_method:
+    mocked_method.__name__ = "get_per_store"
+    yield mocked_method
+
+
+@pytest.fixture
+def report_summary_mocked_price_aggregate_average() -> mock.Mock:
+  with mock.patch.object(
+      Price.aggregate_last_52_weeks,
+      'average',
+      return_value=10.0,
+  ) as mocked_method:
+    mocked_method.__name__ = "average"
+    yield mocked_method
 
 
 @pytest.fixture
@@ -39,7 +74,6 @@ def report_summary_mocked_pricing_aggregate_attributes() -> "Dict[str, str]":
   }
 
 
-# TODO: consider renaming
 @pytest.fixture
 def report_summary_mocked_pricing_aggregate_last_52_weeks_manager(
     report_summary_mocked_pricing_aggregate_attributes: "Dict[str, str]",
@@ -55,29 +89,18 @@ def report_summary_mocked_pricing_aggregate_last_52_weeks_manager(
 
 
 @pytest.fixture
-def report_2024_context(report_with_2024_prices: "Report") -> "Dict":
-  return {
-      'report': report_with_2024_prices,
-      'year': 2024,
-      'week': 1,
-  }
+def report_with_2024_prices(report: Report) -> Report:
+  stores = list(report.store.all())
+  item = report.item.all()[0]
+  num_stores = len(stores)
 
+  for i in range(min(num_stores, 2)):
+    Price.objects.create(
+        item=item,
+        store=stores[i],
+        amount=decimal.Decimal(f'{(i + 1) * 10}.00'),
+        year=2024,
+        week=1,
+    )
 
-@pytest.fixture
-def report_no_prices_context(report: "Report") -> "Dict":
-  return {
-      'report': report,
-      'year': 2024,
-      'week': 1,
-  }
-
-
-@pytest.fixture
-def report_2024_different_week_context(
-    report_with_2024_prices: "Report"
-) -> "Dict":
-  return {
-      'report': report_with_2024_prices,
-      'year': 2024,
-      'week': 2,
-  }
+  return report

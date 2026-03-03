@@ -1,12 +1,12 @@
-"""Test the ItemSerializer class."""
+"""Test the ItemSerializerRW class."""
 
 import re
 from typing import TYPE_CHECKING, Any, Dict
 
 import pytest
 from items.models import Brand, Item, Packaging
-from items.models.serializers.item import ItemSerializer
-from items.models.serializers.packaging import PackagingSerializer
+from items.models.serializers.read_write.item import ItemSerializerRW
+from items.models.serializers.read_write.packaging import PackagingSerializerRW
 from rest_framework.exceptions import ErrorDetail, ValidationError
 from scrapers.models.serializers.scraper_config import ScraperConfigSerializer
 
@@ -17,7 +17,7 @@ AliasNestedItemData = Dict[str, Any]
 
 
 @pytest.mark.django_db
-class TestItemSerializer:
+class TestItemSerializerRW:
 
   def compare_instance_to_data(
       self,
@@ -54,7 +54,7 @@ class TestItemSerializer:
       self,
       item: Item,
   ) -> None:
-    serialized = ItemSerializer(item)
+    serialized = ItemSerializerRW(item)
 
     assert serialized.data == {
         "id":
@@ -66,7 +66,7 @@ class TestItemSerializer:
         "brand":
             item.brand.name,
         "packaging":
-            PackagingSerializer(item.packaging).data,
+            PackagingSerializerRW(item.packaging).data,
         "is_bulk":
             item.is_bulk,
         "is_non_gmo":
@@ -108,7 +108,7 @@ class TestItemSerializer:
             ],
     }
 
-    serialized = ItemSerializer(data=item_data)
+    serialized = ItemSerializerRW(data=item_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -150,7 +150,7 @@ class TestItemSerializer:
             ],
     }
 
-    serialized = ItemSerializer(data=item_data)
+    serialized = ItemSerializerRW(data=item_data)
     serialized.is_valid(raise_exception=True)
     instance = serialized.save()
 
@@ -181,7 +181,7 @@ class TestItemSerializer:
     }
 
     with pytest.raises(ValidationError) as exc:
-      serialized = ItemSerializer(data=item_data)
+      serialized = ItemSerializerRW(data=item_data)
       serialized.is_valid(raise_exception=True)
 
     assert str(exc.value) == str(

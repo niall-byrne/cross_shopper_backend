@@ -4,13 +4,13 @@ from typing import TYPE_CHECKING
 
 import pytest
 from reports.models.serializers.read_only.report_summary.item_price import (
-  ReportSummaryItemPriceSerializerRO,
+    ReportSummaryItemPriceSerializerRO,
 )
 from reports.models.serializers.read_only.report_summary.item_price_current import (
-  ReportSummaryCurrentItemPriceSerializerRO,
+    ReportSummaryCurrentItemPriceSerializerRO,
 )
 from reports.models.serializers.read_only.report_summary.item_price_historical import (
-  ReportSummaryHistoricalItemPriceSerializerRO,
+    ReportSummaryHistoricalItemPriceSerializerRO,
 )
 
 if TYPE_CHECKING:

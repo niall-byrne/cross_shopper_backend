@@ -1,8 +1,10 @@
 """Tests for the ReportSummaryHistoricalItemPriceSerializerRO."""
 
 from typing import TYPE_CHECKING
+from unittest import mock
 
 import pytest
+from pricing.models import Price
 from reports.models import Report
 from reports.models.serializers.read_only.report_summary.\
   item_price_historical import (
@@ -46,6 +48,81 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
         'high': None,
         'low': None,
     }
+
+  def test___repr____specified_context__returns_correct_string(
+      self,
+      report: "Report",
+      report_2024_context: "Dict",
+  ) -> None:
+    serializer = ReportSummaryHistoricalItemPriceSerializerRO(
+        report.item.all()[0],
+        context=report_2024_context,
+    )
+
+    assert repr(serializer) == ":".join([
+        repr(report_2024_context['week']),
+        repr(report_2024_context['year']),
+        repr(report_2024_context['report']),
+        repr(ReportSummaryHistoricalItemPriceSerializerRO),
+    ])
+
+  def test_get_average__multiple_instances_same_context__shares_cache(
+      self,
+      report_prefetched: "Report",
+      report_2024_context: "Dict",
+  ) -> None:
+    item = report_prefetched.item.all()[0]
+
+    serializer1 = ReportSummaryHistoricalItemPriceSerializerRO(
+        item,
+        context=report_2024_context,
+    )
+    serializer2 = ReportSummaryHistoricalItemPriceSerializerRO(
+        item,
+        context=report_2024_context,
+    )
+
+    with mock.patch.object(
+        Price.aggregate_last_52_weeks,
+        'average',
+        return_value=10.0,
+    ) as mock_average:
+      mock_average.__name__ = "average"
+
+      res1 = serializer1.get_average(item)
+      res2 = serializer2.get_average(item)
+
+      assert res1 == res2
+      assert mock_average.call_count == 1
+
+  def test_get_average__multiple_instances_different_context__isolated_cache(
+      self,
+      report_prefetched: "Report",
+      report_2024_context: "Dict",
+      report_2024_different_week_context: "Dict",
+  ) -> None:
+    item = report_prefetched.item.all()[0]
+
+    serializer1 = ReportSummaryHistoricalItemPriceSerializerRO(
+        item,
+        context=report_2024_context,
+    )
+    serializer2 = ReportSummaryHistoricalItemPriceSerializerRO(
+        item,
+        context=report_2024_different_week_context,
+    )
+
+    with mock.patch.object(
+        Price.aggregate_last_52_weeks,
+        'average',
+        return_value=10.0,
+    ) as mock_average:
+      mock_average.__name__ = "average_isolated"
+
+      serializer1.get_average(item)
+      serializer2.get_average(item)
+
+      assert mock_average.call_count == 2
 
   def test_serialization__no_prices__returns_none(
       self,

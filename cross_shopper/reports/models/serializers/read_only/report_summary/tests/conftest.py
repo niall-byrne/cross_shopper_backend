@@ -52,3 +52,30 @@ def report_summary_mocked_pricing_aggregate_last_52_weeks_manager(
   monkeypatch.setattr(Price, "aggregate_last_52_weeks", manager_mock)
 
   return manager_mock
+
+
+@pytest.fixture
+def report_2024_context(report_with_2024_prices: "Report") -> "Dict":
+  return {
+      'report': report_with_2024_prices,
+      'year': 2024,
+      'week': 1,
+  }
+
+
+@pytest.fixture
+def report_no_prices_context(report: "Report") -> "Dict":
+  return {
+      'report': report,
+      'year': 2024,
+      'week': 1,
+  }
+
+
+@pytest.fixture
+def report_2024_different_week_context(report_with_2024_prices: "Report") -> "Dict":
+  return {
+      'report': report_with_2024_prices,
+      'year': 2024,
+      'week': 2,
+  }

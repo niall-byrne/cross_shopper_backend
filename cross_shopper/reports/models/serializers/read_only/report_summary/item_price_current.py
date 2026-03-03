@@ -75,6 +75,7 @@ class ReportSummaryCurrentItemPriceSerializerRO(serializers.ModelSerializer):
     return prices_dict
 
   def __repr__(self) -> str:
+    """Control caching behaviour accross instances."""
     return ":".join(
         map(
             repr, [

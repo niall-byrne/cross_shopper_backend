@@ -136,3 +136,23 @@ repos:
         language: pygrep
         files: "^cross_shopper/(?=.*test_.*)(?!.*(migrations).*).+\\.py$"
         stages: [pre-commit]
+      - id: test-fixtures
+        name: ensure test fixures are not inside test modules
+        entry: "^@pytest.fixture$"
+        language: pygrep
+        files: "^cross_shopper/(?=.*test_.*).+\\.py$"
+        stages: [pre-commit]
+      - id: test-fixtures
+        name: ensure test fixures for models are named correctly and don't cohabitate with mocks
+        entry: '\A.+(@pytest.fixture\(\)|@pytest.fixture\ndef mock.+).+\Z'
+        args: [--multiline]
+        language: pygrep
+        files: "^cross_shopper/(?=.*models/fixtures.*).+\\.py$"
+        stages: [pre-commit]
+      - id: test-fixtures
+        name: ensure test fixures for mocks are named correctly and are kept in conftest.py files
+        entry: '\A.+(@pytest.fixture\(\)|@pytest.fixture\ndef mock_.+).+\Z'
+        args: [--multiline]
+        language: pygrep
+        files: "^cross_shopper/(?=.*conftest.py).+\\.py$"
+        stages: [pre-commit]

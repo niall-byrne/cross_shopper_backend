@@ -90,6 +90,12 @@ repos:
         stages: [pre-commit]
   - repo: local
     hooks:
+      - id: django-model-id
+        name: avoid referencing models by id
+        entry: '\.id'
+        language: pygrep
+        files: "^cross_shopper/.+\\.py$"
+        stages: [pre-commit]
       - id: fmt-type-checking-coverage
         name: ensure type checking conditionals don't cause coverage problems
         language: system

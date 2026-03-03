@@ -94,6 +94,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "root.wsgi.application"
 
+# Cache
+# https://docs.djangoproject.com/en/4.2/ref/settings/#caches
+
+CACHES = {
+    "default":
+        {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "TIMEOUT": 60,
+            "OPTIONS": {
+                "MAX_ENTRIES": 10000
+            }
+        }
+}
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 

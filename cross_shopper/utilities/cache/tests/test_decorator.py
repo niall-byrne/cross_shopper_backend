@@ -14,61 +14,69 @@ class TestMemoizeDecorator:
   def test_memoized_method__same_instance__same_args__returns_cached_result(
       self,
       mocked_serializer: MockSerializer,
+      mocked_arg: str,
   ) -> None:
-    arg = "arg1"
-    mocked_serializer.memoized_method(arg)
+    mocked_serializer.memoized_method(mocked_arg)
 
-    result = mocked_serializer.memoized_method(arg)
+    result = mocked_serializer.memoized_method(mocked_arg)
 
-    assert result == f"Result for {arg} with context {mocked_serializer.context}"
+    assert result == (
+        f"Result for {mocked_arg} with context {mocked_serializer.context}"
+    )
     assert mocked_serializer.call_count == 1
 
   def test_memoized_method__different_instances__same_repr__shares_cache(
       self,
       mocked_serializer: MockSerializer,
       mocked_identical_serializer: MockSerializer,
+      mocked_arg: str,
   ) -> None:
-    arg = "arg1"
-    mocked_serializer.memoized_method(arg)
+    mocked_serializer.memoized_method(mocked_arg)
 
-    result = mocked_identical_serializer.memoized_method(arg)
+    result = mocked_identical_serializer.memoized_method(mocked_arg)
 
     assert repr(mocked_serializer) == repr(mocked_identical_serializer)
-    assert result == f"Result for {arg} with context {mocked_serializer.context}"
+    assert result == (
+        f"Result for {mocked_arg} with context {mocked_serializer.context}"
+    )
     assert mocked_identical_serializer.call_count == 0
 
   def test_memoized_method__different_instances__different_repr__uses_isolated_cache(
       self,
       mocked_serializer: MockSerializer,
       mocked_different_serializer: MockSerializer,
+      mocked_arg: str,
   ) -> None:
-    arg = "arg1"
-    mocked_serializer.memoized_method(arg)
+    mocked_serializer.memoized_method(mocked_arg)
 
-    result = mocked_different_serializer.memoized_method(arg)
+    result = mocked_different_serializer.memoized_method(mocked_arg)
 
     assert repr(mocked_serializer) != repr(mocked_different_serializer)
-    assert result != f"Result for {arg} with context {mocked_serializer.context}"
+    assert result != (
+        f"Result for {mocked_arg} with context {mocked_serializer.context}"
+    )
     assert mocked_different_serializer.call_count == 1
 
   def test_memoized_method__same_instance__different_args__uses_isolated_cache(
       self,
       mocked_serializer: MockSerializer,
+      mocked_arg: str,
   ) -> None:
-    arg1 = "arg1"
     arg2 = "arg2"
-    mocked_serializer.memoized_method(arg1)
+    mocked_serializer.memoized_method(mocked_arg)
 
     result = mocked_serializer.memoized_method(arg2)
 
-    assert result != f"Result for {arg1} with context {mocked_serializer.context}"
+    assert result != (
+        f"Result for {mocked_arg} with context {mocked_serializer.context}"
+    )
     assert mocked_serializer.call_count == 2
 
   def test_memoized_method__none_result__returns_cached_none(self) -> None:
     call_count = 0
 
     @memoize()
-    def return_none(x):
+    def return_none(_x):
       nonlocal call_count
       call_count += 1
       return None
@@ -100,7 +108,7 @@ class TestMemoizeDecorator:
     assert call_counts["f1"] == 1
     assert call_counts["f2"] == 1
 
-  def test_memoized_method__timeout__passes_timeout_to_backend(self,) -> None:
+  def test_memoized_method__timeout__passes_timeout_to_backend(self) -> None:
     timeout_value = 123
 
     @memoize(timeout=timeout_value)

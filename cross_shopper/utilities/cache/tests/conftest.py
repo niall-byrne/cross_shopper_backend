@@ -1,3 +1,7 @@
+"""Test fixtures for the summary family of serializers for Reports."""
+
+from typing import Dict, Optional
+
 import pytest
 from django.core.cache import cache
 from utilities.cache import memoize
@@ -15,7 +19,7 @@ class MockModel:
 
 class MockSerializer:
 
-  def __init__(self, instance: MockModel, context: dict = None):
+  def __init__(self, instance: MockModel, context: Optional[Dict] = None):
     self.instance = instance
     self.context = context or {}
     self.call_count = 0
@@ -45,13 +49,8 @@ def clear_django_cache():
 
 
 @pytest.fixture
-def mocked_model_instance() -> MockModel:
-  return MockModel(pk=1, name="Test Item")
-
-
-@pytest.fixture
-def mocked_serializer_context() -> dict:
-  return {'week': 1, 'year': 2024, 'report': 'ReportA'}
+def mocked_arg() -> str:
+  return "arg1"
 
 
 @pytest.fixture
@@ -71,7 +70,7 @@ def mocked_different_serializer(
 @pytest.fixture
 def mocked_identical_serializer(
     mocked_model_instance: MockModel,
-    mocked_serializer_context: dict,
+    mocked_serializer_context: Dict,
 ) -> MockSerializer:
   return MockSerializer(
       mocked_model_instance, context=dict(mocked_serializer_context)
@@ -79,10 +78,20 @@ def mocked_identical_serializer(
 
 
 @pytest.fixture
+def mocked_model_instance() -> MockModel:
+  return MockModel(pk=1, name="Test Item")
+
+
+@pytest.fixture
 def mocked_serializer(
     mocked_model_instance: MockModel,
-    mocked_serializer_context: dict,
+    mocked_serializer_context: Dict,
 ) -> MockSerializer:
   return MockSerializer(
       mocked_model_instance, context=mocked_serializer_context
   )
+
+
+@pytest.fixture
+def mocked_serializer_context() -> Dict:
+  return {'week': 1, 'year': 2024, 'report': 'ReportA'}

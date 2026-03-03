@@ -1,13 +1,14 @@
 """Tests for the ReportSummaryHistoricalItemPriceSerializerRO."""
 
 from typing import Dict
+from unittest import mock
 
 import pytest
 from reports.models import Report
 from reports.models.serializers.read_only.report_summary.\
   item_price_historical import (
     ReportSummaryHistoricalItemPriceSerializerRO,
-)
+  )
 
 
 @pytest.mark.django_db
@@ -72,7 +73,7 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
       self,
       report_prefetched: Report,
       report_context_2024: Dict,
-      report_summary_mocked_price_aggregate_average: pytest.fixture,
+      report_summary_mocked_price_aggregate_average: mock.Mock,
   ) -> None:
     item = report_prefetched.item.all()[0]
     serializer1 = ReportSummaryHistoricalItemPriceSerializerRO(
@@ -95,7 +96,7 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
       report_prefetched: Report,
       report_context_2024: Dict,
       report_context_2024_alternate: Dict,
-      report_summary_mocked_price_aggregate_average: pytest.fixture,
+      report_summary_mocked_price_aggregate_average: mock.Mock,
   ) -> None:
     item = report_prefetched.item.all()[0]
     serializer1 = ReportSummaryHistoricalItemPriceSerializerRO(

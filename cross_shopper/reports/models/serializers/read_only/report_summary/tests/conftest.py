@@ -1,7 +1,8 @@
 """Test fixtures for the summary family of serializers for Reports."""
 
 import decimal
-from typing import TYPE_CHECKING
+from collections.abc import Generator
+from typing import TYPE_CHECKING, Dict
 from unittest import mock
 
 import pytest
@@ -12,11 +13,11 @@ from reports.models.serializers.read_only.report_summary.item_price_current impo
 )
 
 if TYPE_CHECKING:  # pragma: no cover
-  from typing import Dict
+  pass
 
 
 @pytest.fixture
-def report_context_2024(report_with_2024_prices: Report) -> "Dict":
+def report_context_2024(report_with_2024_prices: Report) -> Dict:
   return {
       'report': report_with_2024_prices,
       'year': 2024,
@@ -25,7 +26,7 @@ def report_context_2024(report_with_2024_prices: Report) -> "Dict":
 
 
 @pytest.fixture
-def report_context_2024_alternate(report_with_2024_prices: Report) -> "Dict":
+def report_context_2024_alternate(report_with_2024_prices: Report) -> Dict:
   return {
       'report': report_with_2024_prices,
       'year': 2024,
@@ -34,7 +35,7 @@ def report_context_2024_alternate(report_with_2024_prices: Report) -> "Dict":
 
 
 @pytest.fixture
-def report_context_no_prices(report: Report) -> "Dict":
+def report_context_no_prices(report: Report) -> Dict:
   return {
       'report': report,
       'year': 2024,
@@ -43,7 +44,7 @@ def report_context_no_prices(report: Report) -> "Dict":
 
 
 @pytest.fixture
-def report_summary_mocked_get_per_store() -> mock.Mock:
+def report_summary_mocked_get_per_store() -> Generator[mock.Mock, None, None]:
   with mock.patch.object(
       ReportSummaryCurrentItemPriceSerializerRO,
       'get_per_store',
@@ -53,7 +54,8 @@ def report_summary_mocked_get_per_store() -> mock.Mock:
 
 
 @pytest.fixture
-def report_summary_mocked_price_aggregate_average() -> mock.Mock:
+def report_summary_mocked_price_aggregate_average(
+) -> Generator[mock.Mock, None, None]:
   with mock.patch.object(
       Price.aggregate_last_52_weeks,
       'average',
@@ -64,7 +66,7 @@ def report_summary_mocked_price_aggregate_average() -> mock.Mock:
 
 
 @pytest.fixture
-def report_summary_mocked_pricing_aggregate_attributes() -> "Dict[str, str]":
+def report_summary_mocked_pricing_aggregate_attributes() -> Dict[str, str]:
   return {
       'average': '10.5',
       'high': '15.0',
@@ -74,7 +76,7 @@ def report_summary_mocked_pricing_aggregate_attributes() -> "Dict[str, str]":
 
 @pytest.fixture
 def report_summary_mocked_pricing_aggregate_last_52_weeks_manager(
-    report_summary_mocked_pricing_aggregate_attributes: "Dict[str, str]",
+    report_summary_mocked_pricing_aggregate_attributes: Dict[str, str],
     monkeypatch: pytest.MonkeyPatch
 ) -> mock.Mock:
   manager_mock = mock.Mock()

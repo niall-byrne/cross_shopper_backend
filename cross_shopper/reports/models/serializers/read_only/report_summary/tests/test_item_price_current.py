@@ -2,6 +2,7 @@
 
 import decimal
 from typing import Dict, Optional
+from unittest import mock
 
 import pytest
 from django.db.models import Avg, Min
@@ -96,7 +97,7 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
       self,
       report_with_2024_prices: Report,
       report_context_2024: Dict,
-      report_summary_mocked_get_per_store: pytest.fixture,
+      report_summary_mocked_get_per_store: mock.Mock,
   ) -> None:
     item = report_with_2024_prices.item.all()[0]
     serializer1 = ReportSummaryCurrentItemPriceSerializerRO(
@@ -119,7 +120,7 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
       report_with_2024_prices: Report,
       report_context_2024: Dict,
       report_context_2024_alternate: Dict,
-      report_summary_mocked_get_per_store: pytest.fixture,
+      report_summary_mocked_get_per_store: mock.Mock,
   ) -> None:
     item = report_with_2024_prices.item.all()[0]
     serializer1 = ReportSummaryCurrentItemPriceSerializerRO(

@@ -84,3 +84,12 @@ repos:
           - "--schemafile"
           - ".github/config/schemas/workflows/workflow-push.json"
         stages: [pre-commit]
+  - repo: local
+    hooks:
+      - id: django-serializer-docstrings
+        name: ensure serializer modules have correct docstrings
+        entry: '\A(?!"""Serializer to (retrieve, list, create or update|retrieve or list) (a |an |)[A-Z]{1}[A-Za-z]+."""\n.+class [A-Z]{1}[A-Za-z]+\(.+\):\n  """Serializer to (retrieve, list, create or update|retrieve or list) (a |an |)[A-Z]{1}[A-Za-z]+."""\n).+\Z'
+        args: [--multiline]
+        language: pygrep
+        files: "^cross_shopper/[a-z_]+/models/serializers/(read_write|read_only)/(?!__init__.py$)(?!report_summary|report_pricing)(?!.*test.*)(?!.+internal).+\\.py$"
+        stages: [pre-commit]

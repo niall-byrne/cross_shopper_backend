@@ -16,7 +16,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 @pytest.fixture
-def report_2024_context(report_with_2024_prices: Report) -> "Dict":
+def report_context_2024(report_with_2024_prices: Report) -> "Dict":
   return {
       'report': report_with_2024_prices,
       'year': 2024,
@@ -25,9 +25,7 @@ def report_2024_context(report_with_2024_prices: Report) -> "Dict":
 
 
 @pytest.fixture
-def report_2024_different_week_context(
-    report_with_2024_prices: Report
-) -> "Dict":
+def report_context_2024_alternate(report_with_2024_prices: Report) -> "Dict":
   return {
       'report': report_with_2024_prices,
       'year': 2024,
@@ -36,7 +34,7 @@ def report_2024_different_week_context(
 
 
 @pytest.fixture
-def report_no_prices_context(report: Report) -> "Dict":
+def report_context_no_prices(report: Report) -> "Dict":
   return {
       'report': report,
       'year': 2024,

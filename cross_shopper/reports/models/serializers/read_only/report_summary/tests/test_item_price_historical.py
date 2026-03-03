@@ -47,41 +47,41 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
         'low': None,
     }
 
-  def test___repr____specified_context__returns_correct_string(
+  def test_repr__specified_context__returns_correct_string(
       self,
       report: Report,
-      report_2024_context: Dict,
+      report_context_2024: Dict,
   ) -> None:
     serializer = ReportSummaryHistoricalItemPriceSerializerRO(
         report.item.all()[0],
-        context=report_2024_context,
+        context=report_context_2024,
     )
 
     serializer_repr = repr(serializer)
 
     assert serializer_repr == ":".join(
         [
-            repr(report_2024_context['week']),
-            repr(report_2024_context['year']),
-            repr(report_2024_context['report']),
+            repr(report_context_2024['week']),
+            repr(report_context_2024['year']),
+            repr(report_context_2024['report']),
             repr(ReportSummaryHistoricalItemPriceSerializerRO),
         ]
     )
 
-  def test_get_average__multiple_instances_same_context__shares_cache(
+  def test_get_average__multiple_instances__same_context__shares_cache(
       self,
       report_prefetched: Report,
-      report_2024_context: Dict,
+      report_context_2024: Dict,
       report_summary_mocked_price_aggregate_average: pytest.fixture,
   ) -> None:
     item = report_prefetched.item.all()[0]
     serializer1 = ReportSummaryHistoricalItemPriceSerializerRO(
         item,
-        context=report_2024_context,
+        context=report_context_2024,
     )
     serializer2 = ReportSummaryHistoricalItemPriceSerializerRO(
         item,
-        context=report_2024_context,
+        context=report_context_2024,
     )
 
     res1 = serializer1.get_average(item)
@@ -90,21 +90,21 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
     assert res1 == res2
     assert report_summary_mocked_price_aggregate_average.call_count == 1
 
-  def test_get_average__multiple_instances_different_context__isolated_cache(
+  def test_get_average__multiple_instances__different_context__isolated_cache(
       self,
       report_prefetched: Report,
-      report_2024_context: Dict,
-      report_2024_different_week_context: Dict,
+      report_context_2024: Dict,
+      report_context_2024_alternate: Dict,
       report_summary_mocked_price_aggregate_average: pytest.fixture,
   ) -> None:
     item = report_prefetched.item.all()[0]
     serializer1 = ReportSummaryHistoricalItemPriceSerializerRO(
         item,
-        context=report_2024_context,
+        context=report_context_2024,
     )
     serializer2 = ReportSummaryHistoricalItemPriceSerializerRO(
         item,
-        context=report_2024_different_week_context,
+        context=report_context_2024_alternate,
     )
 
     serializer1.get_average(item)

@@ -11,7 +11,7 @@ from utilities.cache.tests.conftest import MockSerializer
 
 class TestMemoizeDecorator:
 
-  def test_memoized_method__same_instance_same_args__returns_cached_result(
+  def test_memoized_method__same_instance__same_args__returns_cached_result(
       self,
       mocked_serializer: MockSerializer,
   ) -> None:
@@ -23,7 +23,7 @@ class TestMemoizeDecorator:
     assert result == f"Result for {arg} with context {mocked_serializer.context}"
     assert mocked_serializer.call_count == 1
 
-  def test_memoized_method__different_instances_same_repr__shares_cache(
+  def test_memoized_method__different_instances__same_repr__shares_cache(
       self,
       mocked_serializer: MockSerializer,
       mocked_identical_serializer: MockSerializer,
@@ -37,7 +37,7 @@ class TestMemoizeDecorator:
     assert result == f"Result for {arg} with context {mocked_serializer.context}"
     assert mocked_identical_serializer.call_count == 0
 
-  def test_memoized_method__different_instances_different_repr__uses_isolated_cache(
+  def test_memoized_method__different_instances__different_repr__uses_isolated_cache(
       self,
       mocked_serializer: MockSerializer,
       mocked_different_serializer: MockSerializer,
@@ -51,7 +51,7 @@ class TestMemoizeDecorator:
     assert result != f"Result for {arg} with context {mocked_serializer.context}"
     assert mocked_different_serializer.call_count == 1
 
-  def test_memoized_method__same_instance_different_args__uses_isolated_cache(
+  def test_memoized_method__same_instance__different_args__uses_isolated_cache(
       self,
       mocked_serializer: MockSerializer,
   ) -> None:
@@ -100,7 +100,7 @@ class TestMemoizeDecorator:
     assert call_counts["f1"] == 1
     assert call_counts["f2"] == 1
 
-  def test_memoized_method__timeout__passes_timeout_backend(self,) -> None:
+  def test_memoized_method__timeout__passes_timeout_to_backend(self,) -> None:
     timeout_value = 123
 
     @memoize(timeout=timeout_value)

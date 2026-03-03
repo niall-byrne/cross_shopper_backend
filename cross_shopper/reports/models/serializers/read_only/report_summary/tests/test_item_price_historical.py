@@ -1,6 +1,6 @@
 """Tests for the ReportSummaryHistoricalItemPriceSerializerRO."""
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
 from unittest import mock
 
 import pytest
@@ -12,7 +12,7 @@ from reports.models.serializers.read_only.report_summary.\
 )
 
 if TYPE_CHECKING:  # no cover
-  from typing import Dict
+  pass
 
 
 @pytest.mark.django_db
@@ -24,8 +24,8 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
   )
   def test_serialization__specified_item__returns_correct_representation(
       self,
-      report_prefetched: "Report",
-      report_summary_mocked_pricing_aggregate_attributes: "Dict[str, str]",
+      report_prefetched: Report,
+      report_summary_mocked_pricing_aggregate_attributes: Dict[str, str],
   ) -> None:
     serializer = ReportSummaryHistoricalItemPriceSerializerRO(
         report_prefetched.item.all()[0],
@@ -36,7 +36,7 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
 
   def test_serialization__no_report_context__returns_none(
       self,
-      report_prefetched: "Report",
+      report_prefetched: Report,
   ) -> None:
     serializer = ReportSummaryHistoricalItemPriceSerializerRO(
         report_prefetched.item.all()[0],
@@ -51,25 +51,27 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
 
   def test___repr____specified_context__returns_correct_string(
       self,
-      report: "Report",
-      report_2024_context: "Dict",
+      report: Report,
+      report_2024_context: Dict,
   ) -> None:
     serializer = ReportSummaryHistoricalItemPriceSerializerRO(
         report.item.all()[0],
         context=report_2024_context,
     )
 
-    assert repr(serializer) == ":".join([
-        repr(report_2024_context['week']),
-        repr(report_2024_context['year']),
-        repr(report_2024_context['report']),
-        repr(ReportSummaryHistoricalItemPriceSerializerRO),
-    ])
+    assert repr(serializer) == ":".join(
+        [
+            repr(report_2024_context['week']),
+            repr(report_2024_context['year']),
+            repr(report_2024_context['report']),
+            repr(ReportSummaryHistoricalItemPriceSerializerRO),
+        ]
+    )
 
   def test_get_average__multiple_instances_same_context__shares_cache(
       self,
-      report_prefetched: "Report",
-      report_2024_context: "Dict",
+      report_prefetched: Report,
+      report_2024_context: Dict,
   ) -> None:
     item = report_prefetched.item.all()[0]
 
@@ -97,9 +99,9 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
 
   def test_get_average__multiple_instances_different_context__isolated_cache(
       self,
-      report_prefetched: "Report",
-      report_2024_context: "Dict",
-      report_2024_different_week_context: "Dict",
+      report_prefetched: Report,
+      report_2024_context: Dict,
+      report_2024_different_week_context: Dict,
   ) -> None:
     item = report_prefetched.item.all()[0]
 
@@ -126,7 +128,7 @@ class TestReportSummaryHistoricalItemPriceSerializerRO:
 
   def test_serialization__no_prices__returns_none(
       self,
-      report_prefetched: "Report",
+      report_prefetched: Report,
   ) -> None:
     serializer = ReportSummaryHistoricalItemPriceSerializerRO(
         report_prefetched.item.all()[0],

@@ -1,3 +1,5 @@
+"""Test fixtures for the summary family of serializers for Reports."""
+
 import pytest
 from django.core.cache import cache
 from utilities.cache import memoize
@@ -17,7 +19,7 @@ class RealisticModel:
 class RealisticSerializer:
   """A realistic serializer-like class for testing."""
 
-  def __init__(self, instance, context=None):
+  def __init__(self, instance: RealisticModel, context: dict = None):
     self.instance = instance
     self.context = context or {}
     self.call_count = 0
@@ -28,8 +30,7 @@ class RealisticSerializer:
             repr, [
                 self.context.get('week'),
                 self.context.get('year'),
-                self.context.get('report'),
-                self.__class__
+                self.context.get('report'), self.__class__
             ]
         )
     )
@@ -42,34 +43,45 @@ class RealisticSerializer:
 
 @pytest.fixture(autouse=True)
 def clear_django_cache():
-  """Clear the django cache before and after each test."""
   cache.clear()
   yield
   cache.clear()
 
 
 @pytest.fixture
-def model_instance():
+def model_instance() -> RealisticModel:
   return RealisticModel(pk=1, name="Test Item")
 
 
 @pytest.fixture
-def serializer_context():
+def serializer_context() -> dict:
   return {'week': 1, 'year': 2024, 'report': 'ReportA'}
 
 
 @pytest.fixture
-def serializer(model_instance, serializer_context):
+def serializer(
+    model_instance: RealisticModel,
+    serializer_context: dict,
+) -> RealisticSerializer:
   return RealisticSerializer(model_instance, context=serializer_context)
 
 
 @pytest.fixture
-def identical_serializer(model_instance, serializer_context):
+def identical_serializer(
+    model_instance: RealisticModel,
+    serializer_context: dict,
+) -> RealisticSerializer:
   return RealisticSerializer(model_instance, context=dict(serializer_context))
 
 
 @pytest.fixture
-def different_serializer(model_instance):
+def different_serializer(
+    model_instance: RealisticModel,
+) -> RealisticSerializer:
   return RealisticSerializer(
-      model_instance, context={'week': 2, 'year': 2024, 'report': 'ReportA'}
+      model_instance, context={
+          'week': 2,
+          'year': 2024,
+          'report': 'ReportA'
+      }
   )

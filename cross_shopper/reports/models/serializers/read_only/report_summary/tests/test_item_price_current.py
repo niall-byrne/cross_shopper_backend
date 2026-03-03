@@ -20,8 +20,8 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
 
   def test_serialization__specified_item__returns_correct_representation(
       self,
-      report_with_2024_prices: "Report",
-      report_2024_context: "Dict",
+      report_with_2024_prices: Report,
+      report_2024_context: Dict,
   ) -> None:
     prices = Price.objects.all()
 
@@ -55,8 +55,8 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
 
   def test_serialization__no_prices__returns_none(
       self,
-      report: "Report",
-      report_no_prices_context: "Dict",
+      report: Report,
+      report_no_prices_context: Dict,
   ) -> None:
     serializer = ReportSummaryCurrentItemPriceSerializerRO(
         report.item.all()[0],
@@ -73,25 +73,27 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
 
   def test___repr____specified_context__returns_correct_string(
       self,
-      report: "Report",
-      report_2024_context: "Dict",
+      report: Report,
+      report_2024_context: Dict,
   ) -> None:
     serializer = ReportSummaryCurrentItemPriceSerializerRO(
         report.item.all()[0],
         context=report_2024_context,
     )
 
-    assert repr(serializer) == ":".join([
-        repr(report_2024_context['week']),
-        repr(report_2024_context['year']),
-        repr(report_2024_context['report']),
-        repr(ReportSummaryCurrentItemPriceSerializerRO),
-    ])
+    assert repr(serializer) == ":".join(
+        [
+            repr(report_2024_context['week']),
+            repr(report_2024_context['year']),
+            repr(report_2024_context['report']),
+            repr(ReportSummaryCurrentItemPriceSerializerRO),
+        ]
+    )
 
   def test_get_average__multiple_instances_same_context__shares_cache(
       self,
-      report_with_2024_prices: "Report",
-      report_2024_context: "Dict",
+      report_with_2024_prices: Report,
+      report_2024_context: Dict,
   ) -> None:
     item = report_with_2024_prices.item.all()[0]
 
@@ -119,9 +121,9 @@ class TestReportSummaryCurrentItemPriceSerializerRO:
 
   def test_get_average__multiple_instances_different_context__isolated_cache(
       self,
-      report_with_2024_prices: "Report",
-      report_2024_context: "Dict",
-      report_2024_different_week_context: "Dict",
+      report_with_2024_prices: Report,
+      report_2024_context: Dict,
+      report_2024_different_week_context: Dict,
   ) -> None:
     item = report_with_2024_prices.item.all()[0]
 

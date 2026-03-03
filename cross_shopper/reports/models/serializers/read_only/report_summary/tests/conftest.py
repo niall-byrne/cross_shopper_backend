@@ -73,7 +73,9 @@ def report_no_prices_context(report: "Report") -> "Dict":
 
 
 @pytest.fixture
-def report_2024_different_week_context(report_with_2024_prices: "Report") -> "Dict":
+def report_2024_different_week_context(
+    report_with_2024_prices: "Report"
+) -> "Dict":
   return {
       'report': report_with_2024_prices,
       'year': 2024,

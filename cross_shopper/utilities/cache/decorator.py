@@ -37,8 +37,9 @@ def memoize(timeout=None):
 
       result = func(*args, **kwargs)
 
-      cache.set(hashed_key, result if result is not None else _NullValue(),
-                timeout)
+      cache.set(
+          hashed_key, result if result is not None else _NullValue(), timeout
+      )
       return result
 
     return wrapper

@@ -1,0 +1,25 @@
+{% extends "admin/base.html" %} {% block branding %}
+
+<div
+{% if ENVIRONMENT == 'PRODUCTION' %}
+  style="
+    background-color: #1a8b21;
+    color: white;
+    padding: 10px;
+    text-align: center;
+  "
+{% else %}
+  style="
+    background-color: #ff4444;
+    color: white;
+    padding: 10px;
+    text-align: center;
+  "
+
+{% endif %}
+>
+CROSS SHOPPER: {{ ENVIRONMENT }}
+</div>
+
+{{ block.super }} {% endblock %}
+</div>

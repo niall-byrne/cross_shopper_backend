@@ -20,11 +20,11 @@ precision = 1
 
 [tool.coverage.run]
 branch = true
-omit = ['cross_shopper/manage.py', 'cross_shopper/root/*', '*/test*', '*/app.py', '*/migrations/*.py', '*/typing.py']
+omit = ['cross_shopper/manage.py', 'cross_shopper/root/*', '*/test*', '*/app.py', '*/migrations/*.py', '*/typing.py', 'cross_shopper/config/production.py']
 source = ['./cross_shopper']
 
 [tool.django-stubs]
-django_settings_module = 'config'
+django_settings_module = 'config.development'
 
 [tool.mypy]
 disable_error_code = ['comparison-overlap']
@@ -53,6 +53,7 @@ django-filter = '^25.1'
 django-stubs-ext = '^5.0.4'
 djangorestframework = '^3.15.2'
 drf-nested-routers = '^0.94.1'
+gunicorn = '<25'
 python = '^3.9'
 python-dotenv = '^1.0.1'
 
@@ -85,7 +86,7 @@ poetry-plugin-export = '^1.8'
 
 [tool.pytest]
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = 'config'
+DJANGO_SETTINGS_MODULE = 'config.development'
 filterwarnings = ['ignore:ItemFactory._after_postgeneration:DeprecationWarning', 'ignore:ReportFactory._after_postgeneration:DeprecationWarning']
 python_files = ['test_*.py']
 

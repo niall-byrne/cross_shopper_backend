@@ -1,0 +1,72 @@
+"""Serializer for current Item pricing in Report model summaries."""
+
+import decimal
+import statistics
+
+from items.models import Item
+from pricing.models import Price
+from rest_framework import serializers
+
+
+class ReportSummaryCurrentItemPriceSerializer(
+    serializers.ModelSerializer[Item],
+):
+  """Serializer for current Item pricing in Report model summaries."""
+
+  average = serializers.SerializerMethodField()
+  best = serializers.SerializerMethodField()
+  per_store = serializers.SerializerMethodField()
+
+  class Meta:
+    model = Item
+    fields = ("average", "best", "per_store")
+
+  def get_average(self, instance: Item) -> str | None:
+    """Get the average price for this item across all stores in the report."""
+    prices = self.get_per_store(instance).values()
+    numeric_prices = [decimal.Decimal(p) for p in prices if p is not None]
+
+    if not numeric_prices:
+      return None
+
+    average = statistics.mean(numeric_prices).quantize(
+        decimal.Decimal("0.01"),
+        rounding=decimal.ROUND_HALF_UP,
+    )
+    return str(average)
+
+  def get_best(self, instance: Item) -> str | None:
+    """Get the best (lowest) price for this item across all stores."""
+    prices = self.get_per_store(instance).values()
+    numeric_prices = [decimal.Decimal(p) for p in prices if p is not None]
+
+    if not numeric_prices:
+      return None
+
+    return str(min(numeric_prices))
+
+  def get_per_store(self, instance: Item) -> dict[str, str | None]:
+    """Get the price for this item across all stores in the report."""
+    report = self.context.get("report")
+    week = self.context.get("week")
+    year = self.context.get("year")
+
+    if not report or not week or not year:
+      return {}
+
+    stores = report.store.all()
+    prices_dict: dict[str, str | None] = {
+        str(store.pk): None for store in stores
+    }
+
+    prices = Price.objects.filter(
+        item=instance,
+        store__in=stores,
+        week=week,
+        year=year,
+    )
+
+    for price in prices:
+      prices_dict[str(price.store.pk)] = str(price.amount)
+
+    return prices_dict

@@ -13,6 +13,7 @@ pytest_plugins = [
     "items.models.fixtures.packaging",
     "pricing.models.fixtures.pricing",
     "reports.models.fixtures.report",
+    "reports.models.fixtures.report_summary",
     "stores.models.fixtures.address",
     "stores.models.fixtures.franchise",
     "stores.models.fixtures.store",

@@ -8,9 +8,10 @@ from pricing.models import Price
 from pricing.models.defaults.default_pricing_week import default_pricing_week
 from pricing.models.defaults.default_pricing_year import default_pricing_year
 from stores.models import Store
+from utilities.views.filtersets.default import DefaultFilterSet
 
 
-class PricingFilter(filters.FilterSet):
+class PricingFilter(DefaultFilterSet):
   """Pricing API endpoint filter."""
 
   itemId = filters.ModelMultipleChoiceFilter(
@@ -22,15 +23,14 @@ class PricingFilter(filters.FilterSet):
       queryset=Store.objects.all(),
   )
 
-  def __init__(self, *args: Any, **kwargs: Any) -> None:
-    super().__init__(*args, **kwargs)
-    data = self.data.copy()  # Mutable QueryDict
-    if not self.data.get('week'):
-      data['week'] = default_pricing_week()
-    if not self.data.get('year'):
-      data['year'] = default_pricing_year()
-    self.data = data
-
   class Meta:
     model = Price
-    fields = ['week', 'year']
+    fields = ['itemId', 'storeId', 'week', 'year']
+
+  def default_week(self) -> "Any":
+    """Return the default week value."""
+    return default_pricing_week()
+
+  def default_year(self) -> "Any":
+    """Return the default year value."""
+    return default_pricing_year()

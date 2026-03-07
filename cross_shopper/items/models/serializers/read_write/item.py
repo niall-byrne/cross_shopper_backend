@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, Sequence, cast
 
-from items.models import Brand, Item
+from items.models import Attribute, Brand, Item
 from items.models.serializers.read_write.packaging import PackagingSerializerRW
 from rest_framework import serializers
 from scrapers.models.scraper_config import ScraperConfig
@@ -19,7 +19,14 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
   """Serializer to retrieve, list, create or update an Item."""
 
   name = BlondeCharField(max_length=80, allow_blank=False)
-  full_name = serializers.CharField(read_only=True)
+  name_full = serializers.CharField(read_only=True)
+  attribute = CreatableSlugRelatedField(
+      case_sensitive=False,
+      queryset=Attribute.objects.all(),
+      slug_field="name",
+      write_only=True,
+      many=True,
+  )
   brand = CreatableSlugRelatedField(
       case_sensitive=False,
       queryset=Brand.objects.all(),
@@ -33,8 +40,9 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
     model = Item
     fields = (
         "id",
+        "attribute",
         "name",
-        "full_name",
+        "name_full",
         "brand",
         "packaging",
         "is_bulk",
@@ -45,6 +53,8 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
 
   def create(self, validated_data: Dict[str, Any]) -> Item:
     """Create a new instance."""
+    attribute = validated_data.pop("attribute")
+
     packaging = cast(
         PackagingSerializerRW,
         self.fields["packaging"],
@@ -62,5 +72,6 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
         **validated_data,
         packaging=packaging,
     )
+    item.attribute.set(attribute)
     item.scraper_config.set(scraper_config)
     return item

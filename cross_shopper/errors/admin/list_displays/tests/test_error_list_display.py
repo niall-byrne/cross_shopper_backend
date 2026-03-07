@@ -39,7 +39,7 @@ class TestErrorAdminListDisplay:
                 "description": "Item",
                 "reverse_url_name": "admin:items_item_change",
                 "obj_id_lookup": "item.pk",
-                "obj_name_lookup": "item.full_name",
+                "obj_name_lookup": "item.name_full",
                 "obj_order": "item.name",
             },
         ),

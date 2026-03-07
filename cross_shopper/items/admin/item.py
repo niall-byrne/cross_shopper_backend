@@ -32,7 +32,7 @@ class ItemAdmin(admin.ModelAdmin[Item]):
           },
       ),
       (
-          "CHARACTERISTICS",
+          "CERTIFICATIONS",
           {
               "fields": (
                   "is_non_gmo",
@@ -50,7 +50,11 @@ class ItemAdmin(admin.ModelAdmin[Item]):
       "packaging__container",
       "packaging__quantity",
   )
-  search_fields = ("name", "brand__name")
+  search_fields = (
+      "name",
+      "attribute__name",
+      "brand__name",
+  )
 
   def formfield_for_foreignkey(
       self,

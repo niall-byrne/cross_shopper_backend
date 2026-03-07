@@ -19,7 +19,7 @@ if TYPE_CHECKING:
   from rest_framework import serializers
 
 
-class TestSerializerContextField:
+class TestCreatableSlugRelatedField:
 
   scenarios = pytest.mark.parametrize(
       "data_scenario",

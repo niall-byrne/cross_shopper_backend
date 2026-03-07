@@ -29,5 +29,14 @@ class TestItemAdminListFilter:
                 "is_reversed": False,
             }
         ),
+        DynamicSubClass(
+            base=GenericListFilter,
+            attributes={
+                "title": "attribute",
+                "parameter_name": "attribute__name",
+                "is_boolean": False,
+                "is_reversed": False,
+            }
+        ),
         "name",
     )

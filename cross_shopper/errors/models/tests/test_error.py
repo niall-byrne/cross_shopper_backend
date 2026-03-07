@@ -35,5 +35,5 @@ class TestError:
       error: Error,
   ) -> None:
     assert str(error) == (
-        f"{error.type}: {str(error.item.full_name)} - {error.store}"
+        f"{error.type}: {str(error.item.name_full)} - {error.store}"
     )

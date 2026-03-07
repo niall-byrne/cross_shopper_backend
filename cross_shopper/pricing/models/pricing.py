@@ -59,7 +59,7 @@ class Price(
 
   def __str__(self) -> str:
     return (
-        f"{self.item.full_name}: "
+        f"{self.item.name_full}: "
         f"{self.store.franchise.name}, {self.store.address}, "
         f"Week {self.week} of {self.year}: {self.amount}"
     )

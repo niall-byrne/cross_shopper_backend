@@ -37,7 +37,7 @@ class TestReportSummaryItemSerializerRO:
         "id":
             item.pk,
         "name":
-            item.name,
+            item.name_attributed,
         "brand":
             item.brand.name,
         "is_bulk":

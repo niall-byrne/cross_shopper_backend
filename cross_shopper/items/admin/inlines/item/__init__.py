@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from .item_attribute import ItemAttributeInline
 from .item_scraper_config import ItemScraperConfigInline
 
 if TYPE_CHECKING:
@@ -10,5 +11,6 @@ if TYPE_CHECKING:
   AliasAdminModelInlines = list[type[InlineModelAdmin[Any, Any]]]
 
 item_inlines: AliasAdminModelInlines = [
+    ItemAttributeInline,
     ItemScraperConfigInline,
 ]

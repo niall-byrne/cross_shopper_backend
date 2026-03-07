@@ -14,12 +14,30 @@ from utilities.models.serializers.fields import (
 
 
 @pytest.fixture
+def mocked_input_value() -> str:
+  return "mocked_input_value"
+
+
+@pytest.fixture
 def mocked_model() -> mock.Mock:
   return mock.Mock()
 
 
 @pytest.fixture
-def blonde_field_serializer() -> Type[serializers.Serializer[Any]]:
+def mocked_sanitize() -> mock.Mock:
+  return mock.Mock(return_value="sanitized_value")
+
+
+@pytest.fixture
+def blonde_field_serializer(
+    mocked_sanitize: mock.Mock,
+    monkeypatch: pytest.MonkeyPatch,
+) -> Type[serializers.Serializer[Any]]:
+  monkeypatch.setattr(
+      blonde.PeroxideFieldMixin,
+      "sanitize",
+      mocked_sanitize,
+  )
 
   class TestSerializer(serializers.Serializer[Any]):
     field = blonde.BlondeCharField(allow_null=True)

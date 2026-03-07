@@ -11,6 +11,7 @@ from .item_price import (
 class ReportSummaryItemSerializerRO(serializers.ModelSerializer[Item]):
   """Serializer for Item instances in summarized results of Reports."""
 
+  name = serializers.CharField(source='name_attributed')
   brand = serializers.CharField(source='brand.name')
   packaging = PackagingSerializerRW()
   is_bulk = serializers.BooleanField(read_only=True)

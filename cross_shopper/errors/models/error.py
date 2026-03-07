@@ -25,7 +25,7 @@ class Error(
     return " ".join(
         [
             str(self.type) + ":",
-            str(self.item.full_name),
+            str(self.item.name_full),
             "-",
             str(self.store),
         ]

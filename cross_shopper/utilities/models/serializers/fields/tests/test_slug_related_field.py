@@ -18,7 +18,7 @@ if TYPE_CHECKING:  # no cover
   from typing import Any, Dict, Type
 
 
-class TestSerializerContextField:
+class TestCreatableSlugRelatedField:
 
   scenarios = pytest.mark.parametrize(
       "data_scenario",

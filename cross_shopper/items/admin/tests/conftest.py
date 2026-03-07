@@ -5,8 +5,10 @@ from unittest import mock
 import pytest
 from django.contrib import admin
 from items.admin import (
+    attribute,
     brand,
     item,
+    item_attribute,
     item_scraper_config,
     packaging,
     packaging_container,
@@ -57,6 +59,17 @@ def mocked_request() -> mock.Mock:
 
 
 @pytest.fixture
+def attribute_admin(
+    mocked_admin_site: mock.Mock,
+    mocked_model: mock.Mock,
+) -> attribute.AttributeAdmin:
+  return attribute.AttributeAdmin(
+      model=mocked_model,
+      admin_site=mocked_admin_site,
+  )
+
+
+@pytest.fixture
 def brand_admin(
     mocked_admin_site: mock.Mock,
     mocked_model: mock.Mock,
@@ -98,6 +111,17 @@ def item_admin(
   )
 
   return item.ItemAdmin(
+      model=mocked_model,
+      admin_site=mocked_admin_site,
+  )
+
+
+@pytest.fixture
+def item_attribute_admin(
+    mocked_admin_site: mock.Mock,
+    mocked_model: mock.Mock,
+) -> item_attribute.ItemAttributeAdmin:
+  return item_attribute.ItemAttributeAdmin(
       model=mocked_model,
       admin_site=mocked_admin_site,
   )

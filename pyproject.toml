@@ -54,7 +54,7 @@ django-stubs-ext = '^5.0.4'
 djangorestframework = '^3.15.2'
 drf-nested-routers = '^0.94.1'
 gunicorn = '<25'
-python = '^3.9'
+python = '^3.10'
 python-dotenv = '^1.0.1'
 
 [tool.poetry.group]

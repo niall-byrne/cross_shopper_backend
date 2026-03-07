@@ -38,7 +38,7 @@ class TestItemAdmin:
                 "fields": ("packaging",),
             },
         ), (
-            "CHARACTERISTICS",
+            "CERTIFICATIONS",
             {
                 "fields": (
                     "is_non_gmo",
@@ -76,7 +76,11 @@ class TestItemAdmin:
       self,
       item_admin: "ItemAdmin",
   ) -> None:
-    assert item_admin.search_fields == ("name", "brand__name")
+    assert item_admin.search_fields == (
+        "name",
+        "attribute__name",
+        "brand__name",
+    )
 
   def test_formfield_for_foreignkey__default__correct_sort_order(
       self,

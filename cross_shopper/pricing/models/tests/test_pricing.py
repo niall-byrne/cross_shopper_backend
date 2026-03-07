@@ -58,7 +58,7 @@ class TestPrice:
       price: Price,
   ) -> None:
     assert str(price) == (
-        f"{price.item.full_name}: "
+        f"{price.item.name_full}: "
         f"{price.store.franchise.name}, {price.store.address}, "
         f"Week {price.week} of {price.year}: {price.amount}"
     )

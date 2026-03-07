@@ -13,5 +13,9 @@ item_list_filter = (
         title="packaging",
         parameter_name="packaging__container__name",
     ),
+    GenericListFilter.create(
+        title="attribute",
+        parameter_name="attribute__name",
+    ),
     "name",
 )

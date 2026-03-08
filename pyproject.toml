@@ -62,6 +62,7 @@ python-dotenv = '^1.0.1'
 [tool.poetry.group.dev.dependencies]
 commitizen = '^3.29.0'
 coverage = '^7.6.1'
+django-test-migrations = '^1.4.0'
 factory-boy = '^3.3.1'
 freezegun = '^1.5.1'
 markdown = '^3.7'

@@ -11,6 +11,9 @@ help:
 	@echo "  db-restore        to restore a backup of the production db"
 	@echo "  dev               to start the dev environment"
 	@echo "  dev-db            to rebuild the dev database"
+	@echo "  dj-makemigrations to build all Django migrations"
+	@echo "  dj-migrate        to apply all Django migrations"
+	@echo "  dj-showmigrations to show all Django migrations"
 	@echo "  format-python     to format Python scripts"
 	@echo "  format-shell      to format shell scripts"
 	@echo "  format-toml       to format TOML files"
@@ -63,6 +66,18 @@ db-restore:
 	@echo "Restoring production database ..."
 	@echo "Are you sure? [Y/n] " && read ANS && [ $${ANS:-N} = Y ]
 	@cp -vp ~/iCloud/Databases/cross_shopper/"__latest__.sqlite" ./cross_shopper/db.production.sqlite
+
+dj-makemigrations:
+	@echo "Building database migrations ..."
+	@poetry run cross_shopper/manage.py makemigrations
+
+dj-migrate:
+	@echo "Applying database migrations ..."
+	@poetry run cross_shopper/manage.py migrate
+
+dj-showmigrations:
+	@echo "Displaying database migrations ..."
+	@poetry run cross_shopper/manage.py showmigrations
 
 dev:
 	@echo "Starting Django development environment ..."

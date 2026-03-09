@@ -6,6 +6,7 @@ import pytest
 from items.models import Packaging
 from items.models.serializers.read_write.packaging import PackagingSerializerRW
 from rest_framework.exceptions import ErrorDetail, ValidationError
+from utilities.strings.title import TitleString
 
 
 @pytest.mark.django_db
@@ -56,7 +57,9 @@ class TestPackagingSerializerRW:
     assert instance.unit.name == packaging_data["unit"]
     assert isinstance(packaging_data["container"], str)
     assert instance.container is not None
-    assert instance.container.name == packaging_data["container"].capitalize()
+    assert instance.container.name == (
+        TitleString(packaging_data["container"]).as_title()
+    )
 
   def test_deserialization__valid_input__existing_components__correct_model(
       self,

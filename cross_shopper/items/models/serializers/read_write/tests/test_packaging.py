@@ -20,6 +20,7 @@ class TestPackagingSerializerRW:
   ) -> None:
     serialized = PackagingSerializerRW(packaging_as_bulk)
 
+    assert packaging_as_bulk.container is None
     assert serialized.data == {
         "quantity": packaging_as_bulk.quantity,
         "unit": packaging_as_bulk.unit.name,

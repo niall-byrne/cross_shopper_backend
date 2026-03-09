@@ -3,6 +3,7 @@
 from typing import TypeVar
 
 from utilities.models.fields.bases.transform_base import TransformCharFieldBase
+from utilities.strings.title import TitleString
 from .blonde import BlondeCharField
 
 _ST = TypeVar("_ST")
@@ -17,4 +18,4 @@ class TitleField(
 
   def transform(self, value: str) -> str:
     """Transform the field value into a new form."""
-    return value.capitalize()
+    return TitleString(value).as_title()

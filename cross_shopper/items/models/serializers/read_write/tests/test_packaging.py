@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 import pytest
 from items.models.serializers.read_write.packaging import PackagingSerializerRW
 from rest_framework.exceptions import ErrorDetail, ValidationError
+from utilities.strings.title import TitleString
 
 if TYPE_CHECKING:  # no cover
   from items.models import Packaging
@@ -58,7 +59,9 @@ class TestPackagingSerializerRW:
     assert instance.unit.name == packaging_data["unit"]
     assert isinstance(packaging_data["container"], str)
     assert instance.container is not None
-    assert instance.container.name == packaging_data["container"].capitalize()
+    assert instance.container.name == (
+        TitleString(packaging_data["container"]).as_title()
+    )
 
   def test_deserialization__valid_input__existing_components__correct_model(
       self,

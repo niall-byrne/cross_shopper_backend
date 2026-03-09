@@ -9,9 +9,9 @@ _ST = TypeVar("_ST")
 _GT = TypeVar("_GT")
 
 
-class LowerCaseField(
+class LowerCaseField(  # type: ignore[misc]
     TransformCharFieldBase[_ST, _GT],
-    BlondeCharField[_ST, _GT],
+    BlondeCharField,
 ):
   """Adds lower case transformations to the BlondeCharField."""
 

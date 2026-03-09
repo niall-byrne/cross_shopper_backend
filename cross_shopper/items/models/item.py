@@ -60,7 +60,7 @@ class Item(
   @property
   def name_attributed(self) -> str:
     """Generate the name of this Item with an attribute summary."""
-    basename = self.name
+    basename = str(self.name)
     summary = self.attribute_summary
 
     if summary:

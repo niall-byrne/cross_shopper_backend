@@ -18,7 +18,7 @@ class TestLowerCaseField:
     assert isinstance(lower_case_field_instance, BlondeCharField)
     assert isinstance(lower_case_field_instance, models.CharField)
 
-  @override_settings(**{BlondeCharField.CONFIG_KEY: {}})
+  @override_settings(**{"BlondeCharField.CONFIG_KEY": {}})
   @pytest.mark.parametrize("value", ["STRING1", "string2"])
   def test_pre_save__string__converts_to_lowercase(
       self,

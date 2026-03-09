@@ -6,15 +6,30 @@ import pytest
 from django.test import override_settings
 from rest_framework import serializers
 from utilities.models.serializers.fields.title import TitleField
+from utilities.strings.tests.scenarios import title_string_scenarios
 
 
 class TestTitleField:
 
+  @title_string_scenarios
+  def test_deserialize__transforms_to_title_value(
+      self,
+      title_field_serializer: Type[serializers.Serializer[Any]],
+      input_string: str,
+      expected_string: str,
+  ) -> None:
+    serializer = title_field_serializer(data={
+        "field": input_string,
+    })
+    serializer.is_valid(raise_exception=True)
+
+    assert serializer.data["field"] == expected_string.strip()
+
   @pytest.mark.parametrize(
       "clean,dirty", [
-          ("Simple string", "simple STRING"),
-          ("Simple string", "SIMPLE <a>STRING</a>"),
-          ("Simple &amp; string", "SIMPLE & string"),
+          ("Simple STRING", "simple STRING"),
+          ("SIMPLE STRING", "SIMPLE <a>STRING</a>"),
+          ("SIMPLE &amp; String", "SIMPLE & String"),
       ]
   )
   @override_settings(**{TitleField.CONFIG_KEY: {}})
@@ -33,9 +48,9 @@ class TestTitleField:
 
   @pytest.mark.parametrize(
       "clean,dirty", [
-          ("Simple string", "simple STRING"),
-          ("Simple string", "SIMPLE <a>STRING</a>"),
-          ("Simple & string", "SIMPLE & string"),
+          ("Simple STRING", "simple STRING"),
+          ("SIMPLE STRING", "SIMPLE <a>STRING</a>"),
+          ("SIMPLE & String", "SIMPLE & string"),
       ]
   )
   @override_settings(**{TitleField.CONFIG_KEY: {"&amp;": "&"}})

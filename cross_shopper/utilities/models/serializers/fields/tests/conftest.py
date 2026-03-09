@@ -146,6 +146,6 @@ def creatable_slug_related_field_serializer(
 def title_field_serializer() -> Type[serializers.Serializer[Any]]:
 
   class TestSerializer(serializers.Serializer[Any]):
-    field = title.TitleField()
+    field = title.TitleField(allow_blank=True)
 
   return TestSerializer

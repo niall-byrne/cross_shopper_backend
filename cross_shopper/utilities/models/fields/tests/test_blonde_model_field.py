@@ -2,7 +2,7 @@
 
 import pytest
 from django.test import override_settings
-from django_bleach.models import BleachField
+from django_nh3.models import Nh3CharField
 from utilities.models.fields.blonde import BlondeCharField
 from .conftest import AliasSetupMockModel
 
@@ -11,10 +11,10 @@ class TestBlondeCharField:
 
   def test_inheritance(
       self,
-      blonde_char_field_instance: BlondeCharField[str, str],
+      blonde_char_field_instance: BlondeCharField,
   ) -> None:
     assert isinstance(blonde_char_field_instance, BlondeCharField)
-    assert isinstance(blonde_char_field_instance, BleachField)
+    assert isinstance(blonde_char_field_instance, Nh3CharField)
 
   @override_settings(**{BlondeCharField.CONFIG_KEY: {}})
   @pytest.mark.parametrize(
@@ -24,7 +24,7 @@ class TestBlondeCharField:
   )
   def test_pre_save__string__no_restore_config__converts_to_sanitized(
       self,
-      blonde_char_field_instance: BlondeCharField[str, str],
+      blonde_char_field_instance: BlondeCharField,
       setup_mock_model: AliasSetupMockModel,
       value: str,
       expected: str,
@@ -44,7 +44,7 @@ class TestBlondeCharField:
   )
   def test_pre_save__string__with_restore_config__restores_sanitized_value(
       self,
-      blonde_char_field_instance: BlondeCharField[str, str],
+      blonde_char_field_instance: BlondeCharField,
       setup_mock_model: AliasSetupMockModel,
       value: str,
       expected: str,
@@ -59,7 +59,7 @@ class TestBlondeCharField:
   def test_pre_save__none__returns_none(
       self,
       setup_mock_model: AliasSetupMockModel,
-      blonde_char_field_instance: BlondeCharField[None, None],
+      blonde_char_field_instance: BlondeCharField,
   ) -> None:
 
     model = setup_mock_model("field_name", None)

@@ -10,9 +10,9 @@ _ST = TypeVar("_ST")
 _GT = TypeVar("_GT")
 
 
-class TitleField(
+class TitleField(  # type: ignore[misc]
     TransformCharFieldBase[_ST, _GT],
-    BlondeCharField[_ST, _GT],
+    BlondeCharField,
 ):
   """Adds title case transformations to the BlondeCharField."""
 

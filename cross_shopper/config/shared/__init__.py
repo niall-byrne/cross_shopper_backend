@@ -15,8 +15,8 @@ from pathlib import Path
 import django_stubs_ext
 from dotenv import load_dotenv
 from .address import *  # noqa: F403, F401
-from .bleach import *  # noqa: F403, F401
 from .constance import *  # noqa: F403, F401
+from .nh3 import *  # noqa: F403, F401
 from .rest_framework import *  # noqa: F403, F401
 
 load_dotenv()
@@ -44,9 +44,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "constance",
+    "django_nh3",
     "api",
     "address",
-    "django_bleach",
     "errors",
     "items",
     "pricing",

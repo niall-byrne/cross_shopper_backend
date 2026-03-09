@@ -26,7 +26,7 @@ def setup_mock_model() -> AliasSetupMockModel:
 
 
 @pytest.fixture
-def blonde_char_field_instance() -> BlondeCharField[str, str]:
+def blonde_char_field_instance() -> BlondeCharField:
   return BlondeCharField()
 
 

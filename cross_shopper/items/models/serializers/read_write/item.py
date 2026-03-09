@@ -9,6 +9,9 @@ from scrapers.models.serializers.read_only.scraper_config import (
     ScraperConfigSerializerRO,
 )
 from utilities.models.serializers.fields.blonde import BlondeCharField
+from utilities.models.serializers.fields.slug_related_field import (
+    CreatableSlugRelatedField,
+)
 
 if TYPE_CHECKING:  # no cover
   from scrapers.models.scraper_config import ScraperConfig
@@ -19,10 +22,10 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
 
   name = BlondeCharField(max_length=80, allow_blank=False)
   full_name = serializers.CharField(read_only=True)
-  brand = BlondeCharField(
-      max_length=80,
-      allow_blank=False,
-      source="brand.name",
+  brand = CreatableSlugRelatedField(
+      case_sensitive=False,
+      queryset=Brand.objects.all(),
+      slug_field="name",
   )
   packaging = PackagingSerializerRW()
   is_bulk = serializers.BooleanField(read_only=True)
@@ -44,8 +47,6 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
 
   def create(self, validated_data: Dict[str, Any]) -> Item:
     """Create a new instance."""
-    brand = Brand.objects.get_or_create(**validated_data.pop("brand"))[0]
-
     packaging = cast(
         "PackagingSerializerRW",
         self.fields["packaging"],
@@ -61,7 +62,6 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
 
     item = Item.objects.create(
         **validated_data,
-        brand=brand,
         packaging=packaging,
     )
     item.scraper_config.set(scraper_config)

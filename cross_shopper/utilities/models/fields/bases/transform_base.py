@@ -14,11 +14,11 @@ class TransformCharFieldBase(models.CharField[_ST, _GT], ABC):
 
   def pre_save(self, model_instance: models.Model, add: bool) -> Any:
     """Return field's value just before saving."""
-    value = super().pre_save(model_instance, add)
+    value = getattr(model_instance, self.attname)
     if isinstance(value, str):
       value = self.transform(value)
       setattr(model_instance, self.attname, value)
-    return value
+    return super().pre_save(model_instance, add)
 
   @abc.abstractmethod
   def transform(self, value: str) -> str:

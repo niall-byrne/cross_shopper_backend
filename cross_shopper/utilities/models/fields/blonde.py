@@ -1,25 +1,28 @@
 """A django-bleach sanitizing CharField implementation."""
+from __future__ import annotations
 
-from typing import TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from django.conf import settings
 from django_bleach.models import BleachField
-from .bases.transform_base import TransformCharFieldBase
+
+if TYPE_CHECKING:
+  from django.db.models import Model
 
 _ST = TypeVar("_ST")
 _GT = TypeVar("_GT")
 
 
-class BlondeCharField(
-    TransformCharFieldBase[_ST, _GT],
-    BleachField[_ST, _GT],
-):
+class BlondeCharField(BleachField[_ST, _GT]):
   """Adds HTML sanitization & restoration to a CharField."""
 
   CONFIG_KEY = "BLEACH_RESTORE_CONFIG"
 
-  def transform(self, value: str) -> str:
-    """Transform the field value into a new form."""
-    for bleached, restored in getattr(settings, self.CONFIG_KEY, {}).items():
-      value = value.replace(bleached, restored)
+  def pre_save(self, model_instance: Model, add: bool) -> Any:
+    """Return field's value just before saving."""
+    value = super().pre_save(model_instance, add)
+    if value:
+      for bleached, restored in getattr(settings, self.CONFIG_KEY, {}).items():
+        value = value.replace(bleached, restored)
+      setattr(model_instance, self.attname, value)
     return value

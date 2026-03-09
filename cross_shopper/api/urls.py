@@ -6,6 +6,7 @@ from .views.errors import ErrorViewSet
 from .views.pricing import PricingViewSet
 from .views.report_pricing import ReportPricingReadOnlyViewSet
 from .views.report_summary import ReportSummaryReadOnlyViewSet
+from .views.report_target import ReportTargetReadOnlyViewSet
 from .views.reports import ReportsReadOnlyViewSet
 from .views.scrapers import ScrapersReadOnlyViewSet
 
@@ -16,6 +17,11 @@ router.register(
     r"reports/summaries",
     ReportSummaryReadOnlyViewSet,
     basename="report_summary",
+)
+router.register(
+    r"reports/targets",
+    ReportTargetReadOnlyViewSet,
+    basename="report_target",
 )
 router.register(r"reports", ReportsReadOnlyViewSet)
 router.register(r"scrapers", ScrapersReadOnlyViewSet)

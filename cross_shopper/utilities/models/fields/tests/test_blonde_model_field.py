@@ -1,8 +1,8 @@
 """Test the BlondeCharField custom field."""
 
 import pytest
-from django.db import models
 from django.test import override_settings
+from django_bleach.models import BleachField
 from utilities.models.fields.blonde import BlondeCharField
 from .conftest import AliasSetupMockModel
 
@@ -14,7 +14,7 @@ class TestBlondeCharField:
       blonde_char_field_instance: BlondeCharField[str, str],
   ) -> None:
     assert isinstance(blonde_char_field_instance, BlondeCharField)
-    assert isinstance(blonde_char_field_instance, models.CharField)
+    assert isinstance(blonde_char_field_instance, BleachField)
 
   @override_settings(**{BlondeCharField.CONFIG_KEY: {}})
   @pytest.mark.parametrize(

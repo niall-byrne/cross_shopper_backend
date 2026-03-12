@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.core.exceptions import ValidationError
+from items import constants
 from items.models import Packaging
 
 if TYPE_CHECKING:
@@ -132,6 +133,6 @@ class TestPackaging:
     )
 
     assert str(packaging) == (
-        f"{packaging.CONTAINER_NAME_FOR_BULK_PACKAGING} per "
+        f"{constants.PACKAGING_CONTAINER_NAME_FOR_BULK_PACKAGING} per "
         f"{str(packaging.unit)}"
     )

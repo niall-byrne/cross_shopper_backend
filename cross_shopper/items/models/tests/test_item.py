@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Callable
 
 import pytest
+from items import constants
 
 if TYPE_CHECKING:
   from items.models import Attribute, Item, Packaging
@@ -118,7 +119,7 @@ class TestItem:
               True, True, lambda item: [
                   " ".join(
                       [
-                          item.NAME_PREFIX_ORGANIC,
+                          constants.ITEM_NAME_PREFIX_ORGANIC,
                           item.name,
                           item.attribute_summary,
                       ]
@@ -140,7 +141,7 @@ class TestItem:
           (
               True, False, lambda item: [
                   " ".join([
-                      item.NAME_PREFIX_ORGANIC,
+                      constants.ITEM_NAME_PREFIX_ORGANIC,
                       item.name,
                   ]),
                   item.brand,

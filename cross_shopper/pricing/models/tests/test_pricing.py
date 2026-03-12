@@ -17,14 +17,6 @@ if TYPE_CHECKING:
 @pytest.mark.django_db
 class TestPrice:
 
-  day_of_week_for_pricing = Price.DAY_OF_WEEK_FOR_PRICING
-
-  def test_initialize__defined__attributes(
-      self,
-      price: Price,
-  ) -> None:
-    assert price.DAY_OF_WEEK_FOR_PRICING == 3
-
   def test_initialize__defaults__attributes(
       self,
       price_today: Price,

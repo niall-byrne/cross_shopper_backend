@@ -20,7 +20,6 @@ from .managers.last_52_weeks import AggregateLast52WeeksManager
 class Price(
     ModelBase,
 ):
-  DAY_OF_WEEK_FOR_PRICING = 3  # Thursday
 
   amount = models.DecimalField(
       decimal_places=2,

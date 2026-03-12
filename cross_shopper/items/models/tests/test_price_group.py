@@ -46,7 +46,6 @@ class TestPriceGroup:
       self,
       item: "Item",
   ) -> None:
-    assert item.price_group is not None
     incompatible_packaging_unit = PackagingUnit.objects.create(
         name="incompatible",
     )
@@ -67,7 +66,6 @@ class TestPriceGroup:
       self,
       item: "Item",
   ) -> None:
-    assert item.price_group is not None
     assert item.price_group.has_item is True
 
   def test_items__no_related_item___returns_empty_query_set(
@@ -80,7 +78,6 @@ class TestPriceGroup:
       self,
       item: "Item",
   ) -> None:
-    assert item.price_group is not None
     assert list(item.price_group.items) == [item]
 
   def test_str__returns_group_name(

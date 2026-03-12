@@ -49,8 +49,6 @@ class Item(
   price_group = models.ForeignKey(
       'items.PriceGroup',
       on_delete=models.PROTECT,
-      null=True,
-      blank=True,
   )
   scraper_config = models.ManyToManyField(
       'scrapers.ScraperConfig',
@@ -66,9 +64,8 @@ class Item(
     """Pre-save verification."""
     if self.is_organic:
       self.is_non_gmo = True
-    if self.price_group:
-      if self.price_group.unit.name != self.packaging.unit.name:
-        raise ValidationError(VALIDATION_ERRORS['invalid_price_group'])
+    if self.price_group.unit.name != self.packaging.unit.name:
+      raise ValidationError(VALIDATION_ERRORS['invalid_price_group'])
 
   @property
   def attribute_summary(self) -> str:

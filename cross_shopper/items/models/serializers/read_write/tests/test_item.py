@@ -47,7 +47,6 @@ class TestItemSerializerRW:
     assert item_instance.packaging.container.name == \
         item_data['packaging']['container']
 
-    assert item_instance.price_group is not None
     assert item_instance.price_group.name == \
         item_data['price_group']['name']
 

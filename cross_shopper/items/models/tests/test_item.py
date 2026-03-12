@@ -36,19 +36,10 @@ class TestItem:
 
     assert item.is_non_gmo is True
 
-  def test_clean__price_group_is_none__allows_save(
-      self,
-      item: Item,
-  ) -> None:
-    item.price_group = None
-
-    item.save()
-
   def test_clean__price_group_incompatible__raises_exception(
       self,
       item: Item,
   ) -> None:
-    assert item.price_group is not None
     item.price_group.unit = PackagingUnit.objects.create(name="incompatible")
 
     with pytest.raises(ValidationError) as exc:

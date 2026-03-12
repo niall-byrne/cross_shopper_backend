@@ -78,7 +78,6 @@ class TestPriceGroup:
       self,
       item_not_organic: "Item",
   ) -> None:
-    assert item_not_organic.price_group is not None
     item_not_organic.price_group.is_non_gmo = not item_not_organic.is_non_gmo
 
     with pytest.raises(ValidationError) as exc:
@@ -102,7 +101,6 @@ class TestPriceGroup:
       self,
       item_organic: "Item",
   ) -> None:
-    assert item_organic.price_group is not None
     item_organic.price_group.is_organic = not item_organic.is_organic
 
     with pytest.raises(ValidationError) as exc:
@@ -126,7 +124,6 @@ class TestPriceGroup:
       self,
       item: "Item",
   ) -> None:
-    assert item.price_group is not None
     incompatible_packaging_unit = PackagingUnit.objects.create(
         name="incompatible",
     )
@@ -190,7 +187,6 @@ class TestPriceGroup:
       self,
       item: "Item",
   ) -> None:
-    assert item.price_group is not None
     assert item.price_group.has_item is True
 
   def test_items__no_related_item___returns_empty_query_set(
@@ -203,7 +199,6 @@ class TestPriceGroup:
       self,
       item: "Item",
   ) -> None:
-    assert item.price_group is not None
     assert list(item.price_group.items) == [item]
 
   @pytest.mark.parametrize(

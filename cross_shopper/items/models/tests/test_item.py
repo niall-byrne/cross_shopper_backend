@@ -36,19 +36,10 @@ class TestItem:
 
     assert item_organic.is_non_gmo is True
 
-  def test_clean__price_group_is_none__allows_save(
-      self,
-      item: Item,
-  ) -> None:
-    item.price_group = None
-
-    item.save()
-
   def test_clean__organic_certification_incompatible__raises_exception(
       self,
       item_organic: Item,
   ) -> None:
-    assert item_organic.price_group is not None
     item_organic.price_group.is_organic = not item_organic.is_organic
 
     with pytest.raises(ValidationError) as exc:
@@ -72,7 +63,6 @@ class TestItem:
       self,
       item_not_organic: Item,
   ) -> None:
-    assert item_not_organic.price_group is not None
     item_not_organic.price_group.is_non_gmo = not item_not_organic.is_non_gmo
 
     with pytest.raises(ValidationError) as exc:
@@ -96,7 +86,6 @@ class TestItem:
       self,
       item: Item,
   ) -> None:
-    assert item.price_group is not None
     item.price_group.unit = PackagingUnit.objects.create(name="incompatible")
 
     with pytest.raises(ValidationError) as exc:

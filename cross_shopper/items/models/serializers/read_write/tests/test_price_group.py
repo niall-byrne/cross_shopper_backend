@@ -113,7 +113,6 @@ class TestPriceGroupSerializerRW:
       item: "Item",
       missing_field: str,
   ) -> None:
-    assert item.price_group is not None
     price_group_data: "AliasPriceGroupData" = {
         'attribute': [
             "new_attribute1",

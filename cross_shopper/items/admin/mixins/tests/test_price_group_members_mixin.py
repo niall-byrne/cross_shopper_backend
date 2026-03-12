@@ -12,14 +12,6 @@ if TYPE_CHECKING:  # no cover
 @pytest.mark.django_db
 class TestPriceGroupMembersAdminMixin:
 
-  def test_members__with_none__returns_correct_html(
-      self,
-      price_group_members_admin: PriceGroupMembersAdminMixin,
-  ) -> None:
-    html = price_group_members_admin.members(None)
-
-    assert html == '<ul style="margin-left: auto;"></ul>'
-
   def test_members__with_an_empty_price_group__returns_correct_html(
       self,
       price_group: "PriceGroup",

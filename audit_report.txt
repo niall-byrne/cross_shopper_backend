@@ -1,0 +1,29 @@
+# Docstring Audit Report
+
+## `cross_shopper/api/views/errors/filters.py`
+- Class 'ErrorFilter' docstring might reference wrong model (expected 'Error'). Found: 'Pricing API endpoint filter.'
+
+## `cross_shopper/api/views/report_summary/filters.py`
+- Module docstring might reference 'Report' instead of 'ReportSummary'
+
+## `cross_shopper/api/views/report_summary/tests/test_report_summary_create.py`
+- Class 'TestReportReadOnlyViewSet' is named incorrectly for ReportSummary tests (should be TestReportSummary...)
+- Class 'TestReportReadOnlyViewSet' docstring is 'Test for the ReportReadOnlyViewSet create view.' (should be ReportSummary...)
+
+## `cross_shopper/api/views/report_target/tests/test_report_target_create.py`
+- Class 'TestReportsReadOnlyViewSetCreate' is named incorrectly for ReportTarget tests (should be TestReportTarget...)
+
+## `cross_shopper/api/views/report_target/tests/test_report_target_list.py`
+- Class 'TestReportTargetReadOnlyViewSetList' methods use generic Report objects but docstring is 'Test for the ReportTargetReadOnlyViewSet list view.' (correct but generic)
+
+## `cross_shopper/items/models/serializers/read_write/price_group.py`
+- Found 'accross' in docstring: 'Perform model level validation accross all seriali'...
+
+## `cross_shopper/reports/models/fixtures/report_summary.py`
+- Module docstring might reference 'Report' instead of 'ReportSummary'
+
+## `cross_shopper/reports/models/serializers/read_only/report_summary/item_price_historical.py`
+- Duplicate docstring 'Get the average price for this item at the report stores.' found in methods: get_average, get_high, get_low
+
+## `cross_shopper/utilities/views/filtersets/tests/conftest.py`
+- Class 'MockFilterSet' docstring might reference wrong model (expected 'MockModel'). Found: 'A mock filterset for testing.'

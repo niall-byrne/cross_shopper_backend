@@ -2,6 +2,8 @@
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from items import constants
+from rest_framework import serializers
 from utilities.models.bases.model_base import ModelBase
 from utilities.models.validators.greater_than_zero import (
     validator_greater_than_zero,
@@ -11,8 +13,6 @@ from utilities.models.validators.greater_than_zero import (
 class Packaging(
     ModelBase,
 ):
-  CONTAINER_NAME_FOR_BULK_PACKAGING = "Bulk"
-  VALIDATION_ERROR_MISSING_FIELD = "This field is required."
 
   class Meta:
     verbose_name_plural = "Packaging"
@@ -43,19 +43,24 @@ class Packaging(
     if self.quantity is None and (self.container is not None):
       raise ValidationError(
           {
-              "quantity": [self.VALIDATION_ERROR_MISSING_FIELD],
+              "quantity":
+                  [str(serializers.Field.default_error_messages["required"])],
           }
       )
     if self.container is None and (self.quantity is not None):
       raise ValidationError(
           {
-              "container": [self.VALIDATION_ERROR_MISSING_FIELD],
+              "container":
+                  [str(serializers.Field.default_error_messages["required"])],
           }
       )
 
   def __str__(self) -> str:
     if self.quantity is None and self.container is None:
-      return f"{self.CONTAINER_NAME_FOR_BULK_PACKAGING} per {str(self.unit)}"
+      return (
+          f"{constants.PACKAGING_CONTAINER_NAME_FOR_BULK_PACKAGING} per "
+          f"{str(self.unit)}"
+      )
     return (
         f"{str(self.container)}: "
         f"{str(self.quantity).replace('.00', '')} "

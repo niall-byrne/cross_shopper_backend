@@ -1,8 +1,8 @@
 """Test the Item model."""
-
 from typing import TYPE_CHECKING, Callable, List
 
 import pytest
+from items import constants
 
 if TYPE_CHECKING:  # no cover
   from items.models import Attribute, Item, Packaging
@@ -117,7 +117,7 @@ class TestItem:
               True, True, lambda item: [
                   " ".join(
                       [
-                          item.NAME_PREFIX_ORGANIC,
+                          constants.ITEM_NAME_PREFIX_ORGANIC,
                           item.name,
                           item.attribute_summary,
                       ]
@@ -139,7 +139,7 @@ class TestItem:
           (
               True, False, lambda item: [
                   " ".join([
-                      item.NAME_PREFIX_ORGANIC,
+                      constants.ITEM_NAME_PREFIX_ORGANIC,
                       item.name,
                   ]),
                   item.brand,

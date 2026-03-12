@@ -1,6 +1,7 @@
 """Item model."""
 
 from django.db import models
+from items import constants
 from utilities.models.bases.model_base import ModelBase
 from utilities.models.fields.blonde import BlondeCharField
 
@@ -8,8 +9,6 @@ from utilities.models.fields.blonde import BlondeCharField
 class Item(
     ModelBase,
 ):
-  NAME_PREFIX_ORGANIC = "Organic"
-
   is_non_gmo = models.BooleanField()
   is_organic = models.BooleanField()
 
@@ -73,5 +72,5 @@ class Item(
     basename = self.name_attributed
 
     if self.is_organic:
-      basename = " ".join([self.NAME_PREFIX_ORGANIC, basename])
+      basename = " ".join([constants.ITEM_NAME_PREFIX_ORGANIC, basename])
     return ", ".join([basename, str(self.brand), str(self.packaging)])

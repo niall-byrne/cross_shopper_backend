@@ -3,6 +3,7 @@
 from typing import Callable, List
 
 import pytest
+from items import constants
 from items.models import Attribute, Item, Packaging
 
 
@@ -119,7 +120,7 @@ class TestItem:
               lambda item: [
                   " ".join(
                       [
-                          item.NAME_PREFIX_ORGANIC,
+                          constants.ITEM_NAME_PREFIX_ORGANIC,
                           item.name,
                           item.attribute_summary,
                       ]
@@ -145,7 +146,7 @@ class TestItem:
               False,
               lambda item: [
                   " ".join([
-                      item.NAME_PREFIX_ORGANIC,
+                      constants.ITEM_NAME_PREFIX_ORGANIC,
                       item.name,
                   ]),
                   item.brand,

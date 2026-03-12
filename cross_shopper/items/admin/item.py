@@ -5,10 +5,12 @@ from typing import TYPE_CHECKING
 from constance import config
 from django.contrib import admin
 from items.admin.inlines.item import item_inlines
+from items.admin.list_displays.item import item_list_display
 from items.admin.list_filters.item import item_list_filter
 from items.admin.mixins.price_group_members import PriceGroupMembersAdminMixin
 from items.models import Brand, Item, Packaging
 from reports.models import Report
+from utilities.admin.list_displays.decorator import generate_list_display
 
 if TYPE_CHECKING:  # no cover
   from typing import Any
@@ -18,6 +20,7 @@ if TYPE_CHECKING:  # no cover
   from django.http import HttpRequest
 
 
+@generate_list_display(item_list_display)
 class ItemAdmin(admin.ModelAdmin[Item], PriceGroupMembersAdminMixin):
   fieldsets = (
       (

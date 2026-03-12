@@ -33,8 +33,8 @@ class Item(
   price_group = models.ForeignKey(
       'items.PriceGroup',
       on_delete=models.PROTECT,
-      null=True,
       blank=True,
+      null=True,
   )
   scraper_config = models.ManyToManyField(
       'scrapers.ScraperConfig',

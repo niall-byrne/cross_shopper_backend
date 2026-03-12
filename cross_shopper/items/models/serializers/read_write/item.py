@@ -45,7 +45,7 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
   is_bulk = serializers.BooleanField(read_only=True)
   scraper_config = ScraperConfigSerializerRO(many=True)
 
-  def to_internal_value(self, data: Any) -> Any:
+  def to_internal_value(self, data: dict[str, Any]) -> Any:
     """Append derived values to the price_group serializer data."""
     price_group_data = data.get("price_group")
     packaging_data = data.get("packaging", {})

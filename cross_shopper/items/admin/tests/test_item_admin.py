@@ -8,6 +8,7 @@ import pytest
 from constance.test import override_config
 from django.contrib import admin
 from items.admin.inlines.item import item_inlines
+from items.admin.list_displays.item import item_list_display
 from items.admin.list_filters.item import item_list_filter
 from items.admin.mixins.price_group_members import PriceGroupMembersAdminMixin
 
@@ -61,6 +62,12 @@ class TestItemAdmin:
       item_admin: ItemAdmin,
   ) -> None:
     assert item_admin.inlines == item_inlines
+
+  def test_instantiate__has_correct_list_display(
+      self,
+      item_admin: ItemAdmin,
+  ) -> None:
+    assert item_admin.list_display == tuple(map(str, item_list_display))
 
   def test_instantiate__has_correct_list_filter(
       self,

@@ -5,9 +5,12 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.db.models import QuerySet
-from items.models import Attribute, Brand, Item, Packaging
+from items.models import Attribute, Brand, Item, Packaging, PriceGroup
 from items.models.serializers.read_write.item import ItemSerializerRW
 from items.models.serializers.read_write.packaging import PackagingSerializerRW
+from items.models.serializers.read_write.price_group import (
+    PriceGroupSerializerRW,
+)
 from rest_framework.exceptions import ErrorDetail, ValidationError
 from scrapers.models.scraper_config import ScraperConfig
 from scrapers.models.serializers.read_only.scraper_config import (
@@ -43,6 +46,10 @@ class TestItemSerializerRW:
     assert item_instance.packaging.container is not None
     assert item_instance.packaging.container.name == \
         item_data['packaging']['container']
+
+    assert item_instance.price_group is not None
+    assert item_instance.price_group.name == \
+        item_data['price_group']['name']
 
     assert item_instance.is_non_gmo == item_data['is_non_gmo']
     assert item_instance.is_organic == item_data['is_organic']
@@ -83,6 +90,8 @@ class TestItemSerializerRW:
             item.brand.name,
         'packaging':
             PackagingSerializerRW(item.packaging).data,
+        'price_group':
+            PriceGroupSerializerRW(item.price_group).data,
         'is_bulk':
             item.is_bulk,
         'is_non_gmo':
@@ -111,6 +120,12 @@ class TestItemSerializerRW:
             "unit": "pcs",
             "container": "Bag"
         },
+        "price_group":
+            {
+                "name": "Avocados Price Group",
+                "quantity": 1,
+                "unit": "pcs"
+            },
         "is_non_gmo":
             False,
         "is_organic":
@@ -144,7 +159,11 @@ class TestItemSerializerRW:
       brand: "Brand",
       scraper: "Scraper",
       packaging_as_non_bulk: "Packaging",
+      price_group: "PriceGroup",
   ) -> None:
+    price_group.unit = packaging_as_non_bulk.unit
+    price_group.save()
+
     assert packaging_as_non_bulk.unit is not None
     assert packaging_as_non_bulk.container is not None
     item_data: AliasNestedItemData = {
@@ -159,6 +178,9 @@ class TestItemSerializerRW:
                 "unit": packaging_as_non_bulk.unit.name,
                 "container": packaging_as_non_bulk.container.name,
             },
+        "price_group": {
+            "name": price_group.name,
+        },
         "is_non_gmo":
             False,
         "is_organic":
@@ -232,6 +254,12 @@ class TestItemSerializerRW:
                     ErrorDetail(
                         string='This field is required.', code='required'
                     )
+                ],
+            'price_group':
+                [
+                    ErrorDetail(
+                        string='This field is required.', code='required'
+                    )
                 ]
         }
     )
@@ -241,7 +269,11 @@ class TestItemSerializerRW:
       brand: "Brand",
       scraper: "Scraper",
       packaging_as_non_bulk: "Packaging",
+      price_group: "PriceGroup",
   ) -> None:
+    price_group.unit = packaging_as_non_bulk.unit
+    price_group.save()
+
     assert packaging_as_non_bulk.unit is not None
     assert packaging_as_non_bulk.container is not None
     item_data: AliasNestedItemData = {
@@ -256,6 +288,9 @@ class TestItemSerializerRW:
                 "unit": packaging_as_non_bulk.unit.name,
                 "container": packaging_as_non_bulk.container.name,
             },
+        "price_group": {
+            "name": price_group.name,
+        },
         "is_non_gmo":
             False,
         "is_organic":

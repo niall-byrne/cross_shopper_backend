@@ -13,5 +13,6 @@ item_list_filter = (
         title='packaging',
         parameter_name='packaging__container__name',
     ),
+    'price_group',
     'name',
 )

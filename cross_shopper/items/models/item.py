@@ -1,9 +1,26 @@
 """Item model."""
 
 from django.db import models
+from django.forms import ValidationError
 from items import constants
 from utilities.models.bases.model_base import ModelBase
 from utilities.models.fields.blonde import BlondeCharField
+
+VALIDATION_ERRORS = {
+    'invalid_price_group':
+        {
+            'packaging':
+                [
+                    'The price group comparison unit must match the '
+                    'packaging unit!',
+                ],
+            'price_group':
+                [
+                    'The price group comparison unit must match the '
+                    'packaging unit!',
+                ]
+        }
+}
 
 
 class Item(
@@ -29,6 +46,12 @@ class Item(
       'items.Packaging',
       on_delete=models.PROTECT,
   )
+  price_group = models.ForeignKey(
+      'items.PriceGroup',
+      on_delete=models.PROTECT,
+      null=True,
+      blank=True,
+  )
   scraper_config = models.ManyToManyField(
       'scrapers.ScraperConfig',
       through='items.ItemScraperConfig',
@@ -43,6 +66,9 @@ class Item(
     """Pre-save verification."""
     if self.is_organic:
       self.is_non_gmo = True
+    if self.price_group:
+      if self.price_group.unit.name != self.packaging.unit.name:
+        raise ValidationError(VALIDATION_ERRORS['invalid_price_group'])
 
   @property
   def attribute_summary(self) -> str:

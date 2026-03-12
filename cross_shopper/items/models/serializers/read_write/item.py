@@ -4,6 +4,9 @@ from typing import Any, Dict, Sequence, cast
 
 from items.models import Attribute, Brand, Item
 from items.models.serializers.read_write.packaging import PackagingSerializerRW
+from items.models.serializers.read_write.price_group import (
+    PriceGroupSerializerRW,
+)
 from rest_framework import serializers
 from scrapers.models.scraper_config import ScraperConfig
 from scrapers.models.serializers.read_only.scraper_config import (
@@ -33,6 +36,7 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
       slug_field="name",
   )
   packaging = PackagingSerializerRW()
+  price_group = PriceGroupSerializerRW()
   is_bulk = serializers.BooleanField(read_only=True)
   scraper_config = ScraperConfigSerializerRO(many=True)
 
@@ -45,6 +49,7 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
         'name_full',
         'brand',
         'packaging',
+        'price_group',
         'is_bulk',
         'is_non_gmo',
         'is_organic',
@@ -60,6 +65,11 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
         self.fields['packaging'],
     ).create(validated_data.pop('packaging'))
 
+    price_group = cast(
+        PriceGroupSerializerRW,
+        self.fields['price_group'],
+    ).create(validated_data.pop('price_group'))
+
     scraper_config = cast(
         Sequence[ScraperConfig],
         cast(
@@ -71,6 +81,7 @@ class ItemSerializerRW(serializers.ModelSerializer[Item]):
     item = Item.objects.create(
         **validated_data,
         packaging=packaging,
+        price_group=price_group,
     )
     item.attribute.set(attribute)
     item.scraper_config.set(scraper_config)

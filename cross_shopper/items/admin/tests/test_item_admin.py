@@ -8,6 +8,7 @@ from django.contrib import admin
 from items.admin.inlines.item import item_inlines
 from items.admin.item import ItemAdmin
 from items.admin.list_filters.item import item_list_filter
+from items.admin.mixins.price_group_members import PriceGroupMembersAdminMixin
 
 
 @pytest.mark.django_db
@@ -18,6 +19,7 @@ class TestItemAdmin:
       item_admin: ItemAdmin,
   ) -> None:
     assert isinstance(item_admin, admin.ModelAdmin)
+    assert isinstance(item_admin, PriceGroupMembersAdminMixin)
 
   def test_instantiate__has_correct_fieldsets(
       self,
@@ -33,6 +35,11 @@ class TestItemAdmin:
             "PACKAGING",
             {
                 "fields": ('packaging',),
+            },
+        ), (
+            "PRICE COMPARISONS",
+            {
+                "fields": ('price_group', 'price_group_members'),
             },
         ), (
             "CERTIFICATIONS",
@@ -135,6 +142,20 @@ class TestItemAdmin:
         'container__name',
         'quantity',
     )
+
+  def test_price_group_members__passes_price_group_to_mixin(
+      self,
+      item_admin: ItemAdmin,
+      mocked_price_group_members_mixin: mock.Mock,
+  ) -> None:
+    mocked_object = mock.Mock()
+
+    html = item_admin.price_group_members(mocked_object)
+
+    mocked_price_group_members_mixin.assert_called_once_with(
+        mocked_object.price_group
+    )
+    assert html == mocked_price_group_members_mixin.return_value
 
   @pytest.mark.parametrize(
       "model_change", (True, False), ids=lambda b: f"change-{b}"

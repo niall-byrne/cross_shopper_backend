@@ -13,6 +13,7 @@ from items.admin import (
     packaging,
     packaging_container,
     packaging_unit,
+    price_group,
 )
 
 
@@ -43,6 +44,11 @@ def mocked_model() -> mock.Mock:
 
 @pytest.fixture
 def mocked_model_manager() -> mock.Mock:
+  return mock.Mock()
+
+
+@pytest.fixture
+def mocked_price_group_members_mixin() -> mock.Mock:
   return mock.Mock()
 
 
@@ -86,6 +92,7 @@ def item_admin(
     mocked_formfield_for_foreignkey: mock.Mock,
     mocked_model: mock.Mock,
     mocked_model_manager: mock.Mock,
+    mocked_price_group_members_mixin: mock.Mock,
     mocked_report_manger: mock.Mock,
     monkeypatch: pytest.MonkeyPatch,
 ) -> item.ItemAdmin:
@@ -93,11 +100,6 @@ def item_admin(
       admin.ModelAdmin,
       "formfield_for_foreignkey",
       mocked_formfield_for_foreignkey,
-  )
-  monkeypatch.setattr(
-      item.Report,
-      "objects",
-      mocked_report_manger,
   )
   monkeypatch.setattr(
       item.Brand,
@@ -108,6 +110,16 @@ def item_admin(
       item.Packaging,
       "objects",
       mocked_model_manager,
+  )
+  monkeypatch.setattr(
+      item.PriceGroupMembersAdminMixin,
+      "members",
+      mocked_price_group_members_mixin,
+  )
+  monkeypatch.setattr(
+      item.Report,
+      "objects",
+      mocked_report_manger,
   )
 
   return item.ItemAdmin(
@@ -144,6 +156,17 @@ def packaging_admin(
     mocked_model: mock.Mock,
 ) -> packaging.PackagingAdmin:
   return packaging.PackagingAdmin(
+      model=mocked_model,
+      admin_site=mocked_admin_site,
+  )
+
+
+@pytest.fixture
+def price_group_admin(
+    mocked_admin_site: mock.Mock,
+    mocked_model: mock.Mock,
+) -> price_group.PriceGroupAdmin:
+  return price_group.PriceGroupAdmin(
       model=mocked_model,
       admin_site=mocked_admin_site,
   )

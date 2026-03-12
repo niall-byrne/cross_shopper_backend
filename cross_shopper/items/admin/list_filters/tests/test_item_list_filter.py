@@ -29,5 +29,6 @@ class TestItemAdminListFilter:
                 "is_reversed": False,
             }
         ),
+        'price_group',
         'name',
     )

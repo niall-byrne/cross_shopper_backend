@@ -16,3 +16,14 @@ def item(attribute: "Attribute", scraper_config: "ScraperConfig") -> "Item":
       attributes=[attribute],
       scraper_configs=[scraper_config],
   )
+
+
+@pytest.fixture
+def item_alternate(
+    attribute_alternate: "Attribute",
+    scraper_config_alternate: "ScraperConfig",
+) -> "Item":
+  return ItemFactory.create(
+      attributes=[attribute_alternate],
+      scraper_configs=[scraper_config_alternate],
+  )

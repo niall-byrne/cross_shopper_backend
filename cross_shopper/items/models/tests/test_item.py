@@ -2,8 +2,10 @@
 from typing import Callable, List
 
 import pytest
+from django.forms import ValidationError
 from items import constants
-from items.models import Attribute, Item, Packaging
+from items.models import Attribute, Packaging, PackagingUnit
+from items.models.item import VALIDATION_ERRORS, Item
 
 
 @pytest.mark.django_db
@@ -33,6 +35,26 @@ class TestItem:
     item.save()
 
     assert item.is_non_gmo is True
+
+  def test_clean__price_group_is_none__allows_save(
+      self,
+      item: Item,
+  ) -> None:
+    item.price_group = None
+
+    item.save()
+
+  def test_clean__price_group_incompatible__raises_exception(
+      self,
+      item: Item,
+  ) -> None:
+    assert item.price_group is not None
+    item.price_group.unit = PackagingUnit.objects.create(name="incompatible")
+
+    with pytest.raises(ValidationError) as exc:
+      item.save()
+
+    assert str(exc.value) == str(VALIDATION_ERRORS['invalid_price_group'])
 
   @attribute_order_scenario
   def test_attribute_summary__vary_sorted_attributes__returns_correct_summary(

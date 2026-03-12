@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 from freezegun import freeze_time
-from pricing.models import Price
+from pricing.constants import DAY_OF_WEEK_FOR_PRICING
 from pricing.models.defaults import default_pricing_week
 from .scenarios import eoy_boundary_scenarios
 
@@ -14,7 +14,7 @@ class TestDefaultPricingWeek:
 
   @pytest.mark.parametrize(
       "weekday",
-      list(range(0, Price.DAY_OF_WEEK_FOR_PRICING)),
+      list(range(0, DAY_OF_WEEK_FOR_PRICING)),
   )
   def test__call__before_prices_change__returns_expected_value(
       self,
@@ -27,7 +27,7 @@ class TestDefaultPricingWeek:
 
   @pytest.mark.parametrize(
       "weekday",
-      list(range(Price.DAY_OF_WEEK_FOR_PRICING, 7)),
+      list(range(DAY_OF_WEEK_FOR_PRICING, 7)),
   )
   def test__call__after_prices_change__returns_expected_value(
       self,

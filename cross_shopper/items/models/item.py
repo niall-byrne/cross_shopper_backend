@@ -33,8 +33,6 @@ class Item(
   price_group = models.ForeignKey(
       'items.PriceGroup',
       on_delete=models.PROTECT,
-      null=True,
-      blank=True,
   )
   scraper_config = models.ManyToManyField(
       'scrapers.ScraperConfig',
@@ -51,11 +49,9 @@ class Item(
     if self.is_organic:
       self.is_non_gmo = True
 
-    if self.price_group is not None:
-
-      for validator in model_level_validators:
-        if validator.is_model_valid(self):
-          raise validator.generate_model_error()
+    for validator in model_level_validators:
+      if validator.is_model_valid(self):
+        raise validator.generate_model_error()
 
   @property
   def attribute_summary(self) -> str:

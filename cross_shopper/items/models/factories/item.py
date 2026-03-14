@@ -5,11 +5,16 @@ from typing import TYPE_CHECKING, Any, Dict, List
 import factory
 from items.models.factories.brand import BrandFactory
 from items.models.factories.packaging import PackagingFactory
+from items.models.factories.price_group import PriceGroupFactory
 
 if TYPE_CHECKING:  # no cover
-  from items.models import Attribute, Brand, Item, Packaging
+  from django.db import models
+  from items.models import Attribute, Brand, Item, Packaging, PriceGroup
   from scrapers.models import ScraperConfig
   from .typing import AliasFaker, AliasSubFactory
+
+  class ItemWithPriceGroup(Item):
+    price_group: "models.ForeignKey[Item, PriceGroup]"  # type: ignore[assignment]
 
 
 class ItemFactory(factory.django.DjangoModelFactory["Item"]):
@@ -18,6 +23,12 @@ class ItemFactory(factory.django.DjangoModelFactory["Item"]):
   name: "AliasFaker[str]" = factory.Faker('company')
   brand: "AliasSubFactory[Brand]" = factory.SubFactory(BrandFactory)
   packaging: "AliasSubFactory[Packaging]" = factory.SubFactory(PackagingFactory)
+  price_group: "AliasSubFactory[PriceGroup]" = factory.SubFactory(
+      PriceGroupFactory,
+      is_non_gmo=factory.SelfAttribute('..is_non_gmo'),
+      is_organic=factory.SelfAttribute('..is_organic'),
+      unit=factory.SelfAttribute('..packaging.unit'),
+  )
 
   class Meta:
     model = 'items.Item'

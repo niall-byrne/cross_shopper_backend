@@ -6,6 +6,7 @@ from constance import config
 from django.contrib import admin
 from items.admin.inlines.item import item_inlines
 from items.admin.list_filters.item import item_list_filter
+from items.admin.mixins.price_group_members import PriceGroupMembersAdminMixin
 from items.models import Brand, Item, Packaging
 from reports.models import Report
 
@@ -17,7 +18,7 @@ if TYPE_CHECKING:  # no cover
   from django.http import HttpRequest
 
 
-class ItemAdmin(admin.ModelAdmin[Item]):
+class ItemAdmin(admin.ModelAdmin[Item], PriceGroupMembersAdminMixin):
   fieldsets = (
       (
           "IDENTIFICATION",
@@ -29,6 +30,12 @@ class ItemAdmin(admin.ModelAdmin[Item]):
           "PACKAGING",
           {
               "fields": ("packaging",),
+          },
+      ),
+      (
+          "PRICE COMPARISONS",
+          {
+              "fields": ("price_group", "price_group_members"),
           },
       ),
       (
@@ -50,11 +57,16 @@ class ItemAdmin(admin.ModelAdmin[Item]):
       "packaging__container",
       "packaging__quantity",
   )
+  readonly_fields = ("price_group_members",)
   search_fields = (
       "name",
       "attribute__name",
       "brand__name",
   )
+
+  def price_group_members(self, obj: Item) -> str:
+    """Return an HTML representation of the price_group members."""
+    return self.members(obj.price_group)
 
   def formfield_for_foreignkey(
       self,

@@ -8,3 +8,5 @@ from .item_scraper_config import ItemScraperConfig  # noqa: F401
 from .packaging import Packaging  # noqa: F401
 from .packaging_container import PackagingContainer  # noqa: F401
 from .packaging_unit import PackagingUnit  # noqa: F401
+from .price_group import PriceGroup  # noqa: F401
+from .price_group_attribute import PriceGroupAttribute  # noqa: F401

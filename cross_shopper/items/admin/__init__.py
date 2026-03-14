@@ -9,6 +9,8 @@ from items.admin.item_scraper_config import ItemScraperConfigAdmin
 from items.admin.packaging import PackagingAdmin
 from items.admin.packaging_container import PackagingContainerAdmin
 from items.admin.packaging_unit import PackagingUnitAdmin
+from items.admin.price_group import PriceGroupAdmin
+from items.admin.price_group_attribute import PriceGroupAttributeAdmin
 from items.models import (
     Attribute,
     Brand,
@@ -18,6 +20,8 @@ from items.models import (
     Packaging,
     PackagingContainer,
     PackagingUnit,
+    PriceGroup,
+    PriceGroupAttribute,
 )
 
 admin.site.register(Attribute, AttributeAdmin)
@@ -28,3 +32,5 @@ admin.site.register(ItemScraperConfig, ItemScraperConfigAdmin)
 admin.site.register(Packaging, PackagingAdmin)
 admin.site.register(PackagingContainer, PackagingContainerAdmin)
 admin.site.register(PackagingUnit, PackagingUnitAdmin)
+admin.site.register(PriceGroup, PriceGroupAdmin)
+admin.site.register(PriceGroupAttribute, PriceGroupAttributeAdmin)

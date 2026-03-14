@@ -41,7 +41,7 @@ class TestPricingViewSetCreateAuthentication:
 
     res = authenticated_client.post(pricing_list_url(), data=serializer.data)
 
-    assert res.status_code == status.HTTP_201_CREATED
+    assert res.status_code == status.HTTP_200_OK
     assert res.data == serializer.data
 
   def test_create__new_object__returns_correct_response(

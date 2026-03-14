@@ -50,11 +50,12 @@ class PricingSerializerRW(serializers.ModelSerializer[Price]):
     week = validated_data.pop('week')
     year = validated_data.pop('year')
 
-    instance, _ = Price.objects.update_or_create(
+    instance, created = Price.objects.update_or_create(
         item=item,
         store=store,
         week=week,
         year=year,
         defaults=validated_data,
     )
+    self.created = created
     return instance

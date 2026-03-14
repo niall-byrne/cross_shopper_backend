@@ -1,8 +1,12 @@
 """Pricing API endpoints."""
 
+from typing import Any, Dict
+
 from pricing.models import Price
 from pricing.models.serializers.read_write.pricing import PricingSerializerRW
-from rest_framework import viewsets
+from rest_framework import status, viewsets
+from rest_framework.request import Request
+from rest_framework.response import Response
 from .filters import PricingFilter
 
 
@@ -14,3 +18,28 @@ class PricingViewSet(
   queryset = Price.objects.all()
   serializer_class = PricingSerializerRW
   filterset_class = PricingFilter
+
+  def create(
+      self,
+      request: Request,
+      *args: Any,
+      **kwargs: Dict[str, Any],
+  ) -> Response:
+    """Create a model instance, or update an existing model instance."""
+    serializer = self.get_serializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    self.perform_create(serializer)
+    headers = self.get_success_headers(serializer.data)
+
+    if getattr(serializer, 'created', True):
+      return Response(
+          serializer.data,
+          status=status.HTTP_201_CREATED,
+          headers=headers,
+      )
+
+    return Response(
+        serializer.data,
+        status=status.HTTP_200_OK,
+        headers=headers,
+    )

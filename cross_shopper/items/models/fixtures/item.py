@@ -17,3 +17,38 @@ def item(attribute: Attribute, scraper_config: ScraperConfig) -> Item:
       attributes=[attribute],
       scraper_configs=[scraper_config],
   )
+
+
+@pytest.fixture
+def item_alternate(
+    attribute_alternate: Attribute,
+    scraper_config_alternate: ScraperConfig,
+) -> Item:
+  return ItemFactory.create(
+      attributes=[attribute_alternate],
+      scraper_configs=[scraper_config_alternate],
+  )
+
+
+@pytest.fixture
+def item_organic(
+    attribute_alternate: Attribute,
+    scraper_config_alternate: ScraperConfig,
+) -> Item:
+  return ItemFactory.create(
+      is_organic=True,
+      attributes=[attribute_alternate],
+      scraper_configs=[scraper_config_alternate],
+  )
+
+
+@pytest.fixture
+def item_not_organic(
+    attribute_alternate: Attribute,
+    scraper_config_alternate: ScraperConfig,
+) -> Item:
+  return ItemFactory.create(
+      is_organic=False,
+      attributes=[attribute_alternate],
+      scraper_configs=[scraper_config_alternate],
+  )

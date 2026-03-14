@@ -87,7 +87,7 @@ poetry-plugin-export = '^1.8'
 [tool.pytest]
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = 'config.development'
-filterwarnings = ['ignore:ItemFactory._after_postgeneration:DeprecationWarning', 'ignore:ReportFactory._after_postgeneration:DeprecationWarning']
+filterwarnings = ['ignore:.+._after_postgeneration:DeprecationWarning']
 python_files = ['test_*.py']
 
 [tool.ruff]

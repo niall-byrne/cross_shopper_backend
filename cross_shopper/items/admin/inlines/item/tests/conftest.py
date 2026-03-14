@@ -3,7 +3,10 @@
 from unittest import mock
 
 import pytest
-from items.admin.inlines.item import item_attribute, item_scraper_config
+from items.admin.inlines.item import (
+    item_attribute,
+    item_scraper_config,
+)
 
 
 @pytest.fixture

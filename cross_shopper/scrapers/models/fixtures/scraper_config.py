@@ -17,6 +17,11 @@ def scraper_config() -> ScraperConfig:
 
 
 @pytest.fixture
+def scraper_config_alternate() -> ScraperConfig:
+  return ScraperConfigFactory.create()
+
+
+@pytest.fixture
 def scraper_config_batch() -> QuerySet[ScraperConfig]:
   scraper_configs = ScraperConfigFactory.create_batch(size=10)
   return ScraperConfig.objects.filter(

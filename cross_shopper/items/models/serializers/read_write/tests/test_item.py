@@ -5,9 +5,15 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.db.models import QuerySet
-from items.models import Attribute, Brand, Item, Packaging
+from items.models import Attribute, Brand, Item, Packaging, PriceGroup
 from items.models.serializers.read_write.item import ItemSerializerRW
 from items.models.serializers.read_write.packaging import PackagingSerializerRW
+from items.models.serializers.read_write.price_group import (
+    PriceGroupSerializerRW,
+)
+from items.models.validators.item.price_group_membership import (
+    ItemPriceGroupMembershipValidator,
+)
 from rest_framework.exceptions import ErrorDetail, ValidationError
 from scrapers.models.scraper_config import ScraperConfig
 from scrapers.models.serializers.read_only.scraper_config import (
@@ -26,12 +32,54 @@ if TYPE_CHECKING:  # no cover
 @pytest.mark.django_db
 class TestItemSerializerRW:
 
+  def create_data(self, scraper: "Scraper") -> "AliasNestedItemData":
+    return {
+        "name":
+            "Avocados",
+        "attribute": [
+            "new_attribute1",
+            "new_attribute2",
+        ],
+        "brand":
+            "Generic",
+        "packaging": {
+            "quantity": 4,
+            "unit": "pcs",
+            "container": "Bag"
+        },
+        "price_group":
+            {
+                "name": "Avocados Price Group",
+                "attribute": [
+                    "new_attribute3",
+                    "new_attribute4",
+                ],
+                "quantity": 1,
+                "unit": "pcs"
+            },
+        "is_non_gmo":
+            False,
+        "is_organic":
+            False,
+        "scraper_config":
+            [
+                {
+                    "scraper": scraper.name,
+                    "url": "https://site.com/1",
+                }, {
+                    "scraper": scraper.name,
+                    "url": "https://site.com/2",
+                }
+            ]
+    }
+
   def compare_instance_to_data(
       self,
       item_instance: Item,
       item_data: "Dict[str, Any]",
       attribute_instances: "QuerySet[Attribute]",
       scraper_config_instances: "QuerySet[ScraperConfig]",
+      price_group_attribute_instances: "QuerySet[Attribute]",
   ) -> None:
     assert item_instance.name == item_data['name']
     assert item_instance.brand.name == item_data['brand']
@@ -43,6 +91,20 @@ class TestItemSerializerRW:
     assert item_instance.packaging.container is not None
     assert item_instance.packaging.container.name == \
         item_data['packaging']['container']
+
+    assert item_instance.price_group is not None
+    assert item_instance.price_group.name == \
+        item_data['price_group']['name']
+    assert item_instance.price_group.is_non_gmo == \
+        item_data['price_group']['is_organic']
+    assert item_instance.price_group.is_organic == \
+        item_data['price_group']['is_organic']
+    assert item_instance.price_group.quantity == \
+        item_data['price_group']['quantity']
+    assert item_instance.price_group.unit.name == \
+        item_data['price_group']['unit']
+    assert list(item_instance.price_group.attribute.all()) == \
+        list(price_group_attribute_instances)
 
     assert item_instance.is_non_gmo == item_data['is_non_gmo']
     assert item_instance.is_organic == item_data['is_organic']
@@ -83,6 +145,8 @@ class TestItemSerializerRW:
             item.brand.name,
         'packaging':
             PackagingSerializerRW(item.packaging).data,
+        'price_group':
+            PriceGroupSerializerRW(item.price_group).data,
         'is_bulk':
             item.is_bulk,
         'is_non_gmo':
@@ -97,35 +161,7 @@ class TestItemSerializerRW:
       self,
       scraper: "Scraper",
   ) -> None:
-    item_data: AliasNestedItemData = {
-        "name":
-            "Avocados",
-        "attribute": [
-            "new_attribute1",
-            "new_attribute2",
-        ],
-        "brand":
-            "Generic",
-        "packaging": {
-            "quantity": 4,
-            "unit": "pcs",
-            "container": "Bag"
-        },
-        "is_non_gmo":
-            False,
-        "is_organic":
-            False,
-        "scraper_config":
-            [
-                {
-                    "scraper": scraper.name,
-                    "url": "https://site.com/1",
-                }, {
-                    "scraper": scraper.name,
-                    "url": "https://site.com/2",
-                }
-            ]
-    }
+    item_data: "AliasNestedItemData" = self.create_data(scraper)
 
     serialized = ItemSerializerRW(data=item_data)
     serialized.is_valid(raise_exception=True)
@@ -136,44 +172,45 @@ class TestItemSerializerRW:
         item_data,
         Attribute.objects.filter(name__in=['new_attribute1', 'new_attribute2']),
         ScraperConfig.objects.filter(scraper=scraper),
+        Attribute.objects.filter(name__in=['new_attribute3', 'new_attribute4']),
     )
 
   def test_deserialization__valid_input__existing_all__correct_model(
       self,
       attribute: "Attribute",
+      attribute_alternate: "Attribute",
       brand: "Brand",
       scraper: "Scraper",
       packaging_as_non_bulk: "Packaging",
+      price_group: "PriceGroup",
   ) -> None:
+    price_group.unit = packaging_as_non_bulk.unit
+    price_group.is_non_gmo = False
+    price_group.is_organic = False
+    price_group.attribute.set([attribute_alternate])
+    price_group.save()
+
     assert packaging_as_non_bulk.unit is not None
     assert packaging_as_non_bulk.container is not None
-    item_data: AliasNestedItemData = {
-        "name":
-            "Avocados",
-        "attribute": [attribute.name,],
-        "brand":
-            brand.name,
-        "packaging":
-            {
-                "quantity": packaging_as_non_bulk.quantity,
-                "unit": packaging_as_non_bulk.unit.name,
-                "container": packaging_as_non_bulk.container.name,
-            },
-        "is_non_gmo":
-            False,
-        "is_organic":
-            False,
-        "scraper_config":
-            [
+    item_data: "AliasNestedItemData" = self.create_data(scraper)
+    item_data.update(
+        {
+            "attribute": [attribute.name,],
+            "brand": brand.name,
+            "packaging":
                 {
-                    "scraper": scraper.name,
-                    "url": "https://site.com/1",
-                }, {
-                    "scraper": scraper.name,
-                    "url": "https://site.com/2",
-                }
-            ]
-    }
+                    "quantity": packaging_as_non_bulk.quantity,
+                    "unit": packaging_as_non_bulk.unit.name,
+                    "container": packaging_as_non_bulk.container.name,
+                },
+            "price_group":
+                {
+                    "attribute": [attribute.name,],
+                    "name": price_group.name,
+                    "quantity": price_group.quantity,
+                },
+        }
+    )
 
     serialized = ItemSerializerRW(data=item_data)
     serialized.is_valid(raise_exception=True)
@@ -184,30 +221,18 @@ class TestItemSerializerRW:
         item_data,
         Attribute.objects.filter(pk=attribute.pk),
         ScraperConfig.objects.filter(scraper=scraper),
+        Attribute.objects.filter(pk__in=[attribute.pk, attribute_alternate.pk]),
     )
 
   def test_deserialization__invalid_input__missing_fields__exception(
       self,
       scraper: "Scraper",
   ) -> None:
-    item_data: "AliasNestedItemData" = {
-        "name":
-            "Avocados",
-        "is_non_gmo":
-            False,
-        "is_organic":
-            False,
-        "scraper_config":
-            [
-                {
-                    "scraper": scraper.name,
-                    "url": scraper.url_validation_regex + "/1",
-                }, {
-                    "scraper": scraper.name,
-                    "url": scraper.url_validation_regex + "/2",
-                }
-            ]
-    }
+    item_data: "AliasNestedItemData" = self.create_data(scraper)
+    del item_data['attribute']
+    del item_data['brand']
+    del item_data['packaging']
+    del item_data['price_group']
 
     with pytest.raises(ValidationError) as exc:
       serialized = ItemSerializerRW(data=item_data)
@@ -232,7 +257,50 @@ class TestItemSerializerRW:
                     ErrorDetail(
                         string='This field is required.', code='required'
                     )
+                ],
+            'price_group':
+                [
+                    ErrorDetail(
+                        string='This field is required.', code='required'
+                    )
                 ]
+        }
+    )
+
+  def test_deserialization__invalid_input__missing_nested__fields__exception(
+      self,
+      scraper: "Scraper",
+  ) -> None:
+    item_data: "AliasNestedItemData" = self.create_data(scraper)
+    del item_data['packaging']['unit']
+    del item_data['price_group']['quantity']
+
+    with pytest.raises(ValidationError) as exc:
+      serialized = ItemSerializerRW(data=item_data)
+      serialized.is_valid(raise_exception=True)
+
+    assert str(exc.value) == str(
+        {
+            'packaging':
+                {
+                    'unit':
+                        [
+                            ErrorDetail(
+                                string='This field is required.',
+                                code='required'
+                            )
+                        ]
+                },
+            'price_group':
+                {
+                    'quantity':
+                        [
+                            ErrorDetail(
+                                string='This field is required.',
+                                code='required'
+                            )
+                        ]
+                },
         }
     )
 
@@ -241,36 +309,31 @@ class TestItemSerializerRW:
       brand: "Brand",
       scraper: "Scraper",
       packaging_as_non_bulk: "Packaging",
+      price_group: "PriceGroup",
   ) -> None:
+    price_group.unit = packaging_as_non_bulk.unit
+    price_group.save()
+
     assert packaging_as_non_bulk.unit is not None
     assert packaging_as_non_bulk.container is not None
-    item_data: AliasNestedItemData = {
-        "name":
-            "Avocados",
-        "attribute": ["invalid,attribute"],
-        "brand":
-            brand.name,
-        "packaging":
-            {
-                "quantity": packaging_as_non_bulk.quantity,
-                "unit": packaging_as_non_bulk.unit.name,
-                "container": packaging_as_non_bulk.container.name,
-            },
-        "is_non_gmo":
-            False,
-        "is_organic":
-            False,
-        "scraper_config":
-            [
+    item_data: "AliasNestedItemData" = self.create_data(scraper)
+    item_data.update(
+        {
+            "attribute": ["invalid,attribute"],
+            "brand": brand.name,
+            "packaging":
                 {
-                    "scraper": scraper.name,
-                    "url": "https://site.com/1",
-                }, {
-                    "scraper": scraper.name,
-                    "url": "https://site.com/2",
-                }
-            ]
-    }
+                    "quantity": packaging_as_non_bulk.quantity,
+                    "unit": packaging_as_non_bulk.unit.name,
+                    "container": packaging_as_non_bulk.container.name,
+                },
+            "price_group":
+                {
+                    "name": price_group.name,
+                    "quantity": price_group.quantity,
+                },
+        }
+    )
 
     with pytest.raises(ValidationError) as exc:
       serialized = ItemSerializerRW(data=item_data)
@@ -284,6 +347,84 @@ class TestItemSerializerRW:
                         [
                             ErrorDetail(
                                 string=VALIDATION_ERROR % ',',
+                                code='invalid',
+                            ),
+                        ]
+                }
+        }
+    )
+
+  @pytest.mark.parametrize(
+      "scenario",
+      (
+          {
+              "item_attribute": "organic certification",
+              "price_group_attribute": "organic certification",
+              "kwargs": {
+                  "is_organic": True
+              },
+          },
+          {
+              "item_attribute": "non-gmo certification",
+              "price_group_attribute": "non-gmo certification",
+              "kwargs": {
+                  "is_non_gmo": True
+              },
+          },
+          {
+              "item_attribute": "packaging unit",
+              "price_group_attribute": "comparison unit",
+              "kwargs": {
+                  "unit": "Invalid Unit"
+              },
+          },
+      ),
+  )
+  def test_deserialization__invalid_input__invalid_price_group__exception(
+      self, brand: "Brand", scraper: "Scraper",
+      packaging_as_non_bulk: "Packaging", price_group: "PriceGroup",
+      scenario: "Dict[str, Dict[str, Any]]"
+  ) -> None:
+    price_group.unit = packaging_as_non_bulk.unit
+    price_group.save()
+
+    assert packaging_as_non_bulk.unit is not None
+    assert packaging_as_non_bulk.container is not None
+    item_data: AliasNestedItemData = self.create_data(scraper)
+    item_data.update(
+        {
+            "attribute": ["new attribute name"],
+            "brand": brand.name,
+            "packaging":
+                {
+                    "quantity": packaging_as_non_bulk.quantity,
+                    "unit": packaging_as_non_bulk.unit.name,
+                    "container": packaging_as_non_bulk.container.name,
+                },
+            "price_group":
+                {
+                    "name": price_group.name,
+                    "quantity": price_group.quantity,
+                    **scenario['kwargs'],
+                },
+        }
+    )
+
+    with pytest.raises(ValidationError) as exc:
+      serialized = ItemSerializerRW(data=item_data)
+      serialized.is_valid(raise_exception=True)
+
+    assert str(exc.value) == str(
+        {
+            'price_group':
+                {
+                    list(scenario['kwargs'].keys())[0]:
+                        [
+                            ErrorDetail(
+                                string=str(
+                                    ItemPriceGroupMembershipValidator.
+                                    error_message.format(**scenario),
+                                ),
                                 code='invalid',
                             ),
                         ]

@@ -1,6 +1,6 @@
 """Serializer to retrieve, list, create or update Prices."""
 
-from typing import List
+from typing import Any, Dict, List
 
 from pricing.models import Price
 from pricing.models.defaults import default_pricing_week, default_pricing_year
@@ -37,5 +37,24 @@ class PricingSerializerRW(serializers.ModelSerializer[Price]):
   def get_unique_together_validators(
       self,
   ) -> List[validators.UniqueTogetherValidator]:
-    """Disable unique together checks to enable update operations."""
+    """Disable unique together checks to enable upsert operations."""
     return []
+
+  def create(
+      self,
+      validated_data: Dict[str, Any],
+  ) -> Price:
+    """Create or update a Price instance."""
+    item = validated_data.pop('item')
+    store = validated_data.pop('store')
+    week = validated_data.pop('week')
+    year = validated_data.pop('year')
+
+    instance, _ = Price.objects.update_or_create(
+        item=item,
+        store=store,
+        week=week,
+        year=year,
+        defaults=validated_data,
+    )
+    return instance

@@ -56,27 +56,26 @@ class TestPricingSerializeRW:
     assert instance.week == default_pricing_week.default_pricing_week()
     assert instance.year == default_pricing_year.default_pricing_year()
 
-  def test_deserialization__valid_input__existent__database_error_only(
+  def test_deserialization__valid_input__existent__upserts_model(
       self,
       item: "Item",
       store: "Store",
   ) -> None:
-    duplicate_pricing_data: Dict[str, Union[str, int]] = {
+    pricing_data: Dict[str, Union[str, int]] = {
         'amount': '1000.01',
         'item': item.pk,
         'store': store.pk,
     }
     instance = Price(
-        amount=duplicate_pricing_data['amount'],
+        amount='500.00',
         item=item,
         store=store,
     )
     instance.save()
 
-    serialized = PricingSerializerRW(data=duplicate_pricing_data)
+    serialized = PricingSerializerRW(data=pricing_data)
     serialized.is_valid(raise_exception=True)
+    instance = serialized.save()
 
-    with pytest.raises(ValidationError) as exc:
-      serialized.save()
-
-    assert exc.type != SerializerValidationError
+    assert Price.objects.count() == 1
+    assert instance.amount == decimal.Decimal(pricing_data['amount'])

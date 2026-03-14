@@ -2,6 +2,7 @@
 
 from django.db import models
 from items import constants
+from items.models.validators.item import model_level_validators
 from utilities.models.bases.model_base import ModelBase
 from utilities.models.fields.blonde import BlondeCharField
 
@@ -29,6 +30,12 @@ class Item(
       'items.Packaging',
       on_delete=models.PROTECT,
   )
+  price_group = models.ForeignKey(
+      'items.PriceGroup',
+      on_delete=models.PROTECT,
+      null=True,
+      blank=True,
+  )
   scraper_config = models.ManyToManyField(
       'scrapers.ScraperConfig',
       through='items.ItemScraperConfig',
@@ -43,6 +50,12 @@ class Item(
     """Pre-save verification."""
     if self.is_organic:
       self.is_non_gmo = True
+
+    if self.price_group is not None:
+
+      for validator in model_level_validators:
+        if validator.is_model_valid(self):
+          raise validator.generate_model_error()
 
   @property
   def attribute_summary(self) -> str:

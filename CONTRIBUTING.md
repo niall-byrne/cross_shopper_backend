@@ -19,7 +19,7 @@ To execute all tests `make test` is the most straight-forward mechanism.
 
 ## Testing Standards
 
-We strive for 100% code coverage. If a block of code is intentionally not covered (e.g., `if TYPE_CHECKING:`), use `# pragma: no cover`.
+We strive for 100% code coverage. If a block of code is intentionally not covered (e.g., `if TYPE_CHECKING:`), use `# no cover`.
 
 ### Test Naming Convention
 

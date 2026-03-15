@@ -47,7 +47,7 @@ This document details the coding standards and patterns followed in the Cross Sh
 
 ## Testing Standards
 
-- **Coverage:** Aim for 100% code coverage. Use `# pragma: no cover` for intentionally uncovered blocks (e.g., `if TYPE_CHECKING:`).
+- **Coverage:** Aim for 100% code coverage. Use `# no cover` for intentionally uncovered blocks (e.g., `if TYPE_CHECKING:`).
 - **Pattern:** Use the strict Arrange-Act-Assert (AAA) pattern. Separate these three blocks with a single blank line.
 - **Naming Convention:** Use `test_<method>__<condition1>__<condition2>__<expected_outcome>`. Use double underscores `__` to separate the method name from conditions and the outcome.
 - **Fixtures:**

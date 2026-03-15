@@ -21,8 +21,6 @@ repos:
       - id: ruff
         entry: "ruff check"
         args:
-          - "--select"
-          - "I"
           - "--fix"
         types: ["python"]
       - id: ruff-check
@@ -132,4 +130,18 @@ repos:
         args: [--multiline]
         language: pygrep
         files: "^cross_shopper/(?=.*conftest.py).+\\.py$"
+        stages: [pre-commit]
+      - id: type-aliases
+        name: ensure type aliases are inside a dedicated TYPE_CHECKING clause
+        entry: '\A.+(^Alias[A-Z]{1}[A-Za-z]+ = .+$).+\Z'
+        args: [--multiline]
+        language: pygrep
+        files: "^cross_shopper/.+\\.py$"
+        stages: [pre-commit]
+      - id: type-imports
+        name: ensure type imports are inside a dedicated TYPE_CHECKING clause
+        entry: '\A.+(^from typing import (?!(?:.*\b(?:TYPE_CHECKING|TypeVar|cast)\b))(.+)$).+\Z'
+        args: [--multiline]
+        language: pygrep
+        files: "^cross_shopper/.+\\.py$"
         stages: [pre-commit]

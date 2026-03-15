@@ -1,5 +1,4 @@
-"""
-WSGI config for cross_shopper project.
+"""WSGI config for cross_shopper project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

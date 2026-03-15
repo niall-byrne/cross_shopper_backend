@@ -101,8 +101,11 @@ quote-style = 'preserve'
 [tool.ruff.lint]
 fixable = ['ALL']
 ignore = ['D105', 'D106', 'D107', 'D203', 'D213']
-select = ['ARG001', 'D', 'DJ', 'E', 'F', 'I']
+select = ['ARG001', 'D', 'DJ', 'E', 'F', 'I', 'TCH']
 unfixable = []
+
+[tool.ruff.lint.flake8-type-checking]
+quote-annotations = true
 
 [tool.ruff.lint.isort]
 default-section = 'first-party'

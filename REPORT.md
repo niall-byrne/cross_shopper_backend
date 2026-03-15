@@ -56,7 +56,8 @@ The `memoize` decorator in `utilities/cache/decorator.py` uses `repr` on `args`,
 
 ### 4.1 Logic in `clean()` vs `save()`
 In `items/models/item.py`, the `clean()` method contains logic like `if self.is_organic: self.is_non_gmo = True`.
-- **Problem**: Django does not call `clean()` automatically during `save()`. This logic is only triggered in ModelForms or if `full_clean()` is manually called. This can lead to inconsistent data if items are created/updated via the ORM or serializers that don't call `full_clean()`.
+- **Assessment Update**: While Django does not call `clean()` automatically by default, the project's `ModelBase` (in `utilities/models/bases/model_base.py`) overrides `save()` to explicitly call `self.full_clean()`. This ensures that `clean()` logic is executed upon every save.
+- **Note**: Calling `full_clean()` inside `save()` is a deliberate design choice here to enforce model-level integrity. However, it means that any `ValidationError` raised during cleaning will prevent the save from succeeding, which is the intended behavior in this project but differs from standard Django behavior where `save()` only enforces database-level constraints.
 
 ### 4.2 Business Logic in Serializers
 Extensive business logic and database aggregation are placed directly in serializers (especially under `reports/models/serializers/read_only/report_summary/`). This makes the logic harder to reuse outside the API and contributes to the N+1 issues mentioned above.

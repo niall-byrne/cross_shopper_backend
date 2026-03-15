@@ -12,8 +12,6 @@ from .filters import ReportSummaryFilter
 from .qs import qs_item
 
 if TYPE_CHECKING:  # no cover
-  from typing import Any, Dict
-
   from django.db.models import QuerySet
 
 

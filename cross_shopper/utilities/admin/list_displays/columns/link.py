@@ -10,8 +10,6 @@ from utilities.admin.list_displays.columns.bases.column_base import (
 )
 
 if TYPE_CHECKING:  # no cover
-  from typing import Optional
-
   from django.db.models import Model
   from django.utils.safestring import SafeString
   from utilities.admin.list_displays.columns.typing import AliasColumnMethod

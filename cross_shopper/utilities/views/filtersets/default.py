@@ -4,9 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 from django_filters import rest_framework as filters
 
-if TYPE_CHECKING:  # no cover
-  from typing import Any
-
 
 class DefaultFilterSet(filters.FilterSet):
   """View filterset that populates default values for query params."""

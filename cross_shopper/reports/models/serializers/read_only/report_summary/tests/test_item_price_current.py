@@ -15,7 +15,6 @@ from reports.models.serializers.read_only.report_summary.\
 if TYPE_CHECKING:  # no cover
   from typing import Any, Dict, Optional
 
-  from reports.models.report import Report
   from .conftest import AliasSerializerMockCreator
 
 

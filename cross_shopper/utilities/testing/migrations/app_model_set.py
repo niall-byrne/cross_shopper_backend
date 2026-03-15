@@ -11,7 +11,6 @@ if TYPE_CHECKING:
   from typing import Any, Dict, Type, TypeVar
 
   from django.db.migrations.state import ProjectState
-  from django.db.models import Model
   AppModelSetType = TypeVar("AppModelSetType", bound="AppModelSet")
 
 
@@ -31,25 +30,25 @@ class AppModelSet:
       state: "ProjectState",
   ) -> "AppModelSetType":
     """Create an app model set for the specified state."""
-
     kwargs: "Dict[str, Any]" = {}
-    for field in fields(cls):
-      if field.name == '_sequence_counter':
+    for field_name in fields(cls):
+      if field_name.name == '_sequence_counter':
         continue
 
-      kwargs[field.name] = state.apps.get_model(
+      kwargs[field_name.name] = state.apps.get_model(
           cls.module,
-          field.name,
+          field_name.name,
       )
 
       factory_module = importlib.import_module(
-          f"{cls.module}.models.factories.{cls._as_module_name(field.name)}"
+          f"{cls.module}.models.factories."
+          f"{cls._as_module_name(field_name.name)}"
       )
 
       setattr(
           cls,
-          f"{field.name}Factory",
-          getattr(factory_module, f"{field.name}Factory"),
+          f"{field_name.name}Factory",
+          getattr(factory_module, f"{field_name.name}Factory"),
       )
 
     return cls(**kwargs)
@@ -60,8 +59,7 @@ class AppModelSet:
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', dotted).lower()
 
   def instance(self, model_name: "str", **kwargs: "Any") -> "Any":
-    """Generates an instance of the specified model name."""
-
+    """Generate an instance of the specified model name."""
     for key, value in kwargs.items():
       if value == self.unique:
         kwargs[key] = f"{model_name}.{key}.{self.unique()}"
@@ -75,7 +73,6 @@ class AppModelSet:
     )
 
   def unique(self) -> int:
-    """Generates a unique identifier in lieu of FactoryBoy sequences."""
-
+    """Generate a unique identifier in lieu of FactoryBoy sequences."""
     self._sequence_counter += 1
     return self._sequence_counter

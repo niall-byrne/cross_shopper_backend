@@ -19,7 +19,7 @@ class ScraperConfigActionsAdminMixin(
   scraper_config_is_related_model = False
 
   def _as_mixin(self) -> "AdminMixinType":
-    return cast(AdminMixinType, self)
+    return cast("AdminMixinType", self)
 
   def _get_model_name(self) -> str:
     if self.scraper_config_is_related_model:

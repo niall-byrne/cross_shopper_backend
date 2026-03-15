@@ -1,14 +1,13 @@
 """Tests for the PassThroughFilter."""
 
 from typing import TYPE_CHECKING
-from unittest import mock
-from unittest.mock import Mock
 
 import pytest
 from utilities.views.filters.passthrough import PassThroughFilter
 
 if TYPE_CHECKING:  # no cover
   from typing import Any, Dict, Optional
+  from unittest.mock import Mock
 
 
 class TestPassThroughFilter:
@@ -48,7 +47,7 @@ class TestPassThroughFilter:
   )
   def test_label__vary_kwargs__returns_label(
       self,
-      mocked_model: "mock.Mock",
+      mocked_model: "Mock",
       label: "Optional[str]",
       model: "bool",
       expected_label: "Optional[str]",

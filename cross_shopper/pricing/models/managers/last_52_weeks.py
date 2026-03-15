@@ -63,7 +63,7 @@ class AggregateLast52WeeksManager(models.Manager["Price"]):
       return None
 
     return cast(
-        decimal.Decimal,
+        "decimal.Decimal",
         pricing.aggregate(Avg('amount'))["amount__avg"].quantize(
             decimal.Decimal('.01'),
             rounding=decimal.ROUND_HALF_UP,
@@ -82,7 +82,7 @@ class AggregateLast52WeeksManager(models.Manager["Price"]):
       return None
 
     return cast(
-        decimal.Decimal,
+        "decimal.Decimal",
         pricing.aggregate(Max('amount'),)["amount__max"].quantize(
             decimal.Decimal('.00')
         )
@@ -100,7 +100,7 @@ class AggregateLast52WeeksManager(models.Manager["Price"]):
       return None
 
     return cast(
-        decimal.Decimal,
+        "decimal.Decimal",
         pricing.aggregate(Min('amount'),)["amount__min"].quantize(
             decimal.Decimal('.00')
         )

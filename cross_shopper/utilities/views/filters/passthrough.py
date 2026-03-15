@@ -1,6 +1,6 @@
 """A filter that passes values to the request without touching queries."""
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from django_filters.filters import QuerySetRequestMixin
 from django_filters.rest_framework import CharFilter
@@ -31,7 +31,7 @@ class PassThroughFilter(CharFilter, QuerySetRequestMixin):
     return qs
 
   @property
-  def label(self) -> Any:
+  def label(self) -> "Any":
     """Override the base getter to ensure model data is populated."""
     if self.for_model is not None:
       setattr(self, "model", self.for_model)

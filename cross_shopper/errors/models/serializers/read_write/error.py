@@ -36,7 +36,7 @@ class ErrorSerializerRW(serializers.ModelSerializer[Error]):
   def update(self, instance: Error, validated_data: Dict[str, Any]) -> Error:
     """Update an existing instance."""
     api_request: request.Request = cast(
-        request.Request,
+        "request.Request",
         self.context.get('request'),
     )
 

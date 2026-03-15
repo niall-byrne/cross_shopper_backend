@@ -69,7 +69,6 @@ class TestAppModelSet:
       scenario: "Dict[str, Any]",
       kwargs: "Dict[str, Any]",
   ) -> None:
-    mocked_name = "Mock_name"
     klass = scenario["klass"]
     state = migrator.apply_initial_migration(
         (

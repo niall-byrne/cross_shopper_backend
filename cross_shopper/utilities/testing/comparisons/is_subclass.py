@@ -30,7 +30,7 @@ class DynamicSubClass:
     if not isinstance(target_klass, type):
       self.fail(self.Messages.not_a_class)
 
-    if not issubclass(cast(type, target_klass), self.base):
+    if not issubclass(cast("type", target_klass), self.base):
       self.fail(self.Messages.not_a_subclass.format(self.base))
 
     for attribute, expected in self.attributes.items():

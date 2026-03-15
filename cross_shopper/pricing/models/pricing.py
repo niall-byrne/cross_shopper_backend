@@ -74,7 +74,7 @@ class Price(
     """Calculate the average item price for the past 52 weeks at this store."""
     if self._last_52_weeks.exists():
       return cast(
-          decimal.Decimal,
+          'decimal.Decimal',
           self._last_52_weeks.aggregate(Avg('amount'))["amount__avg"].quantize(
               decimal.Decimal('.01'),
               rounding=decimal.ROUND_HALF_UP,
@@ -88,7 +88,7 @@ class Price(
     """Calculate the highest item price for the past 52 weeks at this store."""
     if self._last_52_weeks.exists():
       return cast(
-          decimal.Decimal,
+          'decimal.Decimal',
           self._last_52_weeks.aggregate(Max('amount'))["amount__max"].quantize(
               decimal.Decimal('.00')
           )
@@ -101,7 +101,7 @@ class Price(
     """Calculate the lowest item price for the past 52 weeks at this store."""
     if self._last_52_weeks.exists():
       return cast(
-          decimal.Decimal,
+          'decimal.Decimal',
           self._last_52_weeks.aggregate(Min('amount'))["amount__min"].quantize(
               decimal.Decimal('.00')
           )

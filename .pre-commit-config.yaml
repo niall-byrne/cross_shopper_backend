@@ -21,8 +21,6 @@ repos:
       - id: ruff
         entry: "ruff check"
         args:
-          - "--select"
-          - "I"
           - "--fix"
         types: ["python"]
       - id: ruff-check

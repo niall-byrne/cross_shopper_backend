@@ -31,6 +31,10 @@ class PriceGroupMemberValidator(MultiFieldValidator["PriceGroup"]):
     """Evaluate the model validation."""
     return price_group.items.exclude(
         **{
-            self.related_field: getattr(price_group, self.model_fields[0]),
+            self.related_field:
+                self.model_get(
+                    self.model_fields[0],
+                    price_group,
+                ),
         }
     ).count() == 0

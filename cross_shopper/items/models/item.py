@@ -53,7 +53,7 @@ class Item(
 
     if self.price_group is not None:
       for validator in model_level_validators:
-        if validator.is_model_valid(self):
+        if not validator.is_model_valid(self):
           raise validator.generate_model_error()
 
   @property

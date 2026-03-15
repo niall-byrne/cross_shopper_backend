@@ -5,10 +5,10 @@ from unittest.mock import MagicMock
 
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework.exceptions import (
-    ValidationError as SerializerValidationError,
+  ValidationError as SerializerValidationError,
 )
-from cross_shopper.utilities.models.validators.tests.multi_field_validator.helpers import (
-    ConcreteMultiFieldValidator,
+from utilities.models.validators.tests.multi_field_validator.conftest import (
+  ConcreteMultiFieldValidator,
 )
 
 
@@ -51,23 +51,26 @@ class TestMultiFieldValidator:
 
     assert result == "value2"
 
-  def test_deserialized_model_get__valid_path__returns_value(
+  def test_deserialized_model_get__fully_serialized_data__returns_value(
       self,
       concrete_validator: ConcreteMultiFieldValidator,
-      mocked_serializer_data: Mapping[str, Any],
+      mocked_fully_serialized_data: Mapping[str, Any],
   ) -> None:
     result = concrete_validator.deserialized_model_get(
-        "nested.field2", mocked_serializer_data)
+        "nested.field2",
+        mocked_fully_serialized_data,
+    )
 
     assert result == "value2"
 
-  def test_deserialized_model_get__model_instance_in_path__returns_value(
+  def test_deserialized_model_get__partially_serialized_data__returns_value(
       self,
       concrete_validator: ConcreteMultiFieldValidator,
-      mocked_model: MagicMock,
+      mocked_partially_serialized_data: Mapping[str, Any],
   ) -> None:
-    data = {"model": mocked_model}
-
-    result = concrete_validator.deserialized_model_get("model.field1", data)
+    result = concrete_validator.deserialized_model_get(
+        "model.field1",
+        mocked_partially_serialized_data,
+    )
 
     assert result == "value1"

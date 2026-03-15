@@ -1,11 +1,13 @@
 """Tests for the ContextField serializer field."""
 
-from typing import Any, Type
-from unittest import mock
+from typing import TYPE_CHECKING, Any, Type
 
 import pytest
 from rest_framework import serializers
 from utilities.models.serializers.fields.context import ContextField
+
+if TYPE_CHECKING:  # no cover
+  from unittest import mock
 
 
 class TestContextField:
@@ -39,7 +41,7 @@ class TestContextField:
   def test_serialize__with_full_context__returns_instance(
       self,
       context_field_serializer: Type[serializers.Serializer[Any]],
-      mocked_model: mock.Mock,
+      mocked_model: "mock.Mock",
   ) -> None:
     serializer = context_field_serializer(
         mocked_model,
@@ -68,7 +70,7 @@ class TestContextField:
   def test_deserialize__partial_context__returns_instance(
       self,
       context_field_serializer: Type[serializers.Serializer[Any]],
-      mocked_model: mock.Mock,
+      mocked_model: "mock.Mock",
   ) -> None:
     serializer = context_field_serializer(
         mocked_model,
@@ -94,7 +96,7 @@ class TestContextField:
   def test_deserialize__missing_context__returns_instance(
       self,
       context_field_serializer: Type[serializers.Serializer[Any]],
-      mocked_model: mock.Mock,
+      mocked_model: "mock.Mock",
   ) -> None:
     serializer = context_field_serializer(
         mocked_model,

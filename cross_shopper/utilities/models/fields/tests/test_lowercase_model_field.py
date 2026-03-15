@@ -1,11 +1,15 @@
 """Test the LowerCaseField custom field."""
 
+from typing import TYPE_CHECKING
+
 import pytest
 from django.db import models
 from django.test import override_settings
 from utilities.models.fields.blonde import BlondeCharField
 from utilities.models.fields.lowercase import LowerCaseField
-from .conftest import AliasSetupMockModel
+
+if TYPE_CHECKING:  # no cover
+  from .conftest import AliasSetupMockModel
 
 
 class TestLowerCaseField:
@@ -23,7 +27,7 @@ class TestLowerCaseField:
   def test_pre_save__string__converts_to_lowercase(
       self,
       lower_case_field_instance: LowerCaseField[str, str],
-      setup_mock_model: AliasSetupMockModel,
+      setup_mock_model: "AliasSetupMockModel",
       value: str,
   ) -> None:
 
@@ -38,7 +42,7 @@ class TestLowerCaseField:
   def test_pre_save__string__converts_to_sanitized(
       self,
       lower_case_field_instance: LowerCaseField[str, str],
-      setup_mock_model: AliasSetupMockModel,
+      setup_mock_model: "AliasSetupMockModel",
       value: str,
       expected: str,
   ) -> None:
@@ -52,7 +56,7 @@ class TestLowerCaseField:
   def test_pre_save__none__returns_none(
       self,
       lower_case_field_instance: LowerCaseField[None, None],
-      setup_mock_model: AliasSetupMockModel,
+      setup_mock_model: "AliasSetupMockModel",
   ) -> None:
 
     model = setup_mock_model("field_name", None)

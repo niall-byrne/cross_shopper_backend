@@ -1,9 +1,13 @@
 """Test the AddressSerializerRW class."""
 
+from typing import TYPE_CHECKING
+
 import pytest
-from address.models import Address
 from rest_framework.exceptions import ErrorDetail, ValidationError
 from stores.models.serializers.read_write.address import AddressSerializerRW
+
+if TYPE_CHECKING:  # no cover
+  from address.models import Address
 
 
 @pytest.mark.django_db
@@ -11,7 +15,7 @@ class TestAddressSerializerRW:
 
   def test_serialization__correct_representation(
       self,
-      address: Address,
+      address: 'Address',
   ) -> None:
     serialized = AddressSerializerRW(address)
 
@@ -49,7 +53,7 @@ class TestAddressSerializerRW:
 
   def test_deserialization__valid_input__existing_components__correct_model(
       self,
-      address: Address,
+      address: 'Address',
   ) -> None:
     address_data = {
         'street_number': 1,

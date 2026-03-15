@@ -1,10 +1,14 @@
 """Tests for the ReportSummaryStoreSerializerRO."""
 
+from typing import TYPE_CHECKING
+
 import pytest
 from reports.models.serializers.read_only.report_summary.store import (
-    ReportSummaryStoreSerializerRO,
+  ReportSummaryStoreSerializerRO,
 )
-from stores.models import Store
+
+if TYPE_CHECKING:  # no cover
+  from stores.models import Store
 
 
 @pytest.mark.django_db

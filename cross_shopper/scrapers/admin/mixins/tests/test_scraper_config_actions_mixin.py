@@ -1,20 +1,22 @@
 """Test the ScraperConfigActionsAdminMixin model."""
 
-from typing import Any
-from unittest import mock
+from typing import TYPE_CHECKING, Any
 
-from scrapers.admin.mixins.scraper_config_actions import (
+if TYPE_CHECKING:  # no cover
+  from unittest import mock
+
+  from scrapers.admin.mixins.scraper_config_actions import (
     ScraperConfigActionsAdminMixin,
-)
+  )
 
 
 class TestScraperConfigActionsAsDirectField:
 
   def test_action_activate_scraper_configs__updates_selected(
       self,
-      action_admin: ScraperConfigActionsAdminMixin[Any],
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
+      action_admin: "ScraperConfigActionsAdminMixin[Any]",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
   ) -> None:
     action_admin.action_activate_scraper_configs(mocked_request, mocked_model)
 
@@ -22,9 +24,9 @@ class TestScraperConfigActionsAsDirectField:
 
   def test_action_activate_scraper_configs__notifies_user(
       self,
-      action_admin: ScraperConfigActionsAdminMixin[Any],
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
+      action_admin: "ScraperConfigActionsAdminMixin[Any]",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
   ) -> None:
     action_admin.action_activate_scraper_configs(mocked_request, mocked_model)
 
@@ -37,9 +39,9 @@ class TestScraperConfigActionsAsDirectField:
 
   def test_action_deactivate_scraper_configs__updates_selected(
       self,
-      action_admin: ScraperConfigActionsAdminMixin[Any],
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
+      action_admin: "ScraperConfigActionsAdminMixin[Any]",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
   ) -> None:
     action_admin.action_deactivate_scraper_configs(mocked_request, mocked_model)
 
@@ -47,9 +49,9 @@ class TestScraperConfigActionsAsDirectField:
 
   def test_action_deactivate_scraper_configs__notifies_user(
       self,
-      action_admin: ScraperConfigActionsAdminMixin[Any],
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
+      action_admin: "ScraperConfigActionsAdminMixin[Any]",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
   ) -> None:
     action_admin.action_deactivate_scraper_configs(mocked_request, mocked_model)
 
@@ -65,10 +67,10 @@ class TestScraperConfigActionsAsRelatedField:
 
   def test_action_activate_scraper_configs__updates_selected(
       self,
-      related_action_admin: ScraperConfigActionsAdminMixin[Any],
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
-      mocked_scraper_config: mock.Mock,
+      related_action_admin: "ScraperConfigActionsAdminMixin[Any]",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
+      mocked_scraper_config: "mock.Mock",
   ) -> None:
     related_action_admin.action_activate_scraper_configs(
         mocked_request,
@@ -80,10 +82,10 @@ class TestScraperConfigActionsAsRelatedField:
 
   def test_action_activate_scraper_configs__notifies_user(
       self,
-      related_action_admin: ScraperConfigActionsAdminMixin[Any],
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
-      mocked_scraper_config: mock.Mock,
+      related_action_admin: "ScraperConfigActionsAdminMixin[Any]",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
+      mocked_scraper_config: "mock.Mock",
   ) -> None:
     related_action_admin.action_activate_scraper_configs(
         mocked_request,
@@ -101,10 +103,10 @@ class TestScraperConfigActionsAsRelatedField:
 
   def test_action_deactivate_scraper_configs__updates_selected(
       self,
-      related_action_admin: ScraperConfigActionsAdminMixin[Any],
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
-      mocked_scraper_config: mock.Mock,
+      related_action_admin: "ScraperConfigActionsAdminMixin[Any]",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
+      mocked_scraper_config: "mock.Mock",
   ) -> None:
     related_action_admin.action_deactivate_scraper_configs(
         mocked_request,
@@ -116,10 +118,10 @@ class TestScraperConfigActionsAsRelatedField:
 
   def test_action_deactivate_scraper_configs__notifies_user(
       self,
-      related_action_admin: ScraperConfigActionsAdminMixin[Any],
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
-      mocked_scraper_config: mock.Mock,
+      related_action_admin: "ScraperConfigActionsAdminMixin[Any]",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
+      mocked_scraper_config: "mock.Mock",
   ) -> None:
     related_action_admin.action_deactivate_scraper_configs(
         mocked_request,

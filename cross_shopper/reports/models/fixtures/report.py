@@ -3,7 +3,6 @@
 from typing import TYPE_CHECKING, Callable, Tuple
 
 import pytest
-from django.contrib.auth.base_user import AbstractBaseUser
 from items.models.factories.item import ItemFactory
 from pricing.models.factories.pricing import TodayPriceFactory
 from reports.models.factories.report import ReportFactory, ReportStoreFactory
@@ -11,6 +10,7 @@ from scrapers.models.factories.scraper_config import ScraperConfigFactory
 from stores.models.factories.store import StoreFactory
 
 if TYPE_CHECKING:  # no cover
+  from django.contrib.auth.base_user import AbstractBaseUser
   from items.models import Item
   from reports.models import Report, ReportStore
   from stores.models import Store
@@ -20,7 +20,7 @@ AliasGetReportItem = Callable[["Report"], "Item"]
 
 
 def create_report(
-    user: AbstractBaseUser, testing_only: bool = False
+    user: "AbstractBaseUser", testing_only: bool = False
 ) -> "Report":
   return ReportFactory.create(
       items=[
@@ -37,12 +37,12 @@ def create_report(
 
 
 @pytest.fixture
-def report(user: AbstractBaseUser) -> "Report":
+def report(user: "AbstractBaseUser") -> "Report":
   return create_report(user)
 
 
 @pytest.fixture
-def report_alternate(user: AbstractBaseUser) -> "Report":
+def report_alternate(user: "AbstractBaseUser") -> "Report":
   return create_report(user)
 
 
@@ -52,7 +52,7 @@ def report_store() -> "ReportStore":
 
 
 @pytest.fixture
-def report_testing(user: AbstractBaseUser) -> "Report":
+def report_testing(user: "AbstractBaseUser") -> "Report":
   return create_report(user, testing_only=True)
 
 

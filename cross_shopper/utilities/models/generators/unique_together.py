@@ -1,8 +1,20 @@
 """Generate batches of models with unique constraints."""
-from typing import Any, Callable, Dict, List, Tuple, Type, TypedDict, TypeVar
+from typing import (
+  TYPE_CHECKING,
+  Any,
+  Callable,
+  Dict,
+  List,
+  Tuple,
+  Type,
+  TypedDict,
+  TypeVar,
+)
 
 from django.db.models import Model
-from factory.django import DjangoModelFactory
+
+if TYPE_CHECKING:  # no cover
+  from factory.django import DjangoModelFactory
 
 ModelType = TypeVar('ModelType', bound=Model)
 
@@ -17,7 +29,7 @@ class UniqueTogetherModelBatchFactory:
 
   def __init__(
       self,
-      model_factory: Type[DjangoModelFactory['ModelType']],
+      model_factory: Type['DjangoModelFactory[ModelType]'],
       unique_together_constraint: Tuple[ConstraintDefinition, ...],
       **kwargs: Any,
   ) -> None:

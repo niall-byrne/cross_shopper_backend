@@ -1,30 +1,33 @@
 """Tests for the generate_list_display decorator."""
 
-from typing import Tuple
-from unittest import mock
+from typing import TYPE_CHECKING, Tuple
 
 from django.urls import reverse
 from django.utils.html import format_html
 from utilities.admin.list_displays import generate_list_display
-from utilities.admin.list_displays.columns import (
+
+if TYPE_CHECKING:  # no cover
+  from unittest import mock
+
+  from utilities.admin.list_displays.columns import (
     ColumnLinkConfig,
     ColumnObjectConfig,
-)
+  )
 
 
 class TestGenerateListDisplay:
 
   def test_single_config__columns_evaluate_as_string_correctly(
       self,
-      column_config_1: Tuple[ColumnLinkConfig],
+      column_config_1: Tuple["ColumnLinkConfig"],
   ) -> None:
     assert tuple(str(element) for element in column_config_1) == \
         ("method_name",)
 
   def test_single_config__def_order___order__sets_the_correct_method_name(
       self,
-      column_config_1: Tuple[ColumnLinkConfig],
-      mocked_admin: mock.Mock,
+      column_config_1: Tuple["ColumnLinkConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_1)(mocked_admin)
 
@@ -32,8 +35,8 @@ class TestGenerateListDisplay:
 
   def test_single_config__def_order__sets_the_correct_description(
       self,
-      column_config_1: Tuple[ColumnLinkConfig],
-      mocked_admin: mock.Mock,
+      column_config_1: Tuple["ColumnLinkConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_1)(mocked_admin)
 
@@ -43,8 +46,8 @@ class TestGenerateListDisplay:
 
   def test_single_config__def_order__sets_the_correct_ordering(
       self,
-      column_config_1: Tuple[ColumnLinkConfig],
-      mocked_admin: mock.Mock,
+      column_config_1: Tuple["ColumnLinkConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_1)(mocked_admin)
 
@@ -54,8 +57,8 @@ class TestGenerateListDisplay:
 
   def test_single_config__set_order__sets_the_correct_ordering(
       self,
-      column_config_1: Tuple[ColumnLinkConfig],
-      mocked_admin: mock.Mock,
+      column_config_1: Tuple["ColumnLinkConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     column_config_1[0].obj_order = "related.field1.ordering"
 
@@ -67,8 +70,8 @@ class TestGenerateListDisplay:
 
   def test_single_config__no_order__sets_the_correct_ordering(
       self,
-      column_config_1: Tuple[ColumnLinkConfig],
-      mocked_admin: mock.Mock,
+      column_config_1: Tuple["ColumnLinkConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     column_config_1[0].obj_order = None
 
@@ -78,9 +81,9 @@ class TestGenerateListDisplay:
 
   def test_single_config__def_order__method_called__not_none__returns_html(
       self,
-      column_config_1: Tuple[ColumnLinkConfig],
-      mocked_admin: mock.Mock,
-      mocked_model: mock.Mock,
+      column_config_1: Tuple["ColumnLinkConfig"],
+      mocked_admin: "mock.Mock",
+      mocked_model: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_1)(mocked_admin)
 
@@ -98,8 +101,8 @@ class TestGenerateListDisplay:
 
   def test_single_config__def_order__method_called__none__returns_none(
       self,
-      column_config_1: Tuple[ColumnLinkConfig],
-      mocked_admin: mock.Mock,
+      column_config_1: Tuple["ColumnLinkConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_1)(mocked_admin)
 
@@ -109,7 +112,7 @@ class TestGenerateListDisplay:
 
   def test_dual_config__columns_evaluate_as_string_correctly(
       self,
-      column_config_2: Tuple[ColumnLinkConfig],
+      column_config_2: Tuple["ColumnLinkConfig"],
   ) -> None:
     assert tuple(str(element) for element in column_config_2) == (
         "method_name_1",
@@ -118,8 +121,8 @@ class TestGenerateListDisplay:
 
   def test_dual_config__def_order__sets_the_correct_method_names(
       self,
-      column_config_2: Tuple[ColumnLinkConfig, ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_2: Tuple["ColumnLinkConfig", "ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_2)(mocked_admin)
 
@@ -128,8 +131,8 @@ class TestGenerateListDisplay:
 
   def test_dual_config__def_order__sets_the_correct_descriptions(
       self,
-      column_config_2: Tuple[ColumnLinkConfig, ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_2: Tuple["ColumnLinkConfig", "ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_2)(mocked_admin)
 
@@ -142,8 +145,8 @@ class TestGenerateListDisplay:
 
   def test_dual_config__def_order__sets_the_correct_ordering(
       self,
-      column_config_2: Tuple[ColumnLinkConfig, ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_2: Tuple["ColumnLinkConfig", "ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_2)(mocked_admin)
 
@@ -156,8 +159,8 @@ class TestGenerateListDisplay:
 
   def test_dual_config__set_order__sets_the_correct_ordering(
       self,
-      column_config_2: Tuple[ColumnLinkConfig, ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_2: Tuple["ColumnLinkConfig", "ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     column_config_2[0].obj_order = "related.field1.ordering"
     column_config_2[1].obj_order = "field2.ordering"
@@ -173,8 +176,8 @@ class TestGenerateListDisplay:
 
   def test_dual_config__no_order__sets_the_correct_ordering(
       self,
-      column_config_2: Tuple[ColumnLinkConfig, ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_2: Tuple["ColumnLinkConfig", "ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     column_config_2[0].obj_order = None
     column_config_2[1].obj_order = None
@@ -186,9 +189,9 @@ class TestGenerateListDisplay:
 
   def test_dual_config__def_order__method_1_called__not_none__returns_html(
       self,
-      column_config_2: Tuple[ColumnLinkConfig, ColumnObjectConfig],
-      mocked_admin: mock.Mock,
-      mocked_model: mock.Mock,
+      column_config_2: Tuple["ColumnLinkConfig", "ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
+      mocked_model: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_2)(mocked_admin)
 
@@ -206,8 +209,8 @@ class TestGenerateListDisplay:
 
   def test_dual_config__def_order__method_1_called__none__returns_none(
       self,
-      column_config_2: Tuple[ColumnLinkConfig, ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_2: Tuple["ColumnLinkConfig", "ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_2)(mocked_admin)
 
@@ -217,9 +220,9 @@ class TestGenerateListDisplay:
 
   def test_dual_config__def_order__method_2_called__not_none__returns_object(
       self,
-      column_config_2: Tuple[ColumnLinkConfig, ColumnObjectConfig],
-      mocked_admin: mock.Mock,
-      mocked_model: mock.Mock,
+      column_config_2: Tuple["ColumnLinkConfig", "ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
+      mocked_model: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_2)(mocked_admin)
 
@@ -229,8 +232,8 @@ class TestGenerateListDisplay:
 
   def test_dual_config__def_order__method_2_called__none__returns_none(
       self,
-      column_config_2: Tuple[ColumnLinkConfig, ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_2: Tuple["ColumnLinkConfig", "ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_2)(mocked_admin)
 
@@ -240,15 +243,15 @@ class TestGenerateListDisplay:
 
   def test_boolean_config__columns_evaluate_as_string_correctly(
       self,
-      column_config_3: Tuple[ColumnLinkConfig],
+      column_config_3: Tuple["ColumnLinkConfig"],
   ) -> None:
     assert tuple(str(element) for element in column_config_3) == \
         ("boolean_method_name",)
 
   def test_boolean_config__def_order__sets_the_correct_method_name(
       self,
-      column_config_3: Tuple[ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_3: Tuple["ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_3)(mocked_admin)
 
@@ -256,8 +259,8 @@ class TestGenerateListDisplay:
 
   def test_boolean_config__def_order__sets_the_correct_description(
       self,
-      column_config_3: Tuple[ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_3: Tuple["ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_3)(mocked_admin)
 
@@ -267,8 +270,8 @@ class TestGenerateListDisplay:
 
   def test_boolean_config__def_order__sets_the_correct_ordering(
       self,
-      column_config_3: Tuple[ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_3: Tuple["ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_3)(mocked_admin)
 
@@ -278,8 +281,8 @@ class TestGenerateListDisplay:
 
   def test_boolean_config__no_order__sets_the_correct_ordering(
       self,
-      column_config_3: Tuple[ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_3: Tuple["ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     column_config_3[0].obj_order = "related.field1.ordering"
 
@@ -291,8 +294,8 @@ class TestGenerateListDisplay:
 
   def test_boolean_config__set_order__sets_the_correct_ordering(
       self,
-      column_config_3: Tuple[ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_3: Tuple["ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     column_config_3[0].obj_order = None
 
@@ -302,8 +305,8 @@ class TestGenerateListDisplay:
 
   def test_boolean_config__def_order__sets_boolean_to_true(
       self,
-      column_config_3: Tuple[ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_3: Tuple["ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_3)(mocked_admin)
 
@@ -311,9 +314,9 @@ class TestGenerateListDisplay:
 
   def test_boolean_config__def_order__method_called__not_none__returns_object(
       self,
-      column_config_3: Tuple[ColumnObjectConfig],
-      mocked_admin: mock.Mock,
-      mocked_model: mock.Mock,
+      column_config_3: Tuple["ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
+      mocked_model: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_3)(mocked_admin)
 
@@ -323,8 +326,8 @@ class TestGenerateListDisplay:
 
   def test_boolean_config__def_order__method_called__none__returns_none(
       self,
-      column_config_3: Tuple[ColumnObjectConfig],
-      mocked_admin: mock.Mock,
+      column_config_3: Tuple["ColumnObjectConfig"],
+      mocked_admin: "mock.Mock",
   ) -> None:
     generate_list_display(config=column_config_3)(mocked_admin)
 

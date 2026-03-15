@@ -1,13 +1,17 @@
 """Test the ReportPricingSerializerRO class."""
 
 import decimal
-from unittest import mock
+from typing import TYPE_CHECKING
 
 import pytest
-from reports.models import Report
 from reports.models.serializers.read_only.report_pricing import (
-    ReportPricingSerializerRO,
+  ReportPricingSerializerRO,
 )
+
+if TYPE_CHECKING:  # no cover
+  from unittest import mock
+
+  from reports.models import Report
 
 
 @pytest.mark.django_db
@@ -15,8 +19,8 @@ class TestReportPricingSerializerRO:
 
   def test_serialization__without_pricing__correct_representation(
       self,
-      report: Report,
-      mocked_aggregate_last_52_weeks_manager: mock.Mock,
+      report: "Report",
+      mocked_aggregate_last_52_weeks_manager: "mock.Mock",
   ) -> None:
     mocked_aggregate_last_52_weeks_manager.average.return_value = None
     mocked_aggregate_last_52_weeks_manager.high.return_value = None
@@ -37,8 +41,8 @@ class TestReportPricingSerializerRO:
 
   def test_serialization__with_pricing__correct_representation(
       self,
-      report: Report,
-      mocked_aggregate_last_52_weeks_manager: mock.Mock,
+      report: "Report",
+      mocked_aggregate_last_52_weeks_manager: "mock.Mock",
   ) -> None:
     mocked_aggregate_last_52_weeks_manager.average.return_value = (
         decimal.Decimal('10.50')

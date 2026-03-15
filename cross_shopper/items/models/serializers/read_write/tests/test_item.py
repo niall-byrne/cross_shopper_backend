@@ -5,7 +5,6 @@ from dataclasses import asdict
 from typing import TYPE_CHECKING
 
 import pytest
-from django.db.models import QuerySet
 from items.models import Attribute, Brand, Item, Packaging, PriceGroup
 from items.models.serializers.read_write.item import ItemSerializerRW
 from items.models.serializers.read_write.packaging import PackagingSerializerRW
@@ -26,6 +25,7 @@ from .scenarios import item_deserialization_validator_scenarios
 if TYPE_CHECKING:  # no cover
   from typing import Any, Dict
 
+  from django.db.models import QuerySet
   from scrapers.models import Scraper
 
   AliasNestedItemData = Dict[str, Any]

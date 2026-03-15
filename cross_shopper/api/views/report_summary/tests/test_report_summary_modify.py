@@ -4,11 +4,11 @@ from typing import TYPE_CHECKING
 
 import pytest
 from rest_framework import status
-from rest_framework.test import APIClient
-from .conftest import AliasReportSummaryDetailUrl
 
 if TYPE_CHECKING:  # no cover
   from reports.models import Report
+  from rest_framework.test import APIClient
+  from .conftest import AliasReportSummaryDetailUrl
 
 
 @pytest.mark.django_db
@@ -21,9 +21,9 @@ class TestReportSummaryReadOnlyViewSet:
 
   def test_modify__forbids_access(
       self,
-      client: APIClient,
+      client: "APIClient",
       report: "Report",
-      report_summary_detail_url: AliasReportSummaryDetailUrl,
+      report_summary_detail_url: "AliasReportSummaryDetailUrl",
   ) -> None:
     res = client.put(report_summary_detail_url(report.pk), data={})
 

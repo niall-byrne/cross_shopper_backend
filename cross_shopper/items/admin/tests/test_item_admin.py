@@ -1,15 +1,18 @@
 """Test the admin for the Item model."""
 
+from typing import TYPE_CHECKING
 from unittest import mock
 
 import pytest
 from constance.test import override_config
 from django.contrib import admin
 from items.admin.inlines.item import item_inlines
-from items.admin.item import ItemAdmin
 from items.admin.list_displays.item import item_list_display
 from items.admin.list_filters.item import item_list_filter
 from items.admin.mixins.price_group_members import PriceGroupMembersAdminMixin
+
+if TYPE_CHECKING:  # no cover
+  from items.admin.item import ItemAdmin
 
 
 @pytest.mark.django_db
@@ -17,14 +20,14 @@ class TestItemAdmin:
 
   def test_instantiate__inheritance(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
   ) -> None:
     assert isinstance(item_admin, admin.ModelAdmin)
     assert isinstance(item_admin, PriceGroupMembersAdminMixin)
 
   def test_instantiate__has_correct_fieldsets(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
   ) -> None:
     assert item_admin.fieldsets == (
         (
@@ -55,25 +58,25 @@ class TestItemAdmin:
 
   def test_instantiate__has_correct_inlines(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
   ) -> None:
     assert item_admin.inlines == item_inlines
 
   def test_instantiate__has_correct_list_display(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
   ) -> None:
     assert item_admin.list_display == tuple(map(str, item_list_display))
 
   def test_instantiate__has_correct_list_filter(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
   ) -> None:
     assert item_admin.list_filter == item_list_filter
 
   def test_instantiate__has_correct_ordering(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
   ) -> None:
     assert item_admin.ordering == (
         'name',
@@ -85,13 +88,13 @@ class TestItemAdmin:
 
   def test_instantiate__has_correct_readonly_fields(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
   ) -> None:
     assert item_admin.readonly_fields == ('price_group_members',)
 
   def test_instantiate__has_correct_search_fields(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
   ) -> None:
     assert item_admin.search_fields == (
         "name",
@@ -101,7 +104,7 @@ class TestItemAdmin:
 
   def test_formfield_for_foreignkey__default__correct_sort_order(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
       mocked_db_field: mock.Mock,
       mocked_formfield_for_foreignkey: mock.Mock,
       mocked_request: mock.Mock,
@@ -117,7 +120,7 @@ class TestItemAdmin:
 
   def test_formfield_for_foreignkey__brand_model__correct_sort_order(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
       mocked_db_field: mock.Mock,
       mocked_formfield_for_foreignkey: mock.Mock,
       mocked_model_manager: mock.Mock,
@@ -136,7 +139,7 @@ class TestItemAdmin:
 
   def test_formfield_for_foreignkey__packaging_model__correct_sort_order(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
       mocked_db_field: mock.Mock,
       mocked_formfield_for_foreignkey: mock.Mock,
       mocked_model_manager: mock.Mock,
@@ -158,7 +161,7 @@ class TestItemAdmin:
 
   def test_price_group_members__passes_price_group_to_mixin(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
       mocked_price_group_members_mixin: mock.Mock,
   ) -> None:
     mocked_object = mock.Mock()
@@ -176,7 +179,7 @@ class TestItemAdmin:
   @override_config(ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS=True)
   def test_save_model__model_object__setting_on___item_attached_to_reports(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
       mocked_form: mock.Mock,
       mocked_report_manger: mock.Mock,
       mocked_request: mock.Mock,
@@ -198,7 +201,7 @@ class TestItemAdmin:
   @override_config(ADMIN_AUTO_ATTACH_ITEMS_TO_REPORTS=False)
   def test_save_model__model_object__setting_off__item_not_attached_to_reports(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
       mocked_form: mock.Mock,
       mocked_report_manger: mock.Mock,
       mocked_request: mock.Mock,
@@ -220,7 +223,7 @@ class TestItemAdmin:
   @pytest.mark.usefixtures('mocked_request')
   def test_save_model__model_object__saves_model_object(
       self,
-      item_admin: ItemAdmin,
+      item_admin: "ItemAdmin",
       mocked_form: mock.Mock,
       mocked_request: mock.Mock,
       model_change: bool,

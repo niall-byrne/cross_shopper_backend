@@ -1,15 +1,15 @@
 """Function for generating model admin list display column entries."""
 
-from typing import TYPE_CHECKING, Callable, Protocol, TypeVar, Union
+from typing import TYPE_CHECKING, Callable, Protocol, Sequence, TypeVar, Union
 
 from django.contrib import admin
+from . import ColumnLinkConfig, ColumnObjectConfig
 
 if TYPE_CHECKING:  # no cover
-  from typing import Any, Optional, Sequence, Type
+  from typing import Any, Optional, Type
 
   from django.db.models import Model
   from django.utils.safestring import SafeString
-  from . import ColumnLinkConfig, ColumnObjectConfig
 
 T = TypeVar('T', bound="admin.ModelAdmin[Any]")
 

@@ -1,10 +1,12 @@
 """Serializer to retrieve or list aggregate Pricing per Item per Report."""
-import decimal
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from items.models import Item
 from pricing.models import Price
 from rest_framework import serializers
+
+if TYPE_CHECKING:  # no cover
+  import decimal
 
 
 class ReportPricingSerializerRO(serializers.ModelSerializer[Item]):
@@ -63,7 +65,7 @@ class ReportPricingSerializerRO(serializers.ModelSerializer[Item]):
 
   def _optional_decimal_to_string(
       self,
-      value: Optional[decimal.Decimal],
+      value: Optional['decimal.Decimal'],
   ) -> Optional[str]:
     if not value:
       return None

@@ -1,13 +1,16 @@
 """Test the Price model."""
 
 import decimal
+from typing import TYPE_CHECKING
 
 import pytest
 from django.core.exceptions import ValidationError
 from freezegun import freeze_time
 from pricing.models import Price
 from pricing.models.defaults import default_pricing_week, default_pricing_year
-from pricing.models.fixtures.pricing import AliasCreateLast52PriceBatch
+
+if TYPE_CHECKING:  # no cover
+  from pricing.models.fixtures.pricing import AliasCreateLast52PriceBatch
 
 
 @pytest.mark.django_db
@@ -55,7 +58,7 @@ class TestPrice:
   @freeze_time('2035-1-1')
   def test_last_52_weeks_average__with_pricing__returns_minimum_value(
       self,
-      create_last_52_price_batch: AliasCreateLast52PriceBatch,
+      create_last_52_price_batch: 'AliasCreateLast52PriceBatch',
   ) -> None:
     last_52_price_batch = create_last_52_price_batch()
     avg_price = (
@@ -79,7 +82,7 @@ class TestPrice:
   @freeze_time('2035-1-1')
   def test_last_52_weeks_avg__is_cached(
       self,
-      create_last_52_price_batch: AliasCreateLast52PriceBatch,
+      create_last_52_price_batch: 'AliasCreateLast52PriceBatch',
   ) -> None:
     last_52_price_batch = create_last_52_price_batch()
     model_object = last_52_price_batch[0]
@@ -93,7 +96,7 @@ class TestPrice:
   @freeze_time('2035-1-1')
   def test_last_52_weeks_high__with_pricing__returns_maximum_value(
       self,
-      create_last_52_price_batch: AliasCreateLast52PriceBatch,
+      create_last_52_price_batch: 'AliasCreateLast52PriceBatch',
   ) -> None:
     last_52_price_batch = create_last_52_price_batch()
     max_price = max([price.amount for price in last_52_price_batch])
@@ -111,7 +114,7 @@ class TestPrice:
   @freeze_time('2035-1-1')
   def test_last_52_weeks_high__is_cached(
       self,
-      create_last_52_price_batch: AliasCreateLast52PriceBatch,
+      create_last_52_price_batch: 'AliasCreateLast52PriceBatch',
   ) -> None:
     last_52_price_batch = create_last_52_price_batch()
     max_price = max([price.amount for price in last_52_price_batch])
@@ -126,7 +129,7 @@ class TestPrice:
   @freeze_time('2035-1-1')
   def test_last_52_weeks_low__with_pricing__returns_minimum_value(
       self,
-      create_last_52_price_batch: AliasCreateLast52PriceBatch,
+      create_last_52_price_batch: 'AliasCreateLast52PriceBatch',
   ) -> None:
     last_52_price_batch = create_last_52_price_batch()
     min_price = min([price.amount for price in last_52_price_batch])
@@ -144,7 +147,7 @@ class TestPrice:
   @freeze_time('2035-1-1')
   def test_last_52_weeks_low__is_cached(
       self,
-      create_last_52_price_batch: AliasCreateLast52PriceBatch,
+      create_last_52_price_batch: 'AliasCreateLast52PriceBatch',
   ) -> None:
     last_52_price_batch = create_last_52_price_batch()
     min_price = min([price.amount for price in last_52_price_batch])

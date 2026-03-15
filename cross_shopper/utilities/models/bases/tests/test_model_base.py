@@ -1,9 +1,13 @@
 """Test the ModelBase class."""
 
-from unittest import mock
+
+from typing import TYPE_CHECKING
 
 import pytest
 from utilities.models.bases.model_base import ModelBase
+
+if TYPE_CHECKING:  # no cover
+  from unittest import mock
 
 
 class TestModelbase:
@@ -12,7 +16,7 @@ class TestModelbase:
   def test_initialize__save__calls_full_clean(
       self,
       concrete_model: ModelBase,
-      mocked_full_clean: mock.Mock,
+      mocked_full_clean: 'mock.Mock',
   ) -> None:
     concrete_model.save()
 
@@ -21,7 +25,7 @@ class TestModelbase:
   def test_initialize__save__calls_base_class_save(
       self,
       concrete_model: ModelBase,
-      mocked_save: mock.Mock,
+      mocked_save: 'mock.Mock',
   ) -> None:
     concrete_model.save()
 

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from rest_framework import serializers
 
-if TYPE_CHECKING:  #no cover
+if TYPE_CHECKING:  # no cover
   from typing import Any, Callable, Optional
 
 

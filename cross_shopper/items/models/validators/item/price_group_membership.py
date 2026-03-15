@@ -3,7 +3,6 @@
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from django.db.models import Model
 from utilities.models.validators.multi_field_validator import (
     MultiFieldValidator,
 )
@@ -11,6 +10,7 @@ from utilities.models.validators.multi_field_validator import (
 if TYPE_CHECKING:  # no cover
   from typing import Any, Callable, Mapping, Tuple, Union
 
+  from django.db.models import Model
   from items.models import Item
   AliasOperation = Callable[[Any, str], Any]
   AliasModelOrAttr = Union[Model, Mapping[str, Any]]

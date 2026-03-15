@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 import pytest
 from pricing.models.defaults.default_pricing_week import default_pricing_week
 from pricing.models.defaults.default_pricing_year import default_pricing_year
-from reports.models.report import Report
 from reports.models.serializers.read_only.report_summary import (
     ReportSummarySerializerRO,
 )
@@ -13,14 +12,15 @@ from reports.models.serializers.read_only.report_summary.item import (
     ReportSummaryItemSerializerRO,
 )
 from rest_framework import status
-from rest_framework.test import APIClient
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # no cover
   from typing import Any, Dict
 
   from pricing.models.fixtures.pricing import (
-      AliasCreateLast52PriceBatchFromReport,
+    AliasCreateLast52PriceBatchFromReport,
   )
+  from reports.models.report import Report
+  from rest_framework.test import APIClient
   from .conftest import AliasReportSummaryDetailUrl
 
 
@@ -55,7 +55,7 @@ class TestReportSummaryReadOnlyViewSet:
   @pytest.mark.usefixtures("report_prefetched_alternate")
   def test_retrieve__200_with_correct_report(
       self,
-      client: APIClient,
+      client: "APIClient",
       report_prefetched: "Report",
       report_summary_detail_url: "AliasReportSummaryDetailUrl",
   ) -> None:

@@ -1,7 +1,6 @@
 """Test the InUseFilter admin model list filter."""
 
 from typing import TYPE_CHECKING
-from unittest import mock
 
 import pytest
 from items.admin.list_filters.filters.price_group.in_use import (
@@ -11,6 +10,8 @@ from items.models import PriceGroup
 from utilities.admin.list_filters import GenericListFilter
 
 if TYPE_CHECKING:  # no cover
+  from unittest import mock
+
   from items.models import Item
   from .conftest import AliasInUseFilterCreator
 
@@ -31,7 +32,7 @@ class TestInUseFilter:
       create_in_user_filter: "AliasInUseFilterCreator",
       item: "Item",
       price_group: "PriceGroup",
-      mocked_request: mock.Mock,
+      mocked_request: 'mock.Mock',
   ) -> None:
     filter_instance = create_in_user_filter(
         {InUseFilter.parameter_name: 'True'},
@@ -47,7 +48,7 @@ class TestInUseFilter:
       create_in_user_filter: "AliasInUseFilterCreator",
       item: "Item",
       price_group: "PriceGroup",
-      mocked_request: mock.Mock,
+      mocked_request: 'mock.Mock',
   ) -> None:
     filter_instance = create_in_user_filter(
         {InUseFilter.parameter_name: 'False'},
@@ -63,7 +64,7 @@ class TestInUseFilter:
       create_in_user_filter: "AliasInUseFilterCreator",
       item: "Item",
       price_group: "PriceGroup",
-      mocked_request: mock.Mock,
+      mocked_request: 'mock.Mock',
   ) -> None:
     filter_instance = create_in_user_filter(
         {InUseFilter.parameter_name: 'None'},

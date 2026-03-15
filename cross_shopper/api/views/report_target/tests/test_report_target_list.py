@@ -12,7 +12,6 @@ from rest_framework import status
 
 if TYPE_CHECKING:  # no cover
   from django.db.models import QuerySet
-  from reports.models import Report
   from rest_framework.test import APIClient
   from .conftest import AliasReportTargetListUrl
 

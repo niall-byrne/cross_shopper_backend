@@ -1,11 +1,9 @@
 """Tests for the CreatableSlugRelatedField."""
 
 from typing import TYPE_CHECKING
-from unittest import mock
 
 import pytest
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 from utilities.models.serializers.fields.mixins.peroxide import (
     PeroxideFieldMixin,
@@ -16,6 +14,9 @@ from utilities.models.serializers.fields.slug_related_field import (
 
 if TYPE_CHECKING:  # no cover
   from typing import Any, Dict, Type
+  from unittest import mock
+
+  from rest_framework import serializers
 
 
 class TestCreatableSlugRelatedField:
@@ -83,7 +84,7 @@ class TestCreatableSlugRelatedField:
       creatable_slug_related_field_serializer:
       "Type[serializers.Serializer[Any]]",
       mocked_input_value: str,
-      mocked_sanitize: mock.Mock,
+      mocked_sanitize: "mock.Mock",
       data_scenario: "Dict[str, str]",
   ) -> None:
     serializer = creatable_slug_related_field_serializer(
@@ -101,7 +102,7 @@ class TestCreatableSlugRelatedField:
       creatable_slug_related_field_serializer:
       "Type[serializers.Serializer[Any]]",
       mocked_input_value: str,
-      mocked_sanitize: mock.Mock,
+      mocked_sanitize: "mock.Mock",
       data_scenario: "Dict[str, str]",
       request: "pytest.FixtureRequest",
   ) -> None:
@@ -129,7 +130,7 @@ class TestCreatableSlugRelatedField:
       creatable_slug_related_field_serializer:
       "Type[serializers.Serializer[Any]]",
       mocked_input_value: str,
-      mocked_sanitize: mock.Mock,
+      mocked_sanitize: "mock.Mock",
       data_scenario: "Dict[str, str]",
       request: "pytest.FixtureRequest",
   ) -> None:

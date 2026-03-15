@@ -1,12 +1,14 @@
 """Test the PackagingSerializerRW class."""
 
-from typing import Any, Dict, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 import pytest
-from items.models import Packaging
 from items.models.serializers.read_write.packaging import PackagingSerializerRW
 from rest_framework.exceptions import ErrorDetail, ValidationError
 from utilities.strings.title import TitleString
+
+if TYPE_CHECKING:  # no cover
+  from items.models import Packaging
 
 
 @pytest.mark.django_db
@@ -14,7 +16,7 @@ class TestPackagingSerializerRW:
 
   def test_serialization__bulk__correct_representation(
       self,
-      packaging_as_bulk: Packaging,
+      packaging_as_bulk: 'Packaging',
   ) -> None:
     serialized = PackagingSerializerRW(packaging_as_bulk)
 
@@ -27,7 +29,7 @@ class TestPackagingSerializerRW:
 
   def test_serialization__non_bulk__correct_representation(
       self,
-      packaging_as_non_bulk: Packaging,
+      packaging_as_non_bulk: 'Packaging',
   ) -> None:
     assert packaging_as_non_bulk.unit is not None
     assert packaging_as_non_bulk.container is not None
@@ -63,7 +65,7 @@ class TestPackagingSerializerRW:
 
   def test_deserialization__valid_input__existing_components__correct_model(
       self,
-      packaging_as_non_bulk: Packaging,
+      packaging_as_non_bulk: 'Packaging',
   ) -> None:
     assert packaging_as_non_bulk.container is not None
     packaging_data: Dict[str, Any] = {
@@ -96,7 +98,7 @@ class TestPackagingSerializerRW:
   )
   def test_deserialization__vary_invalid_input__raises_exception(
       self,
-      packaging_as_non_bulk: Packaging,
+      packaging_as_non_bulk: 'Packaging',
       field_name: str,
       error_message: str,
       error_code: str,

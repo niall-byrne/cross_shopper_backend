@@ -15,7 +15,7 @@ from reports.models.serializers.read_only.report_summary.item_price import (
     ReportSummaryItemPriceSerializerRO,
 )
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # no cover
   from reports.models.report import Report
 
 

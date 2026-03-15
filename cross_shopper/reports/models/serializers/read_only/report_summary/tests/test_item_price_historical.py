@@ -8,7 +8,7 @@ from reports.models.serializers.read_only.report_summary.\
     ReportSummaryHistoricalItemPriceSerializerRO,
 )
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # no cover
   from typing import Any, Dict
 
   from reports.models import Report

@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, ClassVar
 
 import factory
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # no cover
   from typing import Any, Dict, Type, TypeVar
 
   from django.db.migrations.state import ProjectState

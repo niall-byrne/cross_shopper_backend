@@ -1,14 +1,17 @@
 """Test the AggregateLast52WeeksManager class."""
 import decimal
+from typing import TYPE_CHECKING
 
 import pytest
 from freezegun import freeze_time
 from pricing.models import Price
-from pricing.models.fixtures.pricing import (
-    AliasCreateLast52PriceBatchFromReport,
-)
-from reports.models import Report
 from .scenarios import eoy_boundary_scenarios
+
+if TYPE_CHECKING:  # no cover
+  from pricing.models.fixtures.pricing import (
+    AliasCreateLast52PriceBatchFromReport,
+  )
+  from reports.models import Report
 
 
 @pytest.mark.django_db
@@ -16,7 +19,7 @@ class TestAggregateLast52WeeksManager:
 
   def test_average__without_pricing__returns_none(
       self,
-      report: Report,
+      report: 'Report',
   ) -> None:
     assert Price.aggregate_last_52_weeks.average(
         report.item.all()[0],
@@ -27,9 +30,9 @@ class TestAggregateLast52WeeksManager:
   def test_average__with_pricing__returns_correct_value(
       self,
       test_datetime: str,
-      report: Report,
+      report: 'Report',
       create_last_52_price_batch_from_report:
-      AliasCreateLast52PriceBatchFromReport,
+      'AliasCreateLast52PriceBatchFromReport',
   ) -> None:
     with freeze_time(test_datetime):
 
@@ -51,7 +54,7 @@ class TestAggregateLast52WeeksManager:
 
   def test_high__without_pricing__returns_none(
       self,
-      report: Report,
+      report: 'Report',
   ) -> None:
     assert Price.aggregate_last_52_weeks.high(
         report.item.all()[0],
@@ -62,9 +65,9 @@ class TestAggregateLast52WeeksManager:
   def test_high__with_pricing__returns_correct_value(
       self,
       test_datetime: str,
-      report: Report,
+      report: 'Report',
       create_last_52_price_batch_from_report:
-      AliasCreateLast52PriceBatchFromReport,
+      'AliasCreateLast52PriceBatchFromReport',
   ) -> None:
     with freeze_time(test_datetime):
 
@@ -83,7 +86,7 @@ class TestAggregateLast52WeeksManager:
 
   def test_low__without_pricing__returns_none(
       self,
-      report: Report,
+      report: 'Report',
   ) -> None:
     assert Price.aggregate_last_52_weeks.low(
         report.item.all()[0],
@@ -94,9 +97,9 @@ class TestAggregateLast52WeeksManager:
   def test_low__with_pricing__returns_correct_value(
       self,
       test_datetime: str,
-      report: Report,
+      report: 'Report',
       create_last_52_price_batch_from_report:
-      AliasCreateLast52PriceBatchFromReport,
+      'AliasCreateLast52PriceBatchFromReport',
   ) -> None:
     with freeze_time(test_datetime):
 

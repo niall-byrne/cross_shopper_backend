@@ -1,13 +1,15 @@
 """Pricing API endpoints."""
 
-from typing import Any, Dict
+from typing import TYPE_CHECKING, Any, Dict
 
 from pricing.models import Price
 from pricing.models.serializers.read_write.pricing import PricingSerializerRW
 from rest_framework import status, viewsets
-from rest_framework.request import Request
 from rest_framework.response import Response
 from .filters import PricingFilter
+
+if TYPE_CHECKING:  # no cover
+  from rest_framework.request import Request
 
 
 class PricingViewSet(
@@ -21,7 +23,7 @@ class PricingViewSet(
 
   def create(
       self,
-      request: Request,
+      request: 'Request',
       *args: Any,
       **kwargs: Dict[str, Any],
   ) -> Response:

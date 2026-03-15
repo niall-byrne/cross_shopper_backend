@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any, Dict
 import pytest
 from pricing.models.defaults.default_pricing_week import default_pricing_week
 from pricing.models.defaults.default_pricing_year import default_pricing_year
-from reports.models.report import Report
 from reports.models.serializers.read_only.report_summary import (
     ReportSummarySerializerRO,
 )
@@ -14,12 +13,11 @@ from reports.models.serializers.read_only.report_summary.item import (
 )
 from rest_framework import status
 
-if TYPE_CHECKING:
-  from typing import Any, Dict
-
+if TYPE_CHECKING:  # no cover
   from pricing.models.fixtures.pricing import (
-      AliasCreateLast52PriceBatchFromReport,
+    AliasCreateLast52PriceBatchFromReport,
   )
+  from reports.models.report import Report
   from rest_framework.test import APIClient
   from .conftest import AliasReportSummaryListUrl
 

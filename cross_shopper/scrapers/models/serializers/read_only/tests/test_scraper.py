@@ -1,10 +1,14 @@
 """Test the ScraperSerializerRO class."""
 
+from typing import TYPE_CHECKING
+
 import pytest
 from rest_framework.exceptions import ErrorDetail, ValidationError
-from scrapers.models import Scraper
 from scrapers.models.scraper import CONSTRAINT_NAMES
 from scrapers.models.serializers.read_only.scraper import ScraperSerializerRO
+
+if TYPE_CHECKING:  # no cover
+  from scrapers.models import Scraper
 
 
 @pytest.mark.django_db
@@ -12,7 +16,7 @@ class TestScraperSerializerRO:
 
   def test_serialization__correct_representation(
       self,
-      scraper: Scraper,
+      scraper: 'Scraper',
   ) -> None:
     serialized = ScraperSerializerRO(scraper)
 
@@ -57,7 +61,7 @@ class TestScraperSerializerRO:
 
   def test_deserialization__enforces_unique_name_constraint(
       self,
-      scraper: Scraper,
+      scraper: 'Scraper',
   ) -> None:
     serialized = ScraperSerializerRO(scraper)
     data = dict(serialized.data)

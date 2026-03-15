@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, cast
 
 from django.db import migrations, transaction
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # no cover
   from django.apps.registry import Apps
   from django.db.backends.base.schema import BaseDatabaseSchemaEditor
   from reports.models import Report

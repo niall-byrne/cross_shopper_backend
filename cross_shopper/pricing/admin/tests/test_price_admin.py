@@ -1,22 +1,26 @@
 """Test the admin for the Price model."""
 
+from typing import TYPE_CHECKING
+
 from django.contrib import admin
 from pricing.admin.list_displays.price import price_list_display
 from pricing.admin.list_filters.price import price_list_filter
-from pricing.admin.price import PriceAdmin
+
+if TYPE_CHECKING:  # no cover
+  from pricing.admin.price import PriceAdmin
 
 
 class TestPriceAdmin:
 
   def test_instantiate__inheritance(
       self,
-      price_admin: PriceAdmin,
+      price_admin: 'PriceAdmin',
   ) -> None:
     assert isinstance(price_admin, admin.ModelAdmin)
 
   def test_instantiate__has_correct_fieldsets(
       self,
-      price_admin: PriceAdmin,
+      price_admin: 'PriceAdmin',
   ) -> None:
     assert price_admin.fieldsets == (
         (
@@ -45,19 +49,19 @@ class TestPriceAdmin:
 
   def test_instantiate__has_correct_list_display(
       self,
-      price_admin: PriceAdmin,
+      price_admin: 'PriceAdmin',
   ) -> None:
     assert price_admin.list_display == tuple(map(str, price_list_display))
 
   def test_instantiate__has_correct_list_filter(
       self,
-      price_admin: PriceAdmin,
+      price_admin: 'PriceAdmin',
   ) -> None:
     assert price_admin.list_filter == price_list_filter
 
   def test_instantiate__has_correct_ordering(
       self,
-      price_admin: PriceAdmin,
+      price_admin: 'PriceAdmin',
   ) -> None:
     assert price_admin.ordering == (
         '-year',
@@ -68,7 +72,7 @@ class TestPriceAdmin:
 
   def test_instantiate__has_correct_readonly_fields(
       self,
-      price_admin: PriceAdmin,
+      price_admin: 'PriceAdmin',
   ) -> None:
     assert price_admin.readonly_fields == (
         'last_52_weeks_average',
@@ -78,6 +82,6 @@ class TestPriceAdmin:
 
   def test_instantiate__has_correct_search_fields(
       self,
-      price_admin: PriceAdmin,
+      price_admin: 'PriceAdmin',
   ) -> None:
     assert price_admin.search_fields == ("item__name", "store__franchise__name")

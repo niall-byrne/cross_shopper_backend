@@ -6,7 +6,6 @@ from unittest import mock
 
 import pytest
 from pricing.models import Price
-from reports.models.report import Report
 from reports.models.serializers.read_only.report_summary.\
   item_price_current import (
     ReportSummaryCurrentItemPriceSerializerRO,
@@ -14,11 +13,13 @@ from reports.models.serializers.read_only.report_summary.\
 
 if TYPE_CHECKING:  # no cover
   from typing import Any, Callable, Dict
+
+  from reports.models.report import Report
   AliasSerializerMockCreator = Callable[[str], mock.Mock]
 
 
 @pytest.fixture
-def report_context_2024(report_with_2024_prices: Report) -> "Dict[str, Any]":
+def report_context_2024(report_with_2024_prices: "Report") -> "Dict[str, Any]":
   return {
       'report': report_with_2024_prices,
       'year': 2024,
@@ -28,7 +29,7 @@ def report_context_2024(report_with_2024_prices: Report) -> "Dict[str, Any]":
 
 @pytest.fixture
 def report_context_2024_alternate(
-    report_with_2024_prices: Report,
+    report_with_2024_prices: "Report",
 ) -> "Dict[str, Any]":
   return {
       'report': report_with_2024_prices,
@@ -38,7 +39,7 @@ def report_context_2024_alternate(
 
 
 @pytest.fixture
-def report_context_no_prices(report: Report) -> "Dict[str, Any]":
+def report_context_no_prices(report: "Report") -> "Dict[str, Any]":
   return {
       'report': report,
       'year': 2024,
@@ -105,7 +106,7 @@ def report_summary_mocked_pricing_aggregate_last_52_weeks_manager(
 
 
 @pytest.fixture
-def report_with_2024_prices(report: Report) -> Report:
+def report_with_2024_prices(report: "Report") -> "Report":
   stores = list(report.store.all())
   item = report.item.all()[0]
   num_stores = len(stores)

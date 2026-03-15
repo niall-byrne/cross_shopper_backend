@@ -26,7 +26,7 @@ class ColumnLinkConfig(ColumnConfigBase):
   reverse_url_name: str
   obj_id_lookup: str
   obj_name_lookup: str
-  obj_order: Optional[str] = ""
+  obj_order: "Optional[str]" = ""
 
   def __str__(self) -> str:
     return self.method_name

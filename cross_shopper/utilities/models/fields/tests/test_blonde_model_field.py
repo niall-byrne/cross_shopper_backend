@@ -1,10 +1,14 @@
 """Test the BlondeCharField custom field."""
 
+from typing import TYPE_CHECKING
+
 import pytest
 from django.test import override_settings
 from django_nh3.models import Nh3CharField
 from utilities.models.fields.blonde import BlondeCharField
-from .conftest import AliasSetupMockModel
+
+if TYPE_CHECKING:  # no cover
+  from .conftest import AliasSetupMockModel
 
 
 class TestBlondeCharField:
@@ -25,7 +29,7 @@ class TestBlondeCharField:
   def test_pre_save__string__no_restore_config__converts_to_sanitized(
       self,
       blonde_char_field_instance: BlondeCharField,
-      setup_mock_model: AliasSetupMockModel,
+      setup_mock_model: "AliasSetupMockModel",
       value: str,
       expected: str,
   ) -> None:
@@ -45,7 +49,7 @@ class TestBlondeCharField:
   def test_pre_save__string__with_restore_config__restores_sanitized_value(
       self,
       blonde_char_field_instance: BlondeCharField,
-      setup_mock_model: AliasSetupMockModel,
+      setup_mock_model: "AliasSetupMockModel",
       value: str,
       expected: str,
   ) -> None:
@@ -58,7 +62,7 @@ class TestBlondeCharField:
 
   def test_pre_save__none__returns_none(
       self,
-      setup_mock_model: AliasSetupMockModel,
+      setup_mock_model: "AliasSetupMockModel",
       blonde_char_field_instance: BlondeCharField,
   ) -> None:
 

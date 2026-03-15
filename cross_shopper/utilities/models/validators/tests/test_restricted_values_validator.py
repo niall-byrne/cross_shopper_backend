@@ -10,7 +10,7 @@ from utilities.models.validators.restricted_values import (
 )
 
 if TYPE_CHECKING:  # no cover
-  from typing import TYPE_CHECKING, Any, FrozenSet
+  from typing import Any, FrozenSet
 
 
 class TestValidatorRestrictedValues:

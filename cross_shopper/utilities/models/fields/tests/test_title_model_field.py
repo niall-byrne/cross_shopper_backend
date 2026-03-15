@@ -1,12 +1,16 @@
 """Test the TitleField custom field."""
 
+from typing import TYPE_CHECKING
+
 import pytest
 from django.db import models
 from django.test import override_settings
 from utilities.models.fields.blonde import BlondeCharField
 from utilities.models.fields.title import TitleField
 from utilities.strings.tests.scenarios import title_string_scenarios
-from .conftest import AliasSetupMockModel
+
+if TYPE_CHECKING:  # no cover
+  from .conftest import AliasSetupMockModel
 
 
 class TestTitleField:
@@ -24,7 +28,7 @@ class TestTitleField:
   def test_pre_save__string__converts_to_title_case(
       self,
       title_field_instance: TitleField[str, str],
-      setup_mock_model: AliasSetupMockModel,
+      setup_mock_model: "AliasSetupMockModel",
       input_string: str,
       expected_string: str,
   ) -> None:
@@ -44,7 +48,7 @@ class TestTitleField:
   def test_pre_save__string__converts_to_sanitized(
       self,
       title_field_instance: TitleField[str, str],
-      setup_mock_model: AliasSetupMockModel,
+      setup_mock_model: "AliasSetupMockModel",
       input_string: str,
       expected_string: str,
   ) -> None:
@@ -58,7 +62,7 @@ class TestTitleField:
   def test_pre_save__none__returns_none(
       self,
       title_field_instance: TitleField[None, None],
-      setup_mock_model: AliasSetupMockModel,
+      setup_mock_model: "AliasSetupMockModel",
   ) -> None:
 
     model = setup_mock_model("field_name", None)

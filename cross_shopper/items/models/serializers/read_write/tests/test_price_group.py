@@ -3,7 +3,6 @@
 from typing import TYPE_CHECKING
 
 import pytest
-from items.models import PriceGroup
 from items.models.serializers.read_write.price_group import (
     PriceGroupSerializerRW,
 )
@@ -13,7 +12,7 @@ from rest_framework.exceptions import ErrorDetail, ValidationError
 if TYPE_CHECKING:  # no cover
   from typing import Dict, List, Union
 
-  from items.models import Attribute, PackagingUnit
+  from items.models import Attribute, PackagingUnit, PriceGroup
   from items.models.factories.item import ItemWithPriceGroup
   AliasPriceGroupData = Dict[str, Union[int, str, bool, List[str]]]
 
@@ -23,7 +22,7 @@ class TestPriceGroupSerializerRW:
 
   def test_serialization__correct_representation(
       self,
-      price_group: PriceGroup,
+      price_group: 'PriceGroup',
   ) -> None:
     serialized = PriceGroupSerializerRW(price_group)
 

@@ -123,8 +123,8 @@ class TestDynamicSubClass:
   @scenarios
   def test_instantiate__not_a_subclass__raises_exception(
       self,
-      attributes: AliasAttributes,
-      generic_class: AliasGenericClass,
+      attributes: "AliasAttributes",
+      generic_class: "AliasGenericClass",
   ) -> None:
 
     class NonMatching:

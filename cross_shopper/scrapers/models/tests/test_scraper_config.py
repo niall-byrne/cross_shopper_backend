@@ -1,9 +1,13 @@
 """Test the ScraperConfig model."""
 
+from typing import TYPE_CHECKING
+
 import pytest
 from django.core.exceptions import ValidationError
-from items.models import ItemScraperConfig
 from scrapers.models import Scraper, ScraperConfig
+
+if TYPE_CHECKING:  # no cover
+  from items.models import ItemScraperConfig
 
 
 @pytest.mark.django_db
@@ -35,7 +39,7 @@ class TestScraperConfig:
 
   def test_has_item__with_related_item__returns_true(
       self,
-      item_scraper_config: ItemScraperConfig,
+      item_scraper_config: 'ItemScraperConfig',
   ) -> None:
     assert item_scraper_config.scraper_config.has_item is True
 
@@ -47,7 +51,7 @@ class TestScraperConfig:
 
   def test_associated_item__with_related_item__returns_item(
       self,
-      item_scraper_config: ItemScraperConfig,
+      item_scraper_config: 'ItemScraperConfig',
   ) -> None:
     assert item_scraper_config.scraper_config.associated_item == (
         item_scraper_config.item

@@ -1,16 +1,19 @@
 """Test the BlondeCharField serializer field."""
 
-from typing import Any, Type
-from unittest import mock
+from typing import TYPE_CHECKING, Any, Type
 
-from rest_framework import serializers
 from utilities.models.serializers.fields.bases.transform_base import (
-    TransformCharFieldBase,
+  TransformCharFieldBase,
 )
 from utilities.models.serializers.fields.blonde import BlondeCharField
 from utilities.models.serializers.fields.mixins.peroxide import (
-    PeroxideFieldMixin,
+  PeroxideFieldMixin,
 )
+
+if TYPE_CHECKING:  # no cover
+  from unittest import mock
+
+  from rest_framework import serializers
 
 
 class TestBlondeCharField:
@@ -21,7 +24,7 @@ class TestBlondeCharField:
 
   def test_deserialize__none__returns_none(
       self,
-      blonde_field_serializer: Type[serializers.Serializer[Any]],
+      blonde_field_serializer: Type["serializers.Serializer[Any]"],
   ) -> None:
     serializer = blonde_field_serializer(data={
         "field": None,
@@ -32,9 +35,9 @@ class TestBlondeCharField:
 
   def test_deserialize__sanitizes_input_data(
       self,
-      blonde_field_serializer: Type[serializers.Serializer[Any]],
+      blonde_field_serializer: Type["serializers.Serializer[Any]"],
       mocked_input_value: str,
-      mocked_sanitize: mock.Mock,
+      mocked_sanitize: "mock.Mock",
   ) -> None:
     serializer = blonde_field_serializer(data={
         "field": mocked_input_value,
@@ -45,9 +48,9 @@ class TestBlondeCharField:
 
   def test_deserialize__returns_sanitized_data(
       self,
-      blonde_field_serializer: Type[serializers.Serializer[Any]],
+      blonde_field_serializer: Type["serializers.Serializer[Any]"],
       mocked_input_value: str,
-      mocked_sanitize: mock.Mock,
+      mocked_sanitize: "mock.Mock",
   ) -> None:
     serializer = blonde_field_serializer(data={
         "field": mocked_input_value,

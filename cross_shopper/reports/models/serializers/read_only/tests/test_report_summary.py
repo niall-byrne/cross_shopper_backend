@@ -14,7 +14,7 @@ from reports.models.serializers.read_only.report_summary.store import (
     ReportSummaryStoreSerializerRO,
 )
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # no cover
   from reports.models.report import Report
 
 

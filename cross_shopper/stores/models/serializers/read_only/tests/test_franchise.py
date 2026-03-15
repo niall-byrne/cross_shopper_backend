@@ -4,11 +4,11 @@ from typing import TYPE_CHECKING
 
 import pytest
 from rest_framework.exceptions import ErrorDetail, ValidationError
-from stores.models.franchise import Franchise
 from stores.models.serializers.read_only.franchise import FranchiseSerializerRO
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # no cover
   from scrapers.models import Scraper
+  from stores.models.franchise import Franchise
 
 
 @pytest.mark.django_db
@@ -16,7 +16,7 @@ class TestFranchiseSerializerRO:
 
   def test_serialization__correct_representation(
       self,
-      franchise: Franchise,
+      franchise: 'Franchise',
   ) -> None:
     serialized = FranchiseSerializerRO(franchise)
 

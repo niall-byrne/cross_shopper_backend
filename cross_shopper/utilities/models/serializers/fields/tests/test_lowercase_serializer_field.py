@@ -1,11 +1,13 @@
 """Test the LowerCaseField serializer field."""
 
-from typing import Any, Type
+from typing import TYPE_CHECKING, Any, Type
 
 import pytest
 from django.test import override_settings
-from rest_framework import serializers
 from utilities.models.serializers.fields.lowercase import LowerCaseField
+
+if TYPE_CHECKING:  # no cover
+  from rest_framework import serializers
 
 
 class TestLowerCaseField:
@@ -20,7 +22,7 @@ class TestLowerCaseField:
   @override_settings(**{LowerCaseField.CONFIG_KEY: {}})
   def test_deserialize__no_overrides__transforms_and_cleans_data(
       self,
-      lowercase_field_serializer: Type[serializers.Serializer[Any]],
+      lowercase_field_serializer: Type["serializers.Serializer[Any]"],
       clean: str,
       dirty: str,
   ) -> None:
@@ -41,7 +43,7 @@ class TestLowerCaseField:
   @override_settings(**{LowerCaseField.CONFIG_KEY: {"&amp;": "&"}})
   def test_deserialize__with_overrides__transforms_and_cleans_data(
       self,
-      lowercase_field_serializer: Type[serializers.Serializer[Any]],
+      lowercase_field_serializer: Type["serializers.Serializer[Any]"],
       clean: str,
       dirty: str,
   ) -> None:

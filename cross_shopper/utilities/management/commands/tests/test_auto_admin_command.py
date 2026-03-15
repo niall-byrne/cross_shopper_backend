@@ -1,19 +1,23 @@
 """Test the autoadmin management command."""
-import io
-from unittest import mock
+
+from typing import TYPE_CHECKING
 
 import pytest
 from django.core.management import CommandError, call_command
 from utilities.management.commands import autoadmin
+
+if TYPE_CHECKING:  # no cover
+  import io
+  from unittest import mock
 
 
 class TestAutoAdmin:
 
   def test_autoadmin__non_existing__shows_success_message(
       self,
-      mocked_create_superuser: mock.Mock,
-      mocked_stderr: io.StringIO,
-      mocked_stdout: io.StringIO,
+      mocked_create_superuser: 'mock.Mock',
+      mocked_stderr: 'io.StringIO',
+      mocked_stdout: 'io.StringIO',
   ) -> None:
     call_command(
         'autoadmin',
@@ -27,9 +31,9 @@ class TestAutoAdmin:
 
   def test_autoadmin__non_existing__calls_create_superuser(
       self,
-      mocked_create_superuser: mock.Mock,
-      mocked_stderr: io.StringIO,
-      mocked_stdout: io.StringIO,
+      mocked_create_superuser: 'mock.Mock',
+      mocked_stderr: 'io.StringIO',
+      mocked_stdout: 'io.StringIO',
   ) -> None:
     call_command(
         'autoadmin',
@@ -42,9 +46,9 @@ class TestAutoAdmin:
 
   def test_autoadmin__existing__show_no_content(
       self,
-      mocked_create_superuser: mock.Mock,
-      mocked_stderr: io.StringIO,
-      mocked_stdout: io.StringIO,
+      mocked_create_superuser: 'mock.Mock',
+      mocked_stderr: 'io.StringIO',
+      mocked_stdout: 'io.StringIO',
   ) -> None:
     mocked_exception = Exception("Error")
     mocked_create_superuser.side_effect = mocked_exception
@@ -62,9 +66,9 @@ class TestAutoAdmin:
 
   def test_autoadmin__existing__raises_exception(
       self,
-      mocked_create_superuser: mock.Mock,
-      mocked_stderr: io.StringIO,
-      mocked_stdout: io.StringIO,
+      mocked_create_superuser: 'mock.Mock',
+      mocked_stderr: 'io.StringIO',
+      mocked_stdout: 'io.StringIO',
   ) -> None:
     mocked_exception = Exception("Error")
     mocked_create_superuser.side_effect = mocked_exception

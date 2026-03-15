@@ -1,14 +1,16 @@
 """Serializer to retrieve or list summarized results of Reports."""
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.utils import timezone
 from reports.models import Report
 from rest_framework import serializers
-from rest_framework.utils.serializer_helpers import ReturnDict
 from utilities.models.serializers.fields.context import ContextField
 from .item import ReportSummaryItemSerializerRO
 from .store import ReportSummaryStoreSerializerRO
+
+if TYPE_CHECKING:  # no cover
+  from rest_framework.utils.serializer_helpers import ReturnDict
 
 
 class ReportSummarySerializerRO(serializers.ModelSerializer[Report]):
@@ -39,7 +41,7 @@ class ReportSummarySerializerRO(serializers.ModelSerializer[Report]):
   def get_item(
       self,
       instance: Report,
-  ) -> ReturnDict[Any, Any]:
+  ) -> "ReturnDict[Any, Any]":
     """Serialize the report items with the appropriate context."""
     return ReportSummaryItemSerializerRO(
         instance.item.all(),

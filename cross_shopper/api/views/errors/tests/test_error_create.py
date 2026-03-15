@@ -7,7 +7,7 @@ from errors.models import Error
 from errors.models.serializers.read_write.error import ErrorSerializerRW
 from rest_framework import status
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # no cover
   from rest_framework.test import APIClient
   from .conftest import AliasErrorListUrl
 

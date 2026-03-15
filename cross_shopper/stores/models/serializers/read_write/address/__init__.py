@@ -1,12 +1,14 @@
 """Serializer to retrieve, list, create or update Addresses."""
 
-from typing import Dict, Union
+from typing import TYPE_CHECKING, Dict, Union
 
 from address.models import Address, Country, Locality, State
-from django.db import models
 from rest_framework import serializers
 from utilities.models.serializers.fields.blonde import BlondeCharField
 from .address_internal import AddressSerializerInternal
+
+if TYPE_CHECKING:  # no cover
+  from django.db import models
 
 
 class AddressSerializerRW(serializers.ModelSerializer[Address]):
@@ -46,7 +48,7 @@ class AddressSerializerRW(serializers.ModelSerializer[Address]):
 
   def create(
       self,
-      validated_data: Dict[str, Union[str, models.Model]],
+      validated_data: Dict[str, Union[str, 'models.Model']],
   ) -> Address:
     """Create a new instance and all sub instances as needed."""
     country = Country.objects.get_or_create(name=validated_data['country'])[0]

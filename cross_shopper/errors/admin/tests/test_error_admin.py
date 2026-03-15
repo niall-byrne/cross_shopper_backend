@@ -1,28 +1,33 @@
 """Test the admin for the Error model."""
 
-from unittest import mock
+
+from typing import TYPE_CHECKING
 
 from django.contrib import admin
-from errors.admin.error import ErrorAdmin
 from errors.admin.list_displays.error import error_list_display
 from errors.admin.list_filters.error import error_list_filter
 from scrapers.admin.mixins.scraper_config_actions import (
-    ScraperConfigActionsAdminMixin,
+  ScraperConfigActionsAdminMixin,
 )
+
+if TYPE_CHECKING:  # no cover
+  from unittest import mock
+
+  from errors.admin.error import ErrorAdmin
 
 
 class TestErrorAdmin:
 
   def test_instantiate__inheritance(
       self,
-      error_admin: ErrorAdmin,
+      error_admin: "ErrorAdmin",
   ) -> None:
     assert isinstance(error_admin, admin.ModelAdmin)
     assert isinstance(error_admin, ScraperConfigActionsAdminMixin)
 
   def test_instantiate__has_correct_actions(
       self,
-      error_admin: ErrorAdmin,
+      error_admin: "ErrorAdmin",
   ) -> None:
     assert error_admin.actions == (
         "action_activate_scraper_configs",
@@ -34,19 +39,19 @@ class TestErrorAdmin:
 
   def test_instantiate__has_correct_list_display(
       self,
-      error_admin: ErrorAdmin,
+      error_admin: "ErrorAdmin",
   ) -> None:
     assert error_admin.list_display == tuple(map(str, error_list_display))
 
   def test_instantiate__has_correct_list_filter(
       self,
-      error_admin: ErrorAdmin,
+      error_admin: "ErrorAdmin",
   ) -> None:
     assert error_admin.list_filter == error_list_filter
 
   def test_instantiate__has_correct_ordering(
       self,
-      error_admin: ErrorAdmin,
+      error_admin: "ErrorAdmin",
   ) -> None:
     assert error_admin.ordering == (
         "type__name",
@@ -57,7 +62,7 @@ class TestErrorAdmin:
 
   def test_instantiate__has_correct_search_fields(
       self,
-      error_admin: ErrorAdmin,
+      error_admin: "ErrorAdmin",
   ) -> None:
     assert error_admin.search_fields == (
         "store__franchise__name",
@@ -67,9 +72,9 @@ class TestErrorAdmin:
 
   def test_action_mark_as_reoccurring__updates_selected(
       self,
-      error_admin: ErrorAdmin,
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
+      error_admin: "ErrorAdmin",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
   ) -> None:
     error_admin.action_mark_as_reoccurring(mocked_request, mocked_model)
 
@@ -77,9 +82,9 @@ class TestErrorAdmin:
 
   def test_action_mark_as_reoccurring__notifies_user(
       self,
-      error_admin: ErrorAdmin,
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
+      error_admin: "ErrorAdmin",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
   ) -> None:
     error_admin.action_mark_as_reoccurring(mocked_request, mocked_model)
 
@@ -92,9 +97,9 @@ class TestErrorAdmin:
 
   def test_action_mark_as_non_reoccurring__updates_selected(
       self,
-      error_admin: ErrorAdmin,
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
+      error_admin: "ErrorAdmin",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
   ) -> None:
     error_admin.action_mark_as_non_reoccurring(mocked_request, mocked_model)
 
@@ -102,9 +107,9 @@ class TestErrorAdmin:
 
   def test_action_mark_as_non_reoccurring__notifies_user(
       self,
-      error_admin: ErrorAdmin,
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
+      error_admin: "ErrorAdmin",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
   ) -> None:
     error_admin.action_mark_as_non_reoccurring(mocked_request, mocked_model)
 
@@ -117,9 +122,9 @@ class TestErrorAdmin:
 
   def test_action_reset_error_count__updates_selected(
       self,
-      error_admin: ErrorAdmin,
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
+      error_admin: "ErrorAdmin",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
   ) -> None:
     error_admin.action_reset_error_count(mocked_request, mocked_model)
 
@@ -127,9 +132,9 @@ class TestErrorAdmin:
 
   def test_action_reset_error_count__notifies_user(
       self,
-      error_admin: ErrorAdmin,
-      mocked_model: mock.Mock,
-      mocked_request: mock.Mock,
+      error_admin: "ErrorAdmin",
+      mocked_model: "mock.Mock",
+      mocked_request: "mock.Mock",
   ) -> None:
     error_admin.action_reset_error_count(mocked_request, mocked_model)
 

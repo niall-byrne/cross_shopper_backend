@@ -7,6 +7,9 @@ repos:
     rev: v1.4.2
     hooks:
       - id: python-safety-dependencies-check
+        args:
+          - "--ignore"
+          - "71600" # gunicorn CVE-2024-1135
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.32.0
     hooks:

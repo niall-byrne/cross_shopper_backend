@@ -28,6 +28,7 @@ help:
 	@echo "  spelling-markdown to spellcheck markdown files"
 	@echo "  spelling-sync     to synchronize vale packages"
 	@echo "  production        to start the production environment"
+	@echo "  production-halt   to stop a running production environment"
 	@echo "  test-python       to test the Python scripts"
 
 clean: clean-git clean-pycache
@@ -156,7 +157,11 @@ spelling-sync:
 production:
 	@echo "Starting Django ..."
 	@cd cross_shopper && DJANGO_SETTINGS_MODULE='config.production' poetry run ./manage.py collectstatic --noinput
-	@cd cross_shopper && DJANGO_SETTINGS_MODULE='config.production' poetry run gunicorn --bind 0.0.0.0:8000 --workers=2 --access-logfile - --error-logfile - --log-level info root.wsgi:application
+	@cd cross_shopper && DJANGO_SETTINGS_MODULE='config.production' poetry run gunicorn --pid ../.pidfile --bind 0.0.0.0:8000 --workers=2 --access-logfile - --error-logfile - --log-level info root.wsgi:application
+
+production-halt:
+	@echo "Stopping Django ..."
+	@kill $$(< .pidfile)
 
 test-python:
 	@echo "Testing Python scripts ..."

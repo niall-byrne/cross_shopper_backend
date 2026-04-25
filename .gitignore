@@ -192,3 +192,6 @@ pyrightconfig.json
 .vale/*
 !.vale/Vocab
 staticfiles
+
+# Process Management
+.pidfile

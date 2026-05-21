@@ -36,5 +36,8 @@ DATABASES = {
         {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.development.sqlite",
+            "OPTIONS": {
+                "timeout": 20,
+            },
         }
 }

@@ -34,7 +34,7 @@ CACHES = {
 DATABASES = {
     "default":
         {
-            "ENGINE": "django.db.backends.sqlite3",
+            "ENGINE": "utilities.db.sqlite",
             "NAME": BASE_DIR / "db.production.sqlite",
             "OPTIONS": {
                 "timeout": 20,

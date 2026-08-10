@@ -45,7 +45,7 @@ readme = 'README.md'
 version = '0.1.0'
 
 [tool.poetry.dependencies]
-django = '^4.2.29'
+django = '^4.2.30'
 django-address = '^0.2.8'
 django-constance = '^4.3.2'
 django-filter = '^25.1'

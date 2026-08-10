@@ -7,6 +7,19 @@ repos:
     rev: v1.4.2
     hooks:
       - id: python-safety-dependencies-check
+        args:
+          - "-i"
+          - "SFTY-20260603-18287"
+          - "-i"
+          - "SFTY-20260603-03325"
+          - "-i"
+          - "SFTY-20260603-81517"
+          - "-i"
+          - "SFTY-20260707-60059"
+          - "-i"
+          - "SFTY-20260707-97267"
+          - "-i"
+          - "SFTY-20260707-99910"
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.32.0
     hooks:

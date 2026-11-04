@@ -8,7 +8,6 @@
 # The API demonstrated here is more for example purposes.
 
 # 1:                  The name of a pre-commit test scenario. (See 'main' below.)
-# TEST_PROJECT_NAME:  The name of the rendered test project.
 
 # CI only script.
 
@@ -136,10 +135,8 @@ util() {
 
 main() {
 
-  pushd "${TEST_PROJECT_NAME}" >> /dev/null
   poetry run pre-commit run --hook-stage manual spelling-vale-sync
   scenario "${1}"
-  popd >> /dev/null
 
 }
 
